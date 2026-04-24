@@ -17,11 +17,6 @@ export const ProductTable = {
         {
             key: 'stock_quantity',
             label: 'Stock Quantity',
-            render: (value: number) => {
-                const quantity = value || 0;
-                const unit = quantity === 1 ? 'pc' : 'pcs';
-                return `${quantity.toLocaleString('en-PH')} ${unit}`;
-            }
         },
         {
             key: 'category',  // ← Simple key, no dot notation

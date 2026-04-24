@@ -7,32 +7,9 @@ import { formatDate, formatTime } from "@/components/format-time-and-date";
 import TableList from "@/components/table-list";
 import { ProductTable } from "@/tables/product";
 import ShowListModal from "@/components/show-list-modal";
-
-interface Product {
-    id: number;
-    product_name: string;
-    description: string;
-    wholesale_price: number;
-    sale_price: number;
-    stock_quantity: number;
-    is_delivery: 'not-delivery' | 'delivery';
-    category_id: number;  // Foreign key
-    unit_id: number;      // Foreign key
-    category?: {          // Optional relation
-        id: number;
-        category_name: string;
-    };
-    unit?: {              // Optional relation
-        id: number;
-        unit_name: string;
-    };
-    created_at: string;
-    updated_at: string;
-}
-
-interface ProductProps {
-    products: Product[];
-}
+import { Product } from "@/pages/interfaces/Interfaces";
+import { ProductProps } from "@/pages/interfaces/Props";
+import { Package } from "lucide-react";
 
 export default function Index({ products }: ProductProps) {
     const [showProducts, setShowProducts] = useState<Product[]>([]);
@@ -91,25 +68,32 @@ export default function Index({ products }: ProductProps) {
         <div className="container py-8">
             <div className="flex justify-between items-center mb-6 mx-8">
                 <h1 className="text-3xl font-bold">Product List</h1>
-                <Link href={create()} className="inline-block">
-                    <Button>Add Product</Button>
-                </Link>
+                {products.length === 1 && (
+                    <Link href={create()} className="inline-block">
+                        <Button>Add Product</Button>
+                    </Link>
+                )}
             </div>
 
             <div className="mx-8">
-                    <TableList
-                        columns={ProductTable.columns}
-                        actions={ProductTable.actions}
-                        indexLabel = "#"
-                        indexStartFrom={1}
-                        showIndex = {true}
-
-                        data={products}
-                        onView={handleShowModal}
-                        onEdit={(item) => handleEdit(item.id)}
-                        onDelete={(item) => handleDelete(item.id)}
-                        emptyMessage="No Product Found."
-                    />
+                <TableList
+                    columns={ProductTable.columns}
+                    actions={ProductTable.actions}
+                    indexLabel="#"
+                    indexStartFrom={1}
+                    showIndex={true}
+                    data={products}
+                    onView={handleShowModal}
+                    onEdit={(item) => handleEdit(item.id)}
+                    onDelete={(item) => handleDelete(item.id)}
+                    emptyTableMessage={{
+                        icon: <Package />,
+                        title: "No Products Found",
+                        description: "Click Add Product to see them listed here.",
+                        onActionClick: () => router.visit(create()),
+                        buttonText: "Product"
+                    }}
+                />
 
                 {/* Alternative: Controlled modal approach */}
                 {/* <ShowListModal

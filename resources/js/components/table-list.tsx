@@ -1,24 +1,8 @@
 // components/table-list.tsx
-import { Eye, Pencil, Trash } from "lucide-react";
-
-interface Column {
-    label: string;
-    key: string;
-    render?: (value: any, item: any) => React.ReactNode;
-}
-
-interface TableListProps {
-    columns: Column[];
-    data: any[];
-    actions?: string[];
-    onView?: (item: any) => void;
-    onEdit?: (item: any) => void;
-    onDelete?: (item: any) => void;
-    showIndex?: boolean;
-    indexLabel?: string;
-    indexStartFrom?: number;
-    emptyMessage?: string; // New prop for custom empty message
-}
+import { Eye, Pencil, Plus, Trash } from "lucide-react";
+import { Column } from "@/pages/interfaces/Interfaces";
+import { TableListProps } from "@/pages/interfaces/Props";
+import { Button } from "./ui/button";
 
 export default function TableList({ 
     columns, 
@@ -30,7 +14,7 @@ export default function TableList({
     showIndex = true,
     indexLabel = "No.",
     indexStartFrom = 1,
-    emptyMessage = "No data available"
+    emptyTableMessage = "No data available"
 }: TableListProps) {
     // Calculate total columns for empty message colspan
     const totalColumns = 
@@ -44,7 +28,7 @@ export default function TableList({
                 <thead className="bg-gray-50">
                     <tr>
                         {showIndex && (
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-16">
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-16 border-r-1">
                                 {indexLabel}
                             </th>
                         )}
@@ -70,14 +54,25 @@ export default function TableList({
                                 colSpan={totalColumns} 
                                 className="px-6 py-12 text-center text-sm text-gray-500"
                             >
-                                {emptyMessage}
+                                {typeof emptyTableMessage === 'string' ? (
+                                    <p>{emptyTableMessage}</p>
+                                ) : (
+                                    <div className="flex flex-col items-center justify-center">
+                                        <div className="mb-4">{emptyTableMessage.icon}</div>
+                                        <h3 className="text-lg font-medium text-gray-900">{emptyTableMessage.title}</h3>
+                                        <p className="text-gray-500">{emptyTableMessage.description}</p>
+                                        <Button size='default' onClick={() => {emptyTableMessage.onActionClick?.()}} className="cursor-pointer my-2">
+                                           <Plus /> Add {emptyTableMessage.buttonText || 'Item'}
+                                        </Button>
+                                    </div>
+                                )}
                             </td>
                         </tr>
                     ) : (
                         data.map((item, index) => (
                             <tr key={item.id || index} className="hover:bg-gray-50 transition-colors duration-200">
                                 {showIndex && (
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-medium">
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-medium border-r-1">
                                         {indexStartFrom + index}
                                     </td>
                                 )}
