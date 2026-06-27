@@ -3,11 +3,19 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Attributes\Fillable;
 
-#[Fillable(['product_name', 'description', 'wholesale_price', 'sale_price', 'stock_quantity', 'is_delivery', 'category_id', 'unit_id'])]
 class Product extends Model
 {
+    protected $fillable = [
+        'product_name',
+        'description',
+        'wholesale_price',
+        'sale_price',
+        'stock_quantity',
+        'is_delivery',
+        'category_id',
+        'unit_id'
+    ];
 
     public function category()
     {
@@ -19,15 +27,10 @@ class Product extends Model
         return $this->belongsTo(Unit::class);
     }
 
-    public function purchases()
+    public function sales()
     {
-        return $this->hasMany(Purchase::class, 'product_purchase')
-            ->withPivot('unit_price', 'quantity', 'subtotal')
-            ->withTimestamps();
-    }
-
-    public function productPurchases()
-    {
-        return $this->hasMany(ProductPurchase::class);
+        return $this->belongsToMany(Sale::class, 'product_sale')
+                    ->withPivot('quantity', 'item_price', 'total')
+                    ->withTimestamps();
     }
 }

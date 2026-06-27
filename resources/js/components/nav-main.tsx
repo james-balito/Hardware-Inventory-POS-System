@@ -11,12 +11,14 @@ import type { NavItem } from '@/types';
 
 
 
-export function NavMain({ items = [] }: { items: NavItem[] }) {
+export function NavMain({ items = [], navLabel }: { items: NavItem[], navLabel?: string }) {
     const { isCurrentUrl } = useCurrentUrl();
 
     return (
         <SidebarGroup className="px-2 py-0">
-            <SidebarGroupLabel>Platform</SidebarGroupLabel>
+            {navLabel &&
+                <SidebarGroupLabel>{navLabel}</SidebarGroupLabel>
+            }
             <SidebarMenu>
                 {items.map((item) => (
                     <SidebarMenuItem key={item.title}>

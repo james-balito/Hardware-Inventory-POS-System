@@ -75,8 +75,9 @@ export default function Edit({ category }: { category: Category }) {
                                 type="button"
                                 variant="outline"
                                 onClick={() => router.visit('/categories')}
+                                disabled={processing}
                             >
-                                Cancel
+                                {processing ? 'Cancel' : 'Cancel'}
                             </Button>
                         </div>
                     </form>

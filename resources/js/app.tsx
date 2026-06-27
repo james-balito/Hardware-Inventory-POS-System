@@ -4,6 +4,7 @@ import { initializeTheme } from '@/hooks/use-appearance';
 import AppLayout from '@/layouts/app-layout';
 import AuthLayout from '@/layouts/auth-layout';
 import SettingsLayout from '@/layouts/settings/layout';
+import { ToastProvider } from './components/contexts/toast-context';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -23,7 +24,11 @@ createInertiaApp({
     },
     strictMode: true,
     withApp(app) {
-        return <TooltipProvider delayDuration={0}>{app}</TooltipProvider>;
+        return <TooltipProvider delayDuration={0}>
+            <ToastProvider>
+                {app}
+            </ToastProvider>
+        </TooltipProvider>;
     },
     progress: {
         color: '#4B5563',

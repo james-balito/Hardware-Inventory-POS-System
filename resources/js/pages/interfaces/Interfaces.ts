@@ -33,6 +33,28 @@ export interface Product {
     updated_at: string;
 }
 
+// Sale Database Interface
+export interface SaleProduct {
+    id: number;
+    product_name: string;
+    sale_price: number;
+    pivot: {
+        quantity: number;
+        item_price: number;
+        total: number;
+    };
+}
+
+export interface Sale {
+    id: number;
+    invoice_number: string;
+    sub_total: number;
+    total: number;
+    products: SaleProduct[];
+    created_at: string;
+    updated_at: string;
+}
+
 // Column Interface for TableList
 export interface Column {
     label: string;

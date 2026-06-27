@@ -42,7 +42,7 @@ class ProductController extends Controller
             'product_name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'wholesale_price' => 'required|numeric|min:0',
-            'sale_price' => 'required|numeric|min:0|gt:wholesale_price', // gt = greater than
+            'sale_price' => 'required|numeric|min:0|gt:wholesale_price',
             'stock_quantity' => 'required|integer|min:0',
             'category_id' => 'required|exists:categories,id',
             'unit_id' => 'required|exists:units,id',
@@ -66,16 +66,16 @@ class ProductController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Product $product) 
+    public function edit(Product $product)
     {
-         $products = Product::findOrFail($product->id);
         $categories = Category::all();
         $units = Unit::all();
-         return Inertia::render('product/Edit', [
+        
+        return Inertia::render('product/Edit', [
+            'product' => $product, 
             'categories' => $categories,
-            'units' => $units
-
-         ]);
+            'units' => $units,
+        ]);
     }
 
     /**
@@ -83,7 +83,21 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        //
+        $request->validate([
+            'product_name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'wholesale_price' => 'required|numeric|min:0',
+            'sale_price' => 'required|numeric|min:0|gt:wholesale_price',
+            'stock_quantity' => 'required|integer|min:0',
+            'category_id' => 'required|exists:categories,id',
+            'unit_id' => 'required|exists:units,id',
+        ], [
+            'sale_price.gt' => 'The sale price must be greater than the wholesale price.',
+        ]);
+
+        $product->update($request->all());
+        
+        return redirect()->route('products.index')->with('success', 'Product updated successfully.');
     }
 
     /**
@@ -91,8 +105,8 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        $products = Product::findOrFail($product->id);
-
-        $products->delete();
+        $product->delete();
+        
+        return redirect()->route('products.index')->with('success', 'Product deleted successfully.');
     }
 }

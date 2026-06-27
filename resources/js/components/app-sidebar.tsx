@@ -1,5 +1,15 @@
 import { Link } from '@inertiajs/react';
-import { BookOpen, FolderGit2, LayoutGrid } from 'lucide-react';
+import { 
+    LayoutGrid, 
+    ShoppingCart, 
+    PlusCircle, 
+    Clock,
+    Package, 
+    Tag, 
+    Ruler,
+    BookOpen, 
+    FolderGit2 
+} from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
@@ -16,46 +26,45 @@ import {
 import { dashboard } from '@/routes';
 import type { NavItem } from '@/types';
 
-const mainNavItems: NavItem[] = [
+const generalNavItems: NavItem[] = [
     {
         title: 'Dashboard',
         href: dashboard(),
         icon: LayoutGrid,
+    }
+];
+
+const salesNavItems: NavItem[] = [
+    {
+        title: 'Sales Form',
+        href: '/sales/create',
+        icon: PlusCircle,
     },
+    {
+        title: 'Sales History',
+        href: '/sales',
+        icon: Clock,
+    },
+];
+
+const inventoryNavItems: NavItem[] = [
     {
         title: 'Products',
         href: '/products',
-        icon: LayoutGrid,
+        icon: Package,
     },
     {
         title: 'Categories',
         href: '/categories',
-        icon: LayoutGrid,
+        icon: Tag,
     },
     {
         title: 'Units',
         href: '/units',
-        icon: LayoutGrid,
+        icon: Ruler,
     },
-    {
-        title: 'Purchases',
-        href: '/purchases',
-        icon: LayoutGrid,
-    }
 ];
 
-const footerNavItems: NavItem[] = [
-    {
-        title: 'Repository',
-        href: 'https://github.com/laravel/react-starter-kit',
-        icon: FolderGit2,
-    },
-    {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#react',
-        icon: BookOpen,
-    },
-];
 
 export function AppSidebar() {
     return (
@@ -73,11 +82,12 @@ export function AppSidebar() {
             </SidebarHeader>
 
             <SidebarContent>
-                <NavMain items={mainNavItems} />
+                <NavMain items={generalNavItems}/>
+                <NavMain items={salesNavItems} navLabel='Sales' />
+                <NavMain items={inventoryNavItems} navLabel='Inventory' />
             </SidebarContent>
 
             <SidebarFooter>
-                <NavFooter items={footerNavItems} className="mt-auto" />
                 <NavUser />
             </SidebarFooter>
         </Sidebar>
