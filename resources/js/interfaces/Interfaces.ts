@@ -1,5 +1,3 @@
-// Interfaces for Database Models to display data in the frontend
-
 // Category Database Interface
 export interface Category {
     id: number,
@@ -41,6 +39,7 @@ export interface SaleProduct {
     pivot: {
         quantity: number;
         item_price: number;
+        unit:string;
         total: number;
     };
 }

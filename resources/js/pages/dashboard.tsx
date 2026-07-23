@@ -1,7 +1,7 @@
 import { Head } from '@inertiajs/react';
 import { useState, useEffect } from 'react';
 import { dashboard } from '@/routes';
-import { Product, Sale } from './interfaces/Interfaces';
+import { Product, Sale } from '../interfaces/Interfaces';
 import { 
     Package, 
     ShoppingCart, 

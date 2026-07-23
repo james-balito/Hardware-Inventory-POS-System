@@ -1,10 +1,11 @@
-// resources/js/Pages/Sales/Index.tsx
-import { Link, router } from "@inertiajs/react";
-import { useState, useEffect } from "react";
-import { Plus, ReceiptText } from "lucide-react";
-import TableList from "@/components/table-list";
-import { SaleTable } from "@/tables/sales";
-import type { Sale } from "@/pages/interfaces/Interfaces";
+import { Link, router } from '@inertiajs/react';
+import { useState, useEffect } from 'react';
+import { Plus, ReceiptText } from 'lucide-react';
+import TableList from '@/components/table-list';
+import { SaleTable } from '@/tables/sales';
+import type { Sale } from '@/interfaces/Interfaces';
+import SalesModal from '@/components/modals/sales/index-sales-modal';
+import { Clock } from 'lucide-react';
 
 interface SaleProps {
     sales: Sale[];
@@ -12,6 +13,8 @@ interface SaleProps {
 
 export default function Index({ sales }: SaleProps) {
     const [showSales, setShowSales] = useState<Sale[]>([]);
+    const [selectedSale, setSelectedSale] = useState<Sale | null>(null);
+    const [showModal, setShowModal] = useState(false);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -24,46 +27,56 @@ export default function Index({ sales }: SaleProps) {
     }, [sales]);
 
     const handleView = (sale: Sale) => {
-        router.visit(`/sales/${sale.id}`);
+        setSelectedSale(sale);
+        setShowModal(true);
     };
 
     if (loading) {
         return (
             <div className="min-h-screen bg-slate-50">
-                <div className="max-w-6xl mx-auto px-6 py-8">
+                <div className="mx-auto max-w-6xl px-6 py-8">
                     {/* Header skeleton */}
-                    <div className="flex items-end justify-between mb-8">
+                    <div className="mb-8 flex items-end justify-between">
                         <div>
-                            <div className="h-3 w-20 bg-slate-200 rounded animate-pulse mb-3" />
-                            <div className="h-8 w-32 bg-slate-200 rounded animate-pulse" />
+                            <div className="mb-3 h-3 w-20 animate-pulse rounded bg-slate-200" />
+                            <div className="h-8 w-32 animate-pulse rounded bg-slate-200" />
                         </div>
-                        <div className="h-10 w-36 bg-slate-200 rounded-xl animate-pulse" />
+                        <div className="h-10 w-36 animate-pulse rounded-xl bg-slate-200" />
                     </div>
 
                     {/* Stats skeleton */}
-                    <div className="grid grid-cols-3 gap-4 mb-6">
+                    <div className="mb-6 grid grid-cols-3 gap-4">
                         {[...Array(3)].map((_, i) => (
-                            <div key={i} className="bg-white border border-slate-200 rounded-xl p-4 animate-pulse">
-                                <div className="h-3 w-24 bg-slate-100 rounded mb-3" />
-                                <div className="h-8 w-16 bg-slate-100 rounded" />
+                            <div
+                                key={i}
+                                className="animate-pulse rounded-xl border border-slate-200 bg-white p-4"
+                            >
+                                <div className="mb-3 h-3 w-24 rounded bg-slate-100" />
+                                <div className="h-8 w-16 rounded bg-slate-100" />
                             </div>
                         ))}
                     </div>
 
                     {/* Table skeleton */}
-                    <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
-                        <div className="bg-slate-50 border-b border-slate-200 px-6 py-3.5 flex gap-8 animate-pulse">
+                    <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
+                        <div className="flex animate-pulse gap-8 border-b border-slate-200 bg-slate-50 px-6 py-3.5">
                             {[...Array(5)].map((_, i) => (
-                                <div key={i} className="h-3 w-20 bg-slate-200 rounded" />
+                                <div
+                                    key={i}
+                                    className="h-3 w-20 rounded bg-slate-200"
+                                />
                             ))}
                         </div>
                         {[...Array(5)].map((_, i) => (
-                            <div key={i} className="px-6 py-4 border-b border-slate-100 flex gap-8 animate-pulse">
-                                <div className="h-4 w-6 bg-slate-100 rounded" />
-                                <div className="h-4 w-32 bg-slate-100 rounded" />
-                                <div className="h-4 w-20 bg-slate-100 rounded" />
-                                <div className="h-4 w-24 bg-slate-100 rounded" />
-                                <div className="h-4 w-20 bg-slate-100 rounded" />
+                            <div
+                                key={i}
+                                className="flex animate-pulse gap-8 border-b border-slate-100 px-6 py-4"
+                            >
+                                <div className="h-4 w-6 rounded bg-slate-100" />
+                                <div className="h-4 w-32 rounded bg-slate-100" />
+                                <div className="h-4 w-20 rounded bg-slate-100" />
+                                <div className="h-4 w-24 rounded bg-slate-100" />
+                                <div className="h-4 w-20 rounded bg-slate-100" />
                             </div>
                         ))}
                     </div>
@@ -74,69 +87,85 @@ export default function Index({ sales }: SaleProps) {
 
     // Stats
     const totalSales = sales.length;
-    const totalRevenue = sales.reduce((sum, sale) => sum + Number(sale.total), 0);
-    const todaySales = sales.filter(sale => {
+    const totalRevenue = sales.reduce(
+        (sum, sale) => sum + Number(sale.total),
+        0,
+    );
+    const todaySales = sales.filter((sale) => {
         const saleDate = new Date(sale.created_at);
         const today = new Date();
         return saleDate.toDateString() === today.toDateString();
     }).length;
-    const monthlySales = sales.filter(sales => {
+    const monthlySales = sales.filter((sales) => {
         const saleDate = new Date(sales.created_at);
         const month = new Date().getMonth();
         return saleDate.getMonth() === month;
-    })
+    });
 
     return (
         <div className="min-h-screen bg-slate-50">
-            <div className="max-w-6xl mx-auto py-8">
-
+            <div className="mx-auto max-w-6xl py-8">
                 {/* Page Header */}
-                <div className="flex items-end justify-between mb-8">
+                <div className="mb-8 flex items-end justify-between">
                     <div>
-                        <p className="text-xs font-semibold uppercase tracking-widest text-slate-400 mb-1">
-                            Point of Sale
+                        <p className="mb-1 text-xs font-semibold tracking-widest text-slate-400 uppercase">
+                            Point of Sales
                         </p>
-                        <h1 className="text-2xl font-bold text-slate-900">Sales History</h1>
+                        <div className = {`flex items-center gap-2`}>
+                            <span className = {`bg-black text-white rounded-md p-2`}>
+                                <Clock />
+                            </span>
+                            <h1 className="text-2xl font-bold text-slate-900">
+                                Sales History
+                            </h1>
+                        </div>
                     </div>
                     <Link href="/sales/create">
-                        <button className="flex items-center gap-2 bg-slate-900 hover:bg-blue-600 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors cursor-pointer">
-                            <Plus className="w-4 h-4" />
+                        <button className="flex cursor-pointer items-center gap-2 rounded-xl bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-600">
+                            <Plus className="h-4 w-4" />
                             New Sale
                         </button>
                     </Link>
                 </div>
 
                 {/* Summary Stats */}
-                <div className="grid grid-cols-4 gap-4 mb-6">
-                    <div className="bg-white border border-slate-300 rounded-xl p-4">
-                        <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+                <div className="mb-6 grid grid-cols-4 gap-4">
+                    <div className="rounded-xl border border-slate-300 bg-white p-4">
+                        <p className="mb-2 text-xs font-semibold tracking-wider text-slate-400 uppercase">
                             Total Sales
                         </p>
-                        <p className="text-2xl font-bold text-slate-900 font-mono">
+                        <p className="font-mono text-2xl font-bold text-slate-900">
                             {totalSales}
                         </p>
                     </div>
-                    <div className="bg-green-200/10 border border-green-300 rounded-xl p-4">
-                        <p className="text-xs font-semibold uppercase tracking-wider text-green-500 mb-2">
+                    <div className="rounded-xl border border-green-300 bg-green-200/10 p-4">
+                        <p className="mb-2 text-xs font-semibold tracking-wider text-green-500 uppercase">
                             Total Revenue
                         </p>
-                        <p className="text-2xl font-bold text-green-600 font-mono">
-                            ₱{totalRevenue.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        <p className="font-mono text-2xl font-bold text-green-600">
+                            ₱
+                            {totalRevenue.toLocaleString('en-PH', {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2,
+                            })}
                         </p>
                     </div>
-                    <div className="bg-orange-200/10 border border-orange-300 rounded-xl p-4">
-                        <p className="text-xs font-semibold uppercase tracking-wider text-orange-500 mb-2">
-                            {new Date().toLocaleString('en-US', { month: 'long'})} Sales
+                    <div className="rounded-xl border border-orange-300 bg-orange-200/10 p-4">
+                        <p className="mb-2 text-xs font-semibold tracking-wider text-orange-500 uppercase">
+                            {new Date().toLocaleString('en-US', {
+                                month: 'long',
+                            })}{' '}
+                            Sales
                         </p>
-                        <p className="text-2xl font-bold text-orange-600 font-mono">
+                        <p className="font-mono text-2xl font-bold text-orange-600">
                             {monthlySales.length}
                         </p>
                     </div>
-                    <div className="bg-blue-200/10 border border-blue-300 rounded-xl p-4">
-                        <p className="text-xs font-semibold uppercase tracking-wider text-blue-500 mb-2">
+                    <div className="rounded-xl border border-blue-300 bg-blue-200/10 p-4">
+                        <p className="mb-2 text-xs font-semibold tracking-wider text-blue-500 uppercase">
                             Today's Sales
                         </p>
-                        <p className="text-2xl font-bold text-blue-600 font-mono">
+                        <p className="font-mono text-2xl font-bold text-blue-600">
                             {todaySales}
                         </p>
                     </div>
@@ -154,29 +183,42 @@ export default function Index({ sales }: SaleProps) {
                         onView={handleView}
                         emptyTableMessage={{
                             icon: <ReceiptText />,
-                            title: "No sales yet",
-                            description: "Start a new transaction to see it listed here.",
+                            title: 'No sales yet',
+                            description:
+                                'Start a new transaction to see it listed here.',
                             onActionClick: () => router.visit('/sales/create'),
-                            buttonText: "New Sale"
+                            buttonText: 'New Sale',
                         }}
                     />
                 ) : (
-                    <div className="bg-white border border-slate-200 rounded-xl p-12 flex flex-col items-center justify-center text-center">
-                        <div className="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center mb-4">
-                            <ReceiptText className="w-8 h-8 text-slate-400" />
+                    <div className="flex flex-col items-center justify-center rounded-xl border border-slate-200 bg-white p-12 text-center">
+                        <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-slate-100">
+                            <ReceiptText className="h-8 w-8 text-slate-400" />
                         </div>
-                        <h3 className="text-lg font-semibold text-slate-900 mb-1">No sales yet</h3>
-                        <p className="text-sm text-slate-500 mb-6 max-w-sm">
-                            Your sales history will appear here once you start processing transactions.
+                        <h3 className="mb-1 text-lg font-semibold text-slate-900">
+                            No sales yet
+                        </h3>
+                        <p className="mb-6 max-w-sm text-sm text-slate-500">
+                            Your sales history will appear here once you start
+                            processing transactions.
                         </p>
                         <Link href="/sales/create">
-                            <button className="flex items-center gap-2 bg-slate-900 hover:bg-blue-600 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors">
-                                <Plus className="w-4 h-4" />
+                            <button className="flex items-center gap-2 rounded-xl bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-600">
+                                <Plus className="h-4 w-4" />
                                 Create Your First Sale
                             </button>
                         </Link>
                     </div>
                 )}
+
+                <SalesModal
+                    onClose={() => {
+                        setSelectedSale(null);
+                        setShowModal(false);
+                    }}
+                    isOpen={showModal}
+                    sale={selectedSale}
+                />
             </div>
         </div>
     );

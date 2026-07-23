@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import ProductCard from '@/components/product-card';
-import { ProductProps } from '@/pages/interfaces/Props';
-import { Product } from '@/pages/interfaces/Interfaces';
+import { ProductProps } from '@/interfaces/Props';
+import { Product } from '@/interfaces/Interfaces';
 import { router } from '@inertiajs/react';
 
 export default function CreateSale({ products }: ProductProps) {

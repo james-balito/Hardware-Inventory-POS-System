@@ -3,7 +3,7 @@ import { Link, router } from "@inertiajs/react";
 import { useState, useEffect } from "react";
 import { Plus } from "lucide-react";
 import ShowListModal from "@/components/show-list-modal";
-import { CreateCategoryModal } from "@/components/modals/create-category-modal";
+import { CreateCategoryModal } from "@/components/modals/category/create-category-modal";
 import { useToast } from '@/components/contexts/toast-context';
 import type { Category } from "@/types/category";
 import TableList from "@/components/table-list";

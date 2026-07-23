@@ -1,5 +1,5 @@
 // Product Interface
-import { Product, Category, Unit } from "@/pages/interfaces/Interfaces";
+import { Product, Category, Unit } from "@/interfaces/Interfaces";
 
 // Form UI Components
 import { Button } from '@/components/ui/button';

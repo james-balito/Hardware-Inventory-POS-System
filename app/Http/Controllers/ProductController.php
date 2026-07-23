@@ -16,7 +16,14 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::with('category', 'unit')->get();
-        return Inertia::render('product/Index', compact('products'));
+        $categories = Category::all();
+        $units = Unit::all();
+
+        return Inertia::render('product/Index', compact(
+            'products',
+            'categories',
+            'units'
+        ));
     }
 
     /**
@@ -70,9 +77,9 @@ class ProductController extends Controller
     {
         $categories = Category::all();
         $units = Unit::all();
-        
+
         return Inertia::render('product/Edit', [
-            'product' => $product, 
+            'product' => $product,
             'categories' => $categories,
             'units' => $units,
         ]);
@@ -96,7 +103,7 @@ class ProductController extends Controller
         ]);
 
         $product->update($request->all());
-        
+
         return redirect()->route('products.index')->with('success', 'Product updated successfully.');
     }
 
@@ -106,7 +113,7 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         $product->delete();
-        
+
         return redirect()->route('products.index')->with('success', 'Product deleted successfully.');
     }
 }

@@ -20,7 +20,7 @@ export const SaleTable = {
                     return productNames[0];
                 }
                 
-                return `${productNames[0]} +${productNames.length - 1} more`;
+                return `${productNames[0]} + ${productNames.length - 1} more`;
             }
         },
         { 

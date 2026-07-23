@@ -1,5 +1,5 @@
 import { Eye, Pencil, Trash2, Ellipsis, Plus } from "lucide-react";
-import { TableListProps } from "@/pages/interfaces/Props";
+import { TableListProps } from "@/interfaces/Props";
 import {
     DropdownMenu,
     DropdownMenuContent,

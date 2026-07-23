@@ -5,7 +5,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { FormEvent, useState } from 'react';
-import { Category } from '@/pages/interfaces/Interfaces';
+import { Category } from '@/interfaces/Interfaces';
 
 export default function Edit({ category }: { category: Category }) {
     const { data, setData, put, processing, errors } = useForm({

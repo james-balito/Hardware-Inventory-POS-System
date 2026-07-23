@@ -1,9 +1,19 @@
 
 // Product Database Interface and Props
-import { Column, Product } from '@/pages/interfaces/Interfaces';
+import { Column, Product, Category, Unit } from '@/interfaces/Interfaces';
 
 export interface ProductProps {
     products: Product[];
+    categories: Category[];
+    units: Unit[];
+}
+
+export interface CategoryProps {
+    categories: Category[]
+}
+
+export interface UnitProps {
+    units: Unit[]
 }
 
 // TableList Props
