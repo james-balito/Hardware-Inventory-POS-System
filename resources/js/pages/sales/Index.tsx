@@ -6,6 +6,7 @@ import { SaleTable } from '@/tables/sales';
 import type { Sale } from '@/interfaces/Interfaces';
 import SalesModal from '@/components/modals/sales/index-sales-modal';
 import { Clock } from 'lucide-react';
+import PageHeader from '@/components/header';
 
 interface SaleProps {
     sales: Sale[];
@@ -107,19 +108,11 @@ export default function Index({ sales }: SaleProps) {
             <div className="mx-auto max-w-6xl py-8">
                 {/* Page Header */}
                 <div className="mb-8 flex items-end justify-between">
-                    <div>
-                        <p className="mb-1 text-xs font-semibold tracking-widest text-slate-400 uppercase">
-                            Point of Sales
-                        </p>
-                        <div className = {`flex items-center gap-2`}>
-                            <span className = {`bg-black text-white rounded-md p-2`}>
-                                <Clock />
-                            </span>
-                            <h1 className="text-2xl font-bold text-slate-900">
-                                Sales History
-                            </h1>
-                        </div>
-                    </div>
+                    <PageHeader 
+                    headerTitle='Point of Sale'
+                    icon = {<Clock/>}
+                    title='Sales'
+                    />
                     <Link href="/sales/create">
                         <button className="flex cursor-pointer items-center gap-2 rounded-xl bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-600">
                             <Plus className="h-4 w-4" />
@@ -152,7 +145,7 @@ export default function Index({ sales }: SaleProps) {
                     </div>
                     <div className="rounded-xl border border-orange-300 bg-orange-200/10 p-4">
                         <p className="mb-2 text-xs font-semibold tracking-wider text-orange-500 uppercase">
-                            {new Date().toLocaleString('en-US', {
+                            Month of {new Date().toLocaleString('en-US', {
                                 month: 'long',
                             })}{' '}
                             Sales

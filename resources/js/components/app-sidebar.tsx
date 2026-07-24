@@ -41,7 +41,7 @@ const salesNavItems: NavItem[] = [
         icon: PlusCircle,
     },
     {
-        title: 'Sales History',
+        title: 'Sales',
         href: '/sales',
         icon: Clock,
     },

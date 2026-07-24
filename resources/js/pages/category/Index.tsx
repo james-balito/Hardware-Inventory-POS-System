@@ -1,13 +1,14 @@
 // resources/js/Pages/Categories/Index.tsx
 import { Link, router } from "@inertiajs/react";
 import { useState, useEffect } from "react";
-import { Plus } from "lucide-react";
+import { Plus, Tag } from "lucide-react";
 import ShowListModal from "@/components/show-list-modal";
 import { CreateCategoryModal } from "@/components/modals/category/create-category-modal";
 import { useToast } from '@/components/contexts/toast-context';
 import type { Category } from "@/types/category";
 import TableList from "@/components/table-list";
 import { CategoryTable } from "@/tables/category";
+import PageHeader from "@/components/header";
 
 interface CategoryProps {
     categories: Category[];
@@ -93,12 +94,11 @@ export default function Index({ categories }: CategoryProps) {
     return (
         <div className="min-h-screen py-8">
             <div className="flex items-end justify-between mb-8 mx-8">
-                <div>
-                    <p className="text-xs font-semibold uppercase tracking-widest text-slate-400 mb-1">
-                        Inventory
-                    </p>
-                    <h1 className="text-2xl font-bold text-slate-900">Categories</h1>
-                </div>
+               <PageHeader
+               headerTitle = 'Inventory'
+               icon = {<Tag/>}
+               title = "Categories"
+               />
                 <button 
                     onClick={() => setIsCreateModalOpen(true)}
                     className="flex items-center gap-2 bg-slate-900 hover:bg-blue-600 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors cursor-pointer"

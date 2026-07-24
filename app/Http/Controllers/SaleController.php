@@ -68,7 +68,7 @@ class SaleController extends Controller
                 $subTotal += $total;
 
                 $items[$product->id] = [
-                    'quantity'   => $quantity,
+                    'quantity'   => (float) $quantity,
                     'item_price' => $price,   // ← Matches migration column name
                     'total'      => $total,
                 ];
