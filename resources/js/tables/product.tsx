@@ -1,4 +1,4 @@
-import { formatDate, formatTime } from '@/components/format-time-and-date';
+import { shortFormatDate, shortFormatTime } from '@/components/format-time-and-date';
 
 export const ProductTable = {
     columns: [
@@ -82,7 +82,9 @@ export const ProductTable = {
         {
             key: 'created_at',
             label: 'Created Date',
-            render: (value: string) => formatDate(value),
+            render: (value: string) => {
+                return `${shortFormatDate(value)} ${shortFormatTime(value)}`;
+            }
         },
     ],
 

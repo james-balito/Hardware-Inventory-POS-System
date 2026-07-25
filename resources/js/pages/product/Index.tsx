@@ -155,7 +155,6 @@ export default function Index({ products, categories, units }: ProductProps) {
                         </button>
                     </Link>
                 </div>
-
                 {/* Search Bar */}
                 <div className="mb-4">
                     <div className="relative">
@@ -177,12 +176,11 @@ export default function Index({ products, categories, units }: ProductProps) {
                         )}
                     </div>
                 </div>
-
                 {/* Summary Stats */}
                 <div className="mb-6 grid grid-cols-4 gap-4">
                     <button
                         onClick={() => setStockFilter('all')}
-                        className={`flex flex-col items-start rounded-xl border bg-white p-4 transition-all hover:shadow-md ${
+                        className={`flex cursor-pointer flex-col items-start rounded-xl border bg-white p-4 transition-all hover:shadow-md ${
                             stockFilter === 'all'
                                 ? 'border-blue-400 bg-blue-50 shadow-md ring-2 ring-blue-400'
                                 : 'border-blue-200 hover:bg-blue-50'
@@ -198,7 +196,7 @@ export default function Index({ products, categories, units }: ProductProps) {
 
                     <button
                         onClick={() => handleStockFilter('in_stock')}
-                        className={`flex flex-col items-start rounded-xl border bg-white p-4 transition-all hover:shadow-md ${
+                        className={`hover:shadow-mdcursor-pointer flex flex-col items-start rounded-xl border bg-white p-4 transition-all cursor-pointer${
                             stockFilter === 'in_stock'
                                 ? 'border-green-500 bg-green-50 shadow-md ring-2 ring-green-400'
                                 : 'border-green-300 hover:bg-green-50'
@@ -214,7 +212,7 @@ export default function Index({ products, categories, units }: ProductProps) {
 
                     <button
                         onClick={() => handleStockFilter('low_stock')}
-                        className={`flex flex-col items-start rounded-xl border bg-white p-4 transition-all hover:shadow-md ${
+                        className={`flex cursor-pointer flex-col items-start rounded-xl border bg-white p-4 transition-all hover:shadow-md ${
                             stockFilter === 'low_stock'
                                 ? 'border-orange-400 bg-orange-50 shadow-md ring-2 ring-orange-400'
                                 : 'border-orange-200 hover:bg-orange-50'
@@ -230,7 +228,7 @@ export default function Index({ products, categories, units }: ProductProps) {
 
                     <button
                         onClick={() => handleStockFilter('out_of_stock')}
-                        className={`flex flex-col items-start rounded-xl border bg-white p-4 transition-all hover:shadow-md ${
+                        className={`flex cursor-pointer flex-col items-start rounded-xl border bg-white p-4 transition-all hover:shadow-md ${
                             stockFilter === 'out_of_stock'
                                 ? 'border-red-500 bg-red-50 shadow-md ring-2 ring-red-400'
                                 : 'border-red-200 hover:bg-red-50'
@@ -249,7 +247,7 @@ export default function Index({ products, categories, units }: ProductProps) {
                 <div className="mb-4 flex flex-wrap gap-2">
                     <button
                         onClick={() => setActiveCategory(null)}
-                        className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+                        className={`cursor-pointer rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
                             activeCategory === null
                                 ? 'bg-slate-900 text-slate-100'
                                 : 'border border-slate-300 bg-slate-100 text-slate-600 hover:bg-slate-200'
@@ -292,7 +290,6 @@ export default function Index({ products, categories, units }: ProductProps) {
                         </button>
                     ))}
                 </div>
-
                 {/* Active Filters Indicator */}
                 {hasActiveFilters && (
                     <div className="mb-4 flex items-center gap-2">
@@ -318,14 +315,22 @@ export default function Index({ products, categories, units }: ProductProps) {
                         )}
 
                         {stockFilter !== 'all' && (
-                            <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2.5 py-0.5 text-xs font-medium text-amber-700">
+                            <span
+                                className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                                    stockFilter === 'in_stock'
+                                        ? 'bg-green-50 text-green-700'
+                                        : stockFilter === 'low_stock'
+                                          ? 'bg-amber-50 text-amber-700'
+                                          : 'bg-red-50 text-red-700'
+                                }`}
+                            >
                                 {stockFilter === 'in_stock' && 'In Stock'}
                                 {stockFilter === 'low_stock' && 'Low Stock'}
                                 {stockFilter === 'out_of_stock' &&
                                     'Out of Stock'}
                                 <button
                                     onClick={() => setStockFilter('all')}
-                                    className="ml-0.5 rounded-full p-0.5 hover:bg-amber-200"
+                                    className="ml-0.5 rounded-full p-0.5 hover:bg-black/10"
                                 >
                                     <X className="h-3 w-3" />
                                 </button>
@@ -337,13 +342,12 @@ export default function Index({ products, categories, units }: ProductProps) {
                                 setActiveCategory(null);
                                 setStockFilter('all');
                             }}
-                            className="text-xs text-slate-500 underline hover:text-slate-700"
+                            className="cursor-pointer text-xs text-slate-500 underline hover:text-slate-700"
                         >
                             Clear all filters
                         </button>
                     </div>
                 )}
-
                 {/* Table with dynamic empty message */}
                 <TableList
                     columns={ProductTable.columns}
