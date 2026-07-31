@@ -35,19 +35,23 @@ export default function Index({ sales }: SaleProps) {
     if (loading) {
         return (
             <div className="min-h-screen bg-slate-50">
-                <div className="mx-auto max-w-6xl px-6 py-8">
+                <div className="mx-8 px-6 py-8">
                     {/* Header skeleton */}
                     <div className="mb-8 flex items-end justify-between">
-                        <div>
-                            <div className="mb-3 h-3 w-20 animate-pulse rounded bg-slate-200" />
-                            <div className="h-8 w-32 animate-pulse rounded bg-slate-200" />
+                        <div className={`flex flex-row`}>
+                            {/* <div className="mb-3 h-3 w-20 animate-pulse rounded bg-slate-200" /> */}
+                            <div className="h-12 w-13 animate-pulse rounded bg-slate-200" />
+                            <div className={`ml-4 flex flex-col`}>
+                                <div className="h-4 w-25 animate-pulse rounded bg-slate-200" />
+                                <div className="mt-1 h-7 w-15 animate-pulse rounded bg-slate-200" />
+                            </div>
                         </div>
                         <div className="h-10 w-36 animate-pulse rounded-xl bg-slate-200" />
                     </div>
 
                     {/* Stats skeleton */}
-                    <div className="mb-6 grid grid-cols-3 gap-4">
-                        {[...Array(3)].map((_, i) => (
+                    <div className="mb-6 grid grid-cols-4 gap-4">
+                        {[...Array(4)].map((_, i) => (
                             <div
                                 key={i}
                                 className="animate-pulse rounded-xl border border-slate-200 bg-white p-4"
@@ -108,10 +112,10 @@ export default function Index({ sales }: SaleProps) {
             <div className="mx-auto max-w-6xl py-8">
                 {/* Page Header */}
                 <div className="mb-8 flex items-end justify-between">
-                    <PageHeader 
-                    headerTitle='Point of Sale'
-                    icon = {<Clock/>}
-                    title='Sales'
+                    <PageHeader
+                        headerTitle="Point of Sale"
+                        icon={<Clock />}
+                        title="Sales"
                     />
                     <Link href="/sales/create">
                         <button className="flex cursor-pointer items-center gap-2 rounded-xl bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-600">
@@ -123,19 +127,11 @@ export default function Index({ sales }: SaleProps) {
 
                 {/* Summary Stats */}
                 <div className="mb-6 grid grid-cols-4 gap-4">
-                    <div className="rounded-xl border border-slate-300 bg-white p-4">
-                        <p className="mb-2 text-xs font-semibold tracking-wider text-slate-400 uppercase">
-                            Total Sales
-                        </p>
-                        <p className="font-mono text-2xl font-bold text-slate-900">
-                            {totalSales}
-                        </p>
-                    </div>
-                    <div className="rounded-xl border border-green-300 bg-green-200/10 p-4">
-                        <p className="mb-2 text-xs font-semibold tracking-wider text-green-500 uppercase">
+                    <div className="rounded-xl border border-slate-400 bg-white p-4">
+                        <p className="mb-2 text-xs font-semibold tracking-wider text-slate-500 uppercase">
                             Total Revenue
                         </p>
-                        <p className="font-mono text-2xl font-bold text-green-600">
+                        <p className="font-mono text-2xl font-bold text-slate-600">
                             ₱
                             {totalRevenue.toLocaleString('en-PH', {
                                 minimumFractionDigits: 2,
@@ -143,9 +139,18 @@ export default function Index({ sales }: SaleProps) {
                             })}
                         </p>
                     </div>
+                    <div className="rounded-xl border border-green-300 bg-green-200/10 p-4">
+                        <p className="mb-2 text-xs font-semibold tracking-wider text-green-600 uppercase">
+                            Total Sales
+                        </p>
+                        <p className="font-mono text-2xl font-bold text-green-600">
+                            {totalSales}
+                        </p>
+                    </div>
                     <div className="rounded-xl border border-orange-300 bg-orange-200/10 p-4">
                         <p className="mb-2 text-xs font-semibold tracking-wider text-orange-500 uppercase">
-                            Month of {new Date().toLocaleString('en-US', {
+                            Month of{' '}
+                            {new Date().toLocaleString('en-US', {
                                 month: 'long',
                             })}{' '}
                             Sales

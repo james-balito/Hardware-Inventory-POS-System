@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useRef, useLayoutEffect } from 'react';
+import gsap from 'gsap';
 import ProductCard from '@/components/product-card';
 import { ProductProps } from '@/interfaces/Props';
 import { Product } from '@/interfaces/Interfaces';
@@ -6,10 +7,64 @@ import { router } from '@inertiajs/react';
 import PageHeader from '@/components/header';
 import { ShoppingCart } from 'lucide-react';
 
+// A summary row animates itself in, once, the moment it first mounts.
+// Because each row is keyed by product.id, React only mounts a NEW
+// component instance for a product that's genuinely being added —
+// existing rows already in the list keep their same key/instance and
+// are never re-mounted, so they never replay this animation. That's
+// what makes "only new items animate in" work without any manual
+// bookkeeping of which item was just added.
+function SaleLineItem({ children }: { children: React.ReactNode }) {
+    const ref = useRef<HTMLDivElement>(null);
+
+    // useLayoutEffect (not useEffect) runs synchronously before the
+    // browser paints. If we used useEffect here, the row would flash
+    // at full opacity for a frame before GSAP's "from" state kicked in.
+    useLayoutEffect(() => {
+        gsap.fromTo(
+            ref.current,
+            { opacity: 0, y: -8, scale: 0.97 },
+            { opacity: 1, y: 0, scale: 1, duration: 0.35, ease: 'power2.out' }
+        );
+    }, []);
+
+    return <div ref={ref}>{children}</div>;
+}
+
 export default function CreateSale({ products }: ProductProps) {
     const [selectedProducts, setSelectedProducts] = useState<Product[]>([]);
     const [quantities, setQuantities] = useState<Record<number, number>>({});
     const [processing, setProcessing] = useState(false);
+    const [showMoneyModal, setShowMoneyModal] = useState(false);
+
+    // Refs for the page-load entrance animation. cardRefs is reset and
+    // re-populated every render (see below the `products.map`), same
+    // pattern as any GSAP-animated list — but the animation effect
+    // itself only runs once, on mount ([] dependency), since this is a
+    // "the page opened" animation, not something that should replay.
+    const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+    const sidebarRef = useRef<HTMLDivElement>(null);
+
+    useLayoutEffect(() => {
+        gsap.fromTo(
+            cardRefs.current.filter(Boolean),
+            { opacity: 0, y: 16, scale: 0.96 },
+            {
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                duration: 0.45,
+                stagger: 0.04,
+                ease: 'power2.out',
+            }
+        );
+
+        gsap.fromTo(
+            sidebarRef.current,
+            { opacity: 0, x: 32 },
+            { opacity: 1, x: 0, duration: 0.5, ease: 'power2.out', delay: 0.1 }
+        );
+    }, []);
 
     const getQty = (id: number) => quantities[id] ?? 1;
 
@@ -82,6 +137,11 @@ export default function CreateSale({ products }: ProductProps) {
         );
     };
 
+    // Reset before repopulating via the ref callbacks in the map below —
+    // standard cleanup for a ref array so a shrinking `products` prop
+    // (unlikely here, but still) can't leave stale entries behind.
+    cardRefs.current = [];
+
     return (
         <div className="flex h-screen overflow-hidden bg-slate-50">
             <form onSubmit={handleSubmit} className="flex h-full w-full">
@@ -94,18 +154,25 @@ export default function CreateSale({ products }: ProductProps) {
                     />
 
                     <div className="mt-4 grid grid-cols-3 gap-4">
-                        {products.map((product) => (
-                            <ProductCard
+                        {products.map((product, index) => (
+                            <div
                                 key={product.id}
-                                product={product}
-                                onAddOrder={handleAddProduct}
-                            />
+                                ref={(el) => { cardRefs.current[index] = el; }}
+                            >
+                                <ProductCard
+                                    product={product}
+                                    onAddOrder={handleAddProduct}
+                                />
+                            </div>
                         ))}
                     </div>
                 </div>
 
                 {/* ── Right: Sale Summary Sidebar ── */}
-                <div className="flex w-96 flex-col border-l border-slate-800 bg-slate-900">
+                <div
+                    ref={sidebarRef}
+                    className="flex w-96 flex-col border-l border-slate-800 bg-slate-900"
+                >
                     {/* Header */}
                     <div className="border-b border-slate-800 px-6 py-5">
                         <p className="mb-1 text-xs font-semibold tracking-widest text-slate-500 uppercase">
@@ -147,124 +214,123 @@ export default function CreateSale({ products }: ProductProps) {
                         ) : (
                             <div className="space-y-3">
                                 {selectedProducts.map((product) => (
-                                    <div
-                                        key={product.id}
-                                        className="rounded-xl bg-slate-800 p-4"
-                                    >
-                                        {/* Product name + remove */}
-                                        <div className="mb-3 flex items-start justify-between">
-                                            <span className="flex-1 pr-3 text-sm leading-tight font-medium text-white">
-                                                {product.product_name}
-                                            </span>
-                                            <button
-                                                type="button"
-                                                onClick={() =>
-                                                    handleRemoveProduct(
-                                                        product.id,
-                                                    )
-                                                }
-                                                className="shrink-0 text-slate-600 transition-colors hover:text-red-400"
-                                            >
-                                                <svg
-                                                    className="h-4 w-4"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    viewBox="0 0 24 24"
-                                                >
-                                                    <path
-                                                        strokeLinecap="round"
-                                                        strokeLinejoin="round"
-                                                        strokeWidth={2}
-                                                        d="M6 18L18 6M6 6l12 12"
-                                                    />
-                                                </svg>
-                                            </button>
-                                        </div>
-
-                                        {/* Quantity stepper + line total */}
-                                        <div className="flex items-center justify-between">
-                                            <div className="flex items-center gap-2">
+                                    <SaleLineItem key={product.id}>
+                                        <div className="rounded-xl bg-slate-800 p-4">
+                                            {/* Product name + remove */}
+                                            <div className="mb-3 flex items-start justify-between">
+                                                <span className="flex-1 pr-3 text-sm leading-tight font-medium text-white">
+                                                    {product.product_name}
+                                                </span>
                                                 <button
                                                     type="button"
                                                     onClick={() =>
-                                                        handleQuantityChange(
+                                                        handleRemoveProduct(
                                                             product.id,
-                                                            Math.max(
-                                                                1,
-                                                                getQty(
-                                                                    product.id,
-                                                                ) - 1,
-                                                            ),
                                                         )
                                                     }
-                                                    className="flex h-7 w-7 items-center justify-center rounded-lg bg-slate-700 font-medium text-slate-300 transition-colors hover:bg-slate-600 hover:text-white"
+                                                    className="shrink-0 text-slate-600 transition-colors hover:text-red-400"
                                                 >
-                                                    −
-                                                </button>
-                                                <input
-                                                    type="text"
-                                                    inputMode="numeric"
-                                                    value={getQty(product.id)}
-                                                    onChange={(e) => {
-                                                        const value =
-                                                            e.target.value.replace(
-                                                                /\D/g,
-                                                                '',
-                                                            );
-                                                        const qty = parseInt(
-                                                            value,
-                                                            10,
-                                                        );
-                                                        if (value === '')
-                                                            return;
-                                                        if (
-                                                            !isNaN(qty) &&
-                                                            qty >= 1
-                                                        ) {
-                                                            handleQuantityChange(
-                                                                product.id,
-                                                                qty,
-                                                            );
-                                                        }
-                                                    }}
-                                                    className="w-20 cursor-pointer rounded-lg border border-slate-600 bg-slate-700 px-1 py-1 text-center text-sm text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
-                                                />
-                                                <button
-                                                    type="button"
-                                                    onClick={() =>
-                                                        handleQuantityChange(
-                                                            product.id,
-                                                            getQty(product.id) +
-                                                                1,
-                                                        )
-                                                    }
-                                                    className="flex h-7 w-7 items-center justify-center rounded-lg bg-slate-700 font-medium text-slate-300 transition-colors hover:bg-slate-600 hover:text-white"
-                                                >
-                                                    +
+                                                    <svg
+                                                        className="h-4 w-4"
+                                                        fill="none"
+                                                        stroke="currentColor"
+                                                        viewBox="0 0 24 24"
+                                                    >
+                                                        <path
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                            strokeWidth={2}
+                                                            d="M6 18L18 6M6 6l12 12"
+                                                        />
+                                                    </svg>
                                                 </button>
                                             </div>
 
-                                            <span className="font-mono text-sm font-semibold text-white">
-                                                ₱
-                                                {(
-                                                    Number(product.sale_price) *
-                                                    getQty(product.id)
-                                                ).toFixed(2)}
-                                            </span>
-                                        </div>
+                                            {/* Quantity stepper + line total */}
+                                            <div className="flex items-center justify-between">
+                                                <div className="flex items-center gap-2">
+                                                    <button
+                                                        type="button"
+                                                        onClick={() =>
+                                                            handleQuantityChange(
+                                                                product.id,
+                                                                Math.max(
+                                                                    1,
+                                                                    getQty(
+                                                                        product.id,
+                                                                    ) - 1,
+                                                                ),
+                                                            )
+                                                        }
+                                                        className="flex h-7 w-7 items-center justify-center rounded-lg bg-slate-700 font-medium text-slate-300 transition-colors hover:bg-slate-600 hover:text-white"
+                                                    >
+                                                        −
+                                                    </button>
+                                                    <input
+                                                        type="text"
+                                                        inputMode="numeric"
+                                                        value={getQty(product.id)}
+                                                        onChange={(e) => {
+                                                            const value =
+                                                                e.target.value.replace(
+                                                                    /\D/g,
+                                                                    '',
+                                                                );
+                                                            const qty = parseInt(
+                                                                value,
+                                                                10,
+                                                            );
+                                                            if (value === '')
+                                                                return;
+                                                            if (
+                                                                !isNaN(qty) &&
+                                                                qty >= 1
+                                                            ) {
+                                                                handleQuantityChange(
+                                                                    product.id,
+                                                                    qty,
+                                                                );
+                                                            }
+                                                        }}
+                                                        className="w-20 cursor-pointer rounded-lg border border-slate-600 bg-slate-700 px-1 py-1 text-center text-sm text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                                                    />
+                                                    <button
+                                                        type="button"
+                                                        onClick={() =>
+                                                            handleQuantityChange(
+                                                                product.id,
+                                                                getQty(product.id) +
+                                                                    1,
+                                                            )
+                                                        }
+                                                        className="flex h-7 w-7 items-center justify-center rounded-lg bg-slate-700 font-medium text-slate-300 transition-colors hover:bg-slate-600 hover:text-white"
+                                                    >
+                                                        +
+                                                    </button>
+                                                </div>
 
-                                        {/* Unit price hint */}
-                                        <p className="mt-2 text-xs text-slate-500">
-                                            ₱
-                                            {Number(product.sale_price).toFixed(
-                                                2,
-                                            )}{' '}
-                                            × {getQty(product.id)}{' '}
-                                            {getQty(product.id) === 1
-                                                ? 'unit'
-                                                : 'units'}
-                                        </p>
-                                    </div>
+                                                <span className="font-mono text-sm font-semibold text-white">
+                                                    ₱
+                                                    {(
+                                                        Number(product.sale_price) *
+                                                        getQty(product.id)
+                                                    ).toFixed(2)}
+                                                </span>
+                                            </div>
+
+                                            {/* Unit price hint */}
+                                            <p className="mt-2 text-xs text-slate-500">
+                                                ₱
+                                                {Number(product.sale_price).toFixed(
+                                                    2,
+                                                )}{' '}
+                                                × {getQty(product.id)}{' '}
+                                                {getQty(product.id) === 1
+                                                    ? 'unit'
+                                                    : 'units'}
+                                            </p>
+                                        </div>
+                                    </SaleLineItem>
                                 ))}
                             </div>
                         )}

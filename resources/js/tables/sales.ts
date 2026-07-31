@@ -3,28 +3,28 @@ import { formatDate, formatTime } from "@/components/format-time-and-date";
 
 export const SaleTable = {
     columns: [
-        { 
-            key: 'invoice_number', 
+        {
+            key: 'invoice_number',
             label: 'Invoice #',
         },
-        { 
-            key: 'products', 
+        {
+            key: 'products',
             label: 'Products Ordered',
             render: (_: any, row: any) => {
                 const productNames = row.products?.map((p: any) => p.product_name) || [];
-                
+
                 if (productNames.length === 0) return '—';
-                
+
                 // Show first product name + count of remaining
                 if (productNames.length === 1) {
                     return productNames[0];
                 }
-                
+
                 return `${productNames[0]} + ${productNames.length - 1} more`;
             }
         },
-        { 
-            key: 'item_count', 
+        {
+            key: 'item_count',
             label: 'Items',
             render: (_: any, row: any) => {
                 const totalQty = row.products?.reduce((sum: number, p: any) => {
@@ -40,14 +40,9 @@ export const SaleTable = {
         },
         {
             key: 'created_at',
-            label: 'Date',
-            render: (value: string) => formatDate(value)
+            label: 'Ordered At',
+            render: (value: string) => `${formatDate(value)} ${formatTime(value)}`
         },
-        {
-            key: 'created_at',
-            label: 'Time',
-            render: (value: string) => formatTime(value)
-        }
     ],
 
     actions: ['view'],

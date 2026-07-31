@@ -34,6 +34,7 @@ export interface TableListProps {
         buttonText?: string;
         onActionClick?: () => void;
     } | string;
+    useDropdown?: boolean;
 };
 
 

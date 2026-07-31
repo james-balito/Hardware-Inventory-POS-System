@@ -1,5 +1,6 @@
 import { Head } from '@inertiajs/react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import gsap from 'gsap';
 import { dashboard } from '@/routes';
 import { Product, Sale } from '../interfaces/Interfaces';
 import { 
@@ -13,7 +14,7 @@ import {
     BarChart3,
     PieChart,
 } from 'lucide-react';
-import { formatDate } from '@/components/format-time-and-date';
+import { formatDate, shortFormatTime } from '@/components/format-time-and-date';
 
 interface DataProps {
     products: Product[];
@@ -124,10 +125,66 @@ function DashboardSkeleton() {
 export default function Dashboard({ products, sales }: DataProps) {
     const [loading, setLoading] = useState(true);
 
+    // Refs for the GSAP entrance animation. Declared unconditionally at
+    // the top, before the `if (loading) return ...` below — React's
+    // Rules of Hooks require every hook to run in the same order on
+    // every render, so nothing hook-related can live after a
+    // conditional return.
+    const barChartCardRef = useRef<HTMLDivElement>(null);
+    const categoryChartCardRef = useRef<HTMLDivElement>(null);
+    const barRefs = useRef<(HTMLDivElement | null)[]>([]);
+    const categoryBarRefs = useRef<(HTMLDivElement | null)[]>([]);
+
     useEffect(() => {
         const timeout = setTimeout(() => setLoading(false), 800);
         return () => clearTimeout(timeout);
     }, []);
+
+    // Runs once, right after `loading` flips to false and the real chart
+    // DOM (not the skeleton) has actually mounted — refs are only
+    // populated once that render commits, which is exactly when this
+    // effect fires.
+    useEffect(() => {
+        if (loading) return;
+
+        // The two chart cards fade + rise in together
+        gsap.fromTo(
+            [barChartCardRef.current, categoryChartCardRef.current],
+            { opacity: 0, y: 16 },
+            { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out', stagger: 0.1 }
+        );
+
+        // Sales bars grow upward from the baseline. scaleY (not height!)
+        // is the key — height is already correctly set by React from
+        // real data on first paint, so GSAP only needs to visually
+        // scale that existing box from 0 to full size vertically.
+        gsap.fromTo(
+            barRefs.current.filter(Boolean),
+            { scaleY: 0 },
+            {
+                scaleY: 1,
+                duration: 0.6,
+                ease: 'power3.out',
+                stagger: 0.06,
+                transformOrigin: 'bottom',
+                delay: 0.15,
+            }
+        );
+
+        // Category bars grow left-to-right the same way, via scaleX
+        gsap.fromTo(
+            categoryBarRefs.current.filter(Boolean),
+            { scaleX: 0 },
+            {
+                scaleX: 1,
+                duration: 0.6,
+                ease: 'power3.out',
+                stagger: 0.08,
+                transformOrigin: 'left',
+                delay: 0.3,
+            }
+        );
+    }, [loading]);
 
     if (loading) {
         return <DashboardSkeleton />;
@@ -189,6 +246,12 @@ export default function Dashboard({ products, sales }: DataProps) {
     }, {});
 
     const maxRevenue = Math.max(...salesByDay.map(d => d.revenue), 1);
+
+    // Reset the ref arrays each render before re-populating them via the
+    // callback refs below — otherwise stale entries from a previous
+    // render (e.g. if the data set shrinks) would linger in the array.
+    barRefs.current = [];
+    categoryBarRefs.current = [];
 
     return (
         <>
@@ -294,21 +357,22 @@ export default function Dashboard({ products, sales }: DataProps) {
                 <div className="grid grid-cols-3 gap-6">
                     
                     {/* Sales Bar Chart */}
-                    <div className="col-span-2 bg-white border border-slate-200 rounded-xl p-6">
+                    <div ref={barChartCardRef} className="col-span-2 bg-white border border-slate-200 rounded-xl p-6">
                         <div className="flex items-center gap-2 mb-6">
                             <BarChart3 className="w-5 h-5 text-slate-500" />
                             <h3 className="text-sm font-semibold text-slate-900">Sales This Week</h3>
                         </div>
                         
                         <div className="flex items-end gap-3 h-48">
-                            {salesByDay.map((day) => (
+                            {salesByDay.map((day, index) => (
                                 <div key={day.day} className="flex-1 flex flex-col items-center gap-2">
                                     <div className="w-full flex flex-col items-center gap-1">
                                         <span className="text-xs font-medium text-slate-600">
                                             ₱{day.revenue.toLocaleString('en-PH', { maximumFractionDigits: 0 })}
                                         </span>
                                         <div 
-                                            className="w-full bg-blue-500 rounded-t-md transition-all hover:bg-blue-600"
+                                            ref={(el) => { barRefs.current[index] = el; }}
+                                            className="w-full bg-blue-500 rounded-t-md transition-colors hover:bg-blue-600"
                                             style={{ 
                                                 height: `${(day.revenue / maxRevenue) * 140}px`,
                                                 minHeight: day.revenue > 0 ? '8px' : '2px'
@@ -331,14 +395,14 @@ export default function Dashboard({ products, sales }: DataProps) {
                     </div>
 
                     {/* Products by Category */}
-                    <div className="bg-white border border-slate-200 rounded-xl p-6">
+                    <div ref={categoryChartCardRef} className="bg-white border border-slate-200 rounded-xl p-6">
                         <div className="flex items-center gap-2 mb-6">
                             <PieChart className="w-5 h-5 text-slate-500" />
                             <h3 className="text-sm font-semibold text-slate-900">Products by Category</h3>
                         </div>
                         
                         <div className="space-y-3">
-                            {Object.entries(categoryData).map(([category, count]) => {
+                            {Object.entries(categoryData).map(([category, count], index) => {
                                 const percentage = ((count / totalProducts) * 100).toFixed(0);
                                 const colors: Record<string, string> = {
                                     'Hardware': 'bg-blue-500',
@@ -359,7 +423,8 @@ export default function Dashboard({ products, sales }: DataProps) {
                                         </div>
                                         <div className="w-full bg-slate-100 rounded-full h-2">
                                             <div 
-                                                className={`${barColor} h-2 rounded-full transition-all`}
+                                                ref={(el) => { categoryBarRefs.current[index] = el; }}
+                                                className={`${barColor} h-2 rounded-full transition-colors`}
                                                 style={{ width: `${percentage}%` }}
                                             />
                                         </div>
@@ -388,7 +453,7 @@ export default function Dashboard({ products, sales }: DataProps) {
                                     <div key={sale.id} className="px-6 py-3 flex items-center justify-between hover:bg-slate-50 transition-colors">
                                         <div>
                                             <p className="text-sm font-medium text-slate-900">{sale.invoice_number}</p>
-                                            <p className="text-xs text-slate-400">{formatDate(sale.created_at)}</p>
+                                            <p className="text-xs text-slate-400">{formatDate(sale.created_at)} {shortFormatTime(sale.created_at)}</p>
                                         </div>
                                         <p className="text-sm font-semibold text-slate-900 font-mono">
                                             ₱{Number(sale.total).toLocaleString('en-PH', { minimumFractionDigits: 2 })}

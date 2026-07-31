@@ -10,10 +10,23 @@ interface EditCategoryModalProps {
     onSuccess?: () => void;
 }
 
-export function EditCategoryModal({ isOpen, onClose, category, onSuccess }: EditCategoryModalProps) {
+export function EditCategoryModal({
+    isOpen,
+    onClose,
+    category,
+    onSuccess,
+}: EditCategoryModalProps) {
+    console.log('EditCategoryModal category:', category);
+
     return (
-        <Modal isOpen={isOpen} onClose={onClose} title="Edit Category" size="md">
+        <Modal
+            isOpen={isOpen}
+            onClose={onClose}
+            title="Edit Category"
+            size="md"
+        >
             <CategoryForm
+                key={category.id}
                 submitRoute={`/categories/${category.id}`}
                 method="put"
                 submitLabel="Update Category"

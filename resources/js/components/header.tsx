@@ -1,4 +1,4 @@
-interface PageHeaderProps {
+    interface PageHeaderProps {
     title: string;
     icon: React.ReactNode;
     headerTitle?: string;

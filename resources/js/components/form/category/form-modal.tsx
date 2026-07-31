@@ -1,6 +1,6 @@
 // resources/js/Components/Form/CategoryForm.tsx
 import { useForm } from '@inertiajs/react';
-import { FormEvent } from 'react';
+import { FormEvent, useEffect } from 'react';
 import { FormTextInput } from '@/components/form/form-text-input';
 import { FormTextarea } from '@/components/form/form-textarea';
 import { FormActions } from '@/components/form/form-actions';
@@ -25,10 +25,22 @@ export function CategoryForm({
     method = 'post',
     submitLabel = 'Create Category'
 }: CategoryFormProps) {
+
+    console.log('CategoryForm initialData:', initialData);
+
     const { data, setData, post, put, processing, errors } = useForm({
         category_name: initialData.category_name,
         description: initialData.description,
     });
+    
+    console.log('CategoryForm data:', data);
+
+    useEffect(() => {
+        setData({
+            category_name: initialData.category_name,
+            description: initialData.description,
+        })
+    },[initialData.category_name, initialData.description, setData]);
 
     function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();

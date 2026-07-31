@@ -8,6 +8,15 @@ import { ProductProps } from '@/interfaces/Props';
 import { Package, Plus, Search, Filter, X } from 'lucide-react';
 import PageHeader from '@/components/header';
 
+Index.layout = {
+    breadcrumbs: [
+        {
+            title: 'Products',
+            href: '/products',
+        },
+    ],
+};
+
 export default function Index({ products, categories, units }: ProductProps) {
     const [loading, setLoading] = useState(true);
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(
@@ -108,11 +117,34 @@ export default function Index({ products, categories, units }: ProductProps) {
         }
 
         if (hasActiveFilters) {
+            const categoryName = activeCategory
+                ? categories.find((c) => c.id === activeCategory)?.category_name
+                : null;
+
+            const stockLabel =
+                stockFilter !== 'all'
+                    ? stockFilter === 'in_stock'
+                        ? 'In Stock'
+                        : stockFilter === 'low_stock'
+                          ? 'Low Stock'
+                          : 'Out of Stock'
+                    : null;
+
+            // Build dynamic description
+            let description = 'No products found';
+
+            if (categoryName && stockLabel) {
+                description = `No products found in the "${categoryName}" category with "${stockLabel}" status. Try adjusting your filters.`;
+            } else if (categoryName) {
+                description = `No products found in the "${categoryName}" category. Try selecting a different category or clearing your filters.`;
+            } else if (stockLabel) {
+                description = `No products found with "${stockLabel}" status. Try selecting a different filter or clearing your filters.`;
+            }
+
             return {
                 icon: <Filter />,
                 title: 'No matching products',
-                description:
-                    'No products found in the selected category. Try selecting a different category or clearing your filters.',
+                description,
             };
         }
 
@@ -135,12 +167,82 @@ export default function Index({ products, categories, units }: ProductProps) {
     ).length;
 
     if (loading) {
-        // ... your loading skeleton
+        return (
+            <div className="min-h-screen bg-slate-50">
+                <div className="mx-10 py-8">
+                    {/* Header skeleton */}
+                    <div className="mb-8 flex items-end justify-between">
+                        <div className={`flex flex-row`}>
+                            {/* <div className="mb-3 h-3 w-20 animate-pulse rounded bg-slate-200" /> */}
+                            <div className="h-12 w-13 animate-pulse rounded bg-slate-200" />
+                            <div className={`ml-4 flex flex-col`}>
+                                <div className="h-4 w-20 animate-pulse rounded bg-slate-200" />
+                                <div className="mt-1 h-7 w-25 animate-pulse rounded bg-slate-200" />
+                            </div>
+                        </div>
+                        <div className="h-10 w-36 animate-pulse rounded-xl bg-slate-200" />
+                    </div>
+
+                    <div className="mb-4 h-10 w-full animate-pulse rounded-xl bg-slate-200" />
+
+                    {/* Stats skeleton */}
+                    <div className="mb-6 grid grid-cols-4 gap-4">
+                        {[...Array(4)].map((_, i) => (
+                            <div
+                                key={i}
+                                className="animate-pulse rounded-xl border border-slate-200 bg-white p-4"
+                            >
+                                <div className="mb-3 h-3 w-24 rounded bg-slate-100" />
+                                <div className="h-8 w-16 rounded bg-slate-100" />
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="flex animate-pulse gap-5 bg-slate-50">
+                        {[...Array(10)].map((_, i) => (
+                            <div
+                                key={i}
+                                className="my-2 h-7 w-28 rounded bg-slate-200"
+                            />
+                        ))}
+                    </div>
+
+                    {/* Table skeleton */}
+                    <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
+                        <div className="flex animate-pulse gap-3 border-b border-slate-200 bg-slate-50 px-6 py-3.5">
+                            <div className="h-5 w-6 rounded bg-slate-200 mr-10"/>
+                            {[...Array(7)].map((_, i) => (
+                                <div
+                                    key={i}
+                                    className="h-5 w-20 rounded bg-slate-200 mr-10"
+                                />
+                            ))}
+                        </div>
+
+                        {[...Array(10)].map((_, i) => (
+                            <div
+                                key={i}
+                                className="flex flex-row mr-10 animate-pulse items-start justify-items-start gap-8 border-b border-slate-100 px-6 py-4"
+                            >
+                                <div className="my-2 h-4 w-6 justify-self-start rounded bg-slate-100" />
+                                <div className="my-2 h-4 w-32 justify-self-start rounded bg-slate-100" />
+                                <div className="my-2 h-4 w-20 justify-self-start rounded bg-slate-100" />
+                                <div className="my-2 h-4 w-24 justify-self-start rounded bg-slate-100" />
+                                <div className="my-2 h-4 w-20 justify-self-start rounded bg-slate-100" />
+                                <div className="my-2 h-4 w-20 justify-self-start rounded bg-slate-100" />
+                                <div className="my-2 h-4 w-24 justify-self-start rounded bg-slate-100" />
+                                <div className="my-2 h-4 w-20 justify-self-start rounded bg-slate-100" />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        );
     }
 
     return (
         <div className="min-h-screen bg-slate-50">
-            <div className="mx-10 max-w-6xl py-8">
+            <div className="mx-10 py-8">
                 {/* Page Header */}
                 <div className="mb-8 flex items-end justify-between">
                     <PageHeader
@@ -360,6 +462,7 @@ export default function Index({ products, categories, units }: ProductProps) {
                     onEdit={(item) => handleEdit(item.id)}
                     onDelete={(item) => handleDelete(item.id)}
                     emptyTableMessage={getEmptyMessage()}
+                    useDropdown={true}
                 />
             </div>
         </div>

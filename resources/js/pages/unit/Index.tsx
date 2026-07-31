@@ -7,6 +7,8 @@ import { formatDate, formatTime } from '@/components/format-time-and-date';
 import ShowListModal from '@/components/show-list-modal';
 import PageHeader from '@/components/header';
 import { Ruler } from 'lucide-react';
+import TableList from '@/components/table-list';
+import { UnitTable } from '@/tables/units';
 
 interface Unit {
     id: number;
@@ -22,6 +24,7 @@ interface UnitProps {
 
 export default function Index({ units }: UnitProps) {
     const [showUnits, setShowUnits] = useState<Unit[]>([]);
+    const [showCreate, setShowCreate] = useState(false);
     const [loading, setLoading] = useState(true);
     const [selectedUnit, setSelectedUnit] = useState<Unit | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -59,100 +62,72 @@ export default function Index({ units }: UnitProps) {
         }
     };
 
-    if (loading) {
-        return (
-            <div className="container py-8">
-                <div className="mx-8 flex items-center justify-between">
-                    <h1 className="text-3xl font-bold">Unit List</h1>
-                    <Link href={create()} className="inline-block">
-                        <Button>Add Unit</Button>
-                    </Link>
-                </div>
-                <p className="mx-8 my-4">Loading units...</p>
-            </div>
-        );
-    }
-
     return (
         <div className="container py-8">
-            <div className="mx-8 mb-6 flex items-center justify-between">
-                <PageHeader
-                    headerTitle="Inventory"
-                    icon={<Ruler />}
-                    title="Units"
-                />
-                <Link href={create()} className="inline-block">
-                    <Button>Add Unit</Button>
-                </Link>
-            </div>
-
-            <div className="card-stagger mx-8 mt-4 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                {showUnits.length === 0 ? (
-                    <p className="col-span-full text-center text-gray-500">
-                        No units found.
-                    </p>
-                ) : (
-                    showUnits.map((unit, index) => (
-                        <Card key={unit.id} className="relative">
-                            <CardContent className="py-2">
-                                <div className="space-y-2">
-                                    <span className="text-sm text-gray-500">
-                                        #{unit.id}
-                                    </span>
-                                    <h2 className="text-xl font-semibold">
-                                        Unit Name: {unit.unit_name}
-                                    </h2>
-                                    {!unit.abbreviation && (
-                                        <p className="text-gray-400 italic">
-                                            No abbreviation available.
-                                        </p>
-                                    )}
-                                    {unit.abbreviation && (
-                                        <p className="text-gray-600">
-                                            Abbreviation: {unit.abbreviation}
-                                        </p>
-                                    )}
-                                    <p className="text-sm text-gray-500">
-                                        Created: {formatDate(unit.created_at)}{' '}
-                                        {formatTime(unit.created_at)}
-                                    </p>
-
-                                    <div className="mt-4 mb-auto flex gap-2">
-                                        {/* Use modal instead of navigation */}
-                                        <ShowListModal
-                                            trigger={
-                                                <Button
-                                                    variant="outline"
-                                                    size="sm"
-                                                >
-                                                    View Details
-                                                </Button>
-                                            }
-                                            title="Unit Details"
-                                            description={`Information for unit: ${unit.unit_name}`}
-                                            unit={unit}
-                                        />
-
-                                        <Link href={edit(unit.id)}>
-                                            <Button variant="outline" size="sm">
-                                                Edit
-                                            </Button>
-                                        </Link>
-
-                                        <Button
-                                            onClick={() =>
-                                                handleDelete(unit.id)
-                                            }
-                                            variant="destructive"
-                                            size="sm"
-                                        >
-                                            Delete
-                                        </Button>
+            <div>
+                {loading ? (
+                    <div className="min-h-screen bg-white">
+                        <div className="mx-10">
+                            <div className="mb-6 flex items-end justify-between">
+                                <div className = {`flex flex-row`}>
+                                    {/* <div className="mb-3 h-3 w-20 animate-pulse rounded bg-slate-200" /> */}
+                                    <div className="h-12 w-13 animate-pulse rounded bg-slate-200" />
+                                    <div className = {`flex flex-col ml-4`}>
+                                        <div className="h-4 w-20 animate-pulse rounded bg-slate-200" />
+                                        <div className="h-7 w-12 mt-1 animate-pulse rounded bg-slate-200" />
                                     </div>
                                 </div>
-                            </CardContent>
-                        </Card>
-                    ))
+                                <div className="h-10 w-32 animate-pulse rounded-xl bg-slate-200" />
+                            </div>
+
+                            <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
+                                <div className="flex animate-pulse gap-20 border-b border-slate-200 bg-slate-50 px-6 py-3.5">
+                                    {[...Array(8)].map((_, i) => (
+                                        <div
+                                            key={i}
+                                            className="h-3 w-20 rounded bg-slate-200"
+                                        />
+                                    ))}
+                                </div>
+                                {[...Array(10)].map((_, i) => (
+                                    <div
+                                        key={i}
+                                        className="flex animate-pulse gap-8 border-b border-slate-100 px-6 py-4"
+                                    >
+                                        <div className="h-4 w-6 rounded bg-slate-100" />
+                                        <div className="h-4 w-24 rounded bg-slate-100" />
+                                        <div className="h-4 w-40 rounded bg-slate-100" />
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                ) : (
+                    <>
+                        <div className="mx-10 mb-6 flex items-center justify-between">
+                            <PageHeader
+                                headerTitle="Inventory"
+                                icon={<Ruler />}
+                                title="Units"
+                            />
+                            <Button
+                                onClick={() => alert('Show create modal')}
+                                className="inline-block"
+                            >
+                                Add Unit
+                            </Button>
+                        </div>
+
+                        <div className={`mx-10`}>
+                            <TableList
+                                columns={UnitTable.columns}
+                                indexLabel="#"
+                                indexStartFrom={1}
+                                showIndex={true}
+                                data={showUnits}
+                            />
+                        </div>
+                    </>
                 )}
             </div>
 
