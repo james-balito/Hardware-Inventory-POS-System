@@ -11,6 +11,8 @@ export const UnitTable = {
     ],
 
     actions: [
-
+        'view',
+        'edit',
+        'delete'
     ]
 }

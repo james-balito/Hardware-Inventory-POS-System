@@ -257,7 +257,7 @@ export default function Dashboard({ products, sales }: DataProps) {
         <>
             <Head title="Dashboard" />
             
-            <div className="space-y-6 p-6">
+            <div className="space-y-6 p-6 mx-4">
                 
                 {/* ── Stats Cards ── */}
                 <div className="grid grid-cols-4 gap-4">
@@ -450,7 +450,7 @@ export default function Dashboard({ products, sales }: DataProps) {
                                 </div>
                             ) : (
                                 recentSales.map(sale => (
-                                    <div key={sale.id} className="px-6 py-3 flex items-center justify-between hover:bg-slate-50 transition-colors">
+                                    <a key={sale.id} href = "/sales" className="px-6 py-3 flex items-center justify-between hover:bg-slate-50 transition-colors">
                                         <div>
                                             <p className="text-sm font-medium text-slate-900">{sale.invoice_number}</p>
                                             <p className="text-xs text-slate-400">{formatDate(sale.created_at)} {shortFormatTime(sale.created_at)}</p>
@@ -458,7 +458,7 @@ export default function Dashboard({ products, sales }: DataProps) {
                                         <p className="text-sm font-semibold text-slate-900 font-mono">
                                             ₱{Number(sale.total).toLocaleString('en-PH', { minimumFractionDigits: 2 })}
                                         </p>
-                                    </div>
+                                    </a>
                                 ))
                             )}
                         </div>
@@ -476,7 +476,7 @@ export default function Dashboard({ products, sales }: DataProps) {
                                 </div>
                             ) : (
                                 topProducts.map((product, index) => (
-                                    <div key={product.id} className="px-6 py-3 flex items-center gap-3 hover:bg-slate-50 transition-colors">
+                                    <a key={product.id}  href= "/products" className="px-6 py-3 flex items-center gap-3 hover:bg-slate-50 transition-colors">
                                         <span className="text-xs font-bold text-slate-400 w-5">#{index + 1}</span>
                                         <div className="flex-1 min-w-0">
                                             <p className="text-sm font-medium text-slate-900 truncate">{product.product_name}</p>
@@ -490,7 +490,7 @@ export default function Dashboard({ products, sales }: DataProps) {
                                                units
                                             </p>
                                         </div>
-                                    </div>
+                                    </a>
                                 ))
                             )}
                         </div>

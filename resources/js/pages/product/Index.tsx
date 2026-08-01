@@ -446,7 +446,7 @@ export default function Index({ products, categories, units }: ProductProps) {
                             }}
                             className="cursor-pointer text-xs text-slate-500 underline hover:text-slate-700"
                         >
-                            Clear all filters
+                            Clear all filters 
                         </button>
                     </div>
                 )}
@@ -464,6 +464,11 @@ export default function Index({ products, categories, units }: ProductProps) {
                     emptyTableMessage={getEmptyMessage()}
                     useDropdown={true}
                 />
+
+                {/* View Modal */}
+                <div className = {`${isModalOpen ? 'block' : 'hidden'}`}>
+                 
+                </div>
             </div>
         </div>
     );

@@ -9,6 +9,9 @@ import PageHeader from '@/components/header';
 import { Ruler } from 'lucide-react';
 import TableList from '@/components/table-list';
 import { UnitTable } from '@/tables/units';
+import { Head } from '@inertiajs/react';
+import { CreateUnitModal } from '@/components/modals/unit/create-unit-modal';
+import { EditUnitModal } from '@/components/modals/unit/edit-unit-modal';
 
 interface Unit {
     id: number;
@@ -28,6 +31,8 @@ export default function Index({ units }: UnitProps) {
     const [loading, setLoading] = useState(true);
     const [selectedUnit, setSelectedUnit] = useState<Unit | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
     useEffect(() => {
         const timeoutId = setTimeout(() => {
@@ -43,9 +48,9 @@ export default function Index({ units }: UnitProps) {
         setIsModalOpen(true);
     };
 
-    const handleEdit = (id: number) => {
-        console.log(`Edit unit with ID: ${id}`);
-        router.visit(`/units/${id}/edit`);
+    const handleEdit = (unit: Unit) => {
+        setSelectedUnit(unit);
+        setIsEditModalOpen(true);
     };
 
     const handleDelete = (id: number) => {
@@ -64,17 +69,18 @@ export default function Index({ units }: UnitProps) {
 
     return (
         <div className="container py-8">
+            <Head title="Units" />
             <div>
                 {loading ? (
                     <div className="min-h-screen bg-white">
                         <div className="mx-10">
                             <div className="mb-6 flex items-end justify-between">
-                                <div className = {`flex flex-row`}>
+                                <div className={`flex flex-row`}>
                                     {/* <div className="mb-3 h-3 w-20 animate-pulse rounded bg-slate-200" /> */}
                                     <div className="h-12 w-13 animate-pulse rounded bg-slate-200" />
-                                    <div className = {`flex flex-col ml-4`}>
+                                    <div className={`ml-4 flex flex-col`}>
                                         <div className="h-4 w-20 animate-pulse rounded bg-slate-200" />
-                                        <div className="h-7 w-12 mt-1 animate-pulse rounded bg-slate-200" />
+                                        <div className="mt-1 h-7 w-12 animate-pulse rounded bg-slate-200" />
                                     </div>
                                 </div>
                                 <div className="h-10 w-32 animate-pulse rounded-xl bg-slate-200" />
@@ -111,7 +117,7 @@ export default function Index({ units }: UnitProps) {
                                 title="Units"
                             />
                             <Button
-                                onClick={() => alert('Show create modal')}
+                                onClick={() => setIsCreateModalOpen(true)}
                                 className="inline-block"
                             >
                                 Add Unit
@@ -121,6 +127,11 @@ export default function Index({ units }: UnitProps) {
                         <div className={`mx-10`}>
                             <TableList
                                 columns={UnitTable.columns}
+                                actions={UnitTable.actions}
+                                onView={handleShowModal}
+                                onEdit={handleEdit}
+                                onDelete={handleDelete}
+                                useDropdown={false}
                                 indexLabel="#"
                                 indexStartFrom={1}
                                 showIndex={true}
@@ -129,7 +140,7 @@ export default function Index({ units }: UnitProps) {
                         </div>
                     </>
                 )}
-            </div>
+        </div>
 
             {/* Alternative: Controlled modal approach */}
             <ShowListModal
@@ -138,6 +149,18 @@ export default function Index({ units }: UnitProps) {
                 unit={selectedUnit || undefined}
                 open={isModalOpen}
                 onOpenChange={setIsModalOpen}
+            />
+
+            <CreateUnitModal
+                isOpen={isCreateModalOpen}
+                onClose={() => setIsCreateModalOpen(false)}
+            />
+
+            <EditUnitModal
+                isOpen={isEditModalOpen}
+                onClose={() => setIsEditModalOpen(false)}
+                unit={selectedUnit || ({} as Unit)}
+                onSuccess={() => setIsEditModalOpen(false)}
             />
         </div>
     );

@@ -42,6 +42,7 @@ export default function Index({ categories }: CategoryProps) {
     };
 
     const handleEdit = (item: Category) => {
+        console.log('Full Item:' , item);
         setSelectedCategory(item);
         setEditKey((prev) => prev + 1);
         setIsEditModalOpen(true);
@@ -141,7 +142,7 @@ export default function Index({ categories }: CategoryProps) {
                     actions={actions}
                     data={showCategories}
                     onView={handleShowModal}
-                    onEdit={(item) => handleEdit(item.id)}
+                    onEdit={(item) => handleEdit(item)}
                     onDelete={(item) => handleDelete(item.id)}
                 />
             </div>
