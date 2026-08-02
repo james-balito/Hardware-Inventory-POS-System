@@ -139,7 +139,7 @@ export default function TableList({
                                 {columns.map((column) => (
                                     <td
                                         key={column.key}
-                                        className="px-6 py-4 text-sm text-slate-700"
+                                        className="px-6 py-4 text-sm text-left text-slate-700"
                                     >
                                         {column.render
                                             ? column.render(

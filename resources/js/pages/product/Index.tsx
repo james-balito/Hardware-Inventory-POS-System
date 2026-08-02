@@ -210,11 +210,11 @@ export default function Index({ products, categories, units }: ProductProps) {
                     {/* Table skeleton */}
                     <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
                         <div className="flex animate-pulse gap-3 border-b border-slate-200 bg-slate-50 px-6 py-3.5">
-                            <div className="h-5 w-6 rounded bg-slate-200 mr-10"/>
+                            <div className="mr-10 h-5 w-6 rounded bg-slate-200" />
                             {[...Array(7)].map((_, i) => (
                                 <div
                                     key={i}
-                                    className="h-5 w-20 rounded bg-slate-200 mr-10"
+                                    className="mr-10 h-5 w-20 rounded bg-slate-200"
                                 />
                             ))}
                         </div>
@@ -222,7 +222,7 @@ export default function Index({ products, categories, units }: ProductProps) {
                         {[...Array(10)].map((_, i) => (
                             <div
                                 key={i}
-                                className="flex flex-row mr-10 animate-pulse items-start justify-items-start gap-8 border-b border-slate-100 px-6 py-4"
+                                className="mr-10 flex animate-pulse flex-row items-start justify-items-start gap-8 border-b border-slate-100 px-6 py-4"
                             >
                                 <div className="my-2 h-4 w-6 justify-self-start rounded bg-slate-100" />
                                 <div className="my-2 h-4 w-32 justify-self-start rounded bg-slate-100" />
@@ -446,7 +446,7 @@ export default function Index({ products, categories, units }: ProductProps) {
                             }}
                             className="cursor-pointer text-xs text-slate-500 underline hover:text-slate-700"
                         >
-                            Clear all filters 
+                            Clear all filters
                         </button>
                     </div>
                 )}
@@ -466,9 +466,7 @@ export default function Index({ products, categories, units }: ProductProps) {
                 />
 
                 {/* View Modal */}
-                <div className = {`${isModalOpen ? 'block' : 'hidden'}`}>
-                 
-                </div>
+                <div className={`${isModalOpen ? 'block' : 'hidden'}`}></div>
             </div>
         </div>
     );

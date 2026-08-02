@@ -12,7 +12,7 @@ export function CreateUnitModal({ isOpen, onClose }: CreateUnitModalProps) {
     const { addToast } = useToast();
 
     return (
-        <Modal isOpen={isOpen} onClose={onClose} title="Create New Category" size="md">
+        <Modal isOpen={isOpen} onClose={onClose} title="Add New Unit" size="md">
             <UnitForm
                 submitRoute="/units"
                 method="post"

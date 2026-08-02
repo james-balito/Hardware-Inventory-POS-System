@@ -12,7 +12,7 @@ export function CreateCategoryModal({ isOpen, onClose }: CreateCategoryModalProp
     const { addToast } = useToast();
 
     return (
-        <Modal isOpen={isOpen} onClose={onClose} title="Create New Category" size="md">
+        <Modal isOpen={isOpen} onClose={onClose} title="Add New Category" size="md">
             <CategoryForm
                 submitRoute="/categories"
                 method="post"
