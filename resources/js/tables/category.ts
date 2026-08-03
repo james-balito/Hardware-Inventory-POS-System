@@ -1,6 +1,3 @@
-// tables/category.tsx
-import { formatDate, formatTime } from "@/components/format-time-and-date";
-
 export function CategoryTable() {
     const columns = [
         { key: 'category_name', label: 'Category Name' },

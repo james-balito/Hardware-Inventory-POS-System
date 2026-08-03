@@ -1,9 +1,6 @@
-import { Card, CardContent } from '@/components/ui/card';
-import { Link, router } from '@inertiajs/react';
+import { router } from '@inertiajs/react';
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { create, edit } from '@/routes/units';
-import { formatDate, formatTime } from '@/components/format-time-and-date';
 import ShowListModal from '@/components/show-list-modal';
 import PageHeader from '@/components/header';
 import { Ruler } from 'lucide-react';
@@ -40,7 +37,6 @@ Index.layout = {
 
 export default function Index({ units }: UnitProps) {
     const [showUnits, setShowUnits] = useState<Unit[]>([]);
-    const [showCreate, setShowCreate] = useState(false);
     const [loading, setLoading] = useState(true);
     const [selectedUnit, setSelectedUnit] = useState<Unit | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);

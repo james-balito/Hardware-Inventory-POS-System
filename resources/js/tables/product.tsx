@@ -1,8 +1,3 @@
-import {
-    shortFormatDate,
-    shortFormatTime,
-} from '@/components/format-time-and-date';
-
 export const ProductTable = {
     columns: [
         { key: 'product_name', label: 'Product' },
