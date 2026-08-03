@@ -6,10 +6,22 @@ import { ProductTable } from '@/tables/product';
 import { Product } from '@/interfaces/Interfaces';
 import { ProductProps } from '@/interfaces/Props';
 import { Package, Plus, Search, Filter, X } from 'lucide-react';
+import { Head } from '@inertiajs/react';
 import PageHeader from '@/components/header';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 
 Index.layout = {
     breadcrumbs: [
+        {
+            title: 'Inventory',
+            href: '/products',
+        },
         {
             title: 'Products',
             href: '/products',
@@ -17,7 +29,25 @@ Index.layout = {
     ],
 };
 
+// Debounce hook
+function useDebounce<Time>(value: Time, delay: number): Time {
+    const [debouncedValue, setDebouncedValue] = useState<Time>(value);
+
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            setDebouncedValue(value);
+        }, delay);
+
+        return () => {
+            clearTimeout(handler);
+        };
+    }, [value, delay]);
+
+    return debouncedValue;
+}
+
 export default function Index({ products, categories, units }: ProductProps) {
+    // States
     const [loading, setLoading] = useState(true);
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(
         null,
@@ -27,7 +57,9 @@ export default function Index({ products, categories, units }: ProductProps) {
     const [stockFilter, setStockFilter] = useState<
         'all' | 'in_stock' | 'low_stock' | 'out_of_stock'
     >('all');
-    const [searchQuery, setSearchQuery] = useState('');
+    const [searchInput, setSearchInput] = useState('');
+    const [hiddenColumns, setHiddenColumns] = useState<string[]>([]);
+    const debouncedSearch = useDebounce(searchInput, 300);
 
     useEffect(() => {
         const id = setTimeout(() => setLoading(false), 800);
@@ -39,8 +71,8 @@ export default function Index({ products, categories, units }: ProductProps) {
         let result = products;
 
         // Search filter
-        if (searchQuery.trim()) {
-            const query = searchQuery.toLowerCase();
+        if (debouncedSearch.trim()) {
+            const query = debouncedSearch.toLowerCase();
             result = result.filter(
                 (product) =>
                     product.product_name?.toLowerCase().includes(query) ||
@@ -71,14 +103,16 @@ export default function Index({ products, categories, units }: ProductProps) {
         }
 
         return result;
-    }, [products, activeCategory, stockFilter, searchQuery]);
+    }, [products, activeCategory, stockFilter, debouncedSearch]);
 
+    // Product Actions Function
     const handleShowModal = (product: Product) => {
         setSelectedProduct(product);
         setIsModalOpen(true);
     };
 
     const handleEdit = (id: number) => router.visit(`/products/${id}/edit`);
+
     const handleDelete = (id: number) => {
         if (confirm('Are you sure you want to delete this product?')) {
             router.delete(`/products/${id}`);
@@ -92,19 +126,15 @@ export default function Index({ products, categories, units }: ProductProps) {
         setStockFilter(stockFilter === filter ? 'all' : filter);
     };
 
-    // Category counts for badges
-    const categoryCounts = useMemo(() => {
-        const counts: Record<number, number> = {};
-        products.forEach((product) => {
-            counts[product.category_id] =
-                (counts[product.category_id] || 0) + 1;
-        });
-        return counts;
-    }, [products]);
+    const stockFilters = [
+        { id: 1, value: 'in_stock', label: 'In Stock' },
+        { id: 2, value: 'low_stock', label: 'Low Stock' },
+        { id: 3, value: 'out_of_stock', label: 'Out of Stock' },
+    ];
 
     // Determine active filters
     const hasActiveFilters = activeCategory !== null || stockFilter !== 'all';
-    const hasSearchQuery = searchQuery.trim() !== '';
+    const hasSearchQuery = debouncedSearch.trim() !== '';
 
     // Dynamic empty message based on state
     const getEmptyMessage = () => {
@@ -112,7 +142,7 @@ export default function Index({ products, categories, units }: ProductProps) {
             return {
                 icon: <Search />,
                 title: 'No results found',
-                description: `No products matching "${searchQuery}". Try different keywords or check for typos.`,
+                description: `No products matching "${debouncedSearch}". Try different keywords or check for typos.`,
             };
         }
 
@@ -130,7 +160,6 @@ export default function Index({ products, categories, units }: ProductProps) {
                           : 'Out of Stock'
                     : null;
 
-            // Build dynamic description
             let description = 'No products found';
 
             if (categoryName && stockLabel) {
@@ -158,7 +187,9 @@ export default function Index({ products, categories, units }: ProductProps) {
     };
 
     // Stats
-    const inStock = products.filter((p) => Number(p.stock_quantity) > 0).length;
+    const inStock = products.filter(
+        (p) => Number(p.stock_quantity) >= 5,
+    ).length;
     const lowStock = products.filter(
         (p) => Number(p.stock_quantity) < 5 && Number(p.stock_quantity) > 0,
     ).length;
@@ -173,7 +204,6 @@ export default function Index({ products, categories, units }: ProductProps) {
                     {/* Header skeleton */}
                     <div className="mb-8 flex items-end justify-between">
                         <div className={`flex flex-row`}>
-                            {/* <div className="mb-3 h-3 w-20 animate-pulse rounded bg-slate-200" /> */}
                             <div className="h-12 w-13 animate-pulse rounded bg-slate-200" />
                             <div className={`ml-4 flex flex-col`}>
                                 <div className="h-4 w-20 animate-pulse rounded bg-slate-200" />
@@ -240,11 +270,19 @@ export default function Index({ products, categories, units }: ProductProps) {
         );
     }
 
+    const visibleColumns = useMemo(() => {
+        // Filter out hidden columns
+        return ProductTable.columns.filter(
+            (col) => !hiddenColumns.includes(col.key),
+        );
+    }, [hiddenColumns]);
+
     return (
         <div className="min-h-screen bg-slate-50">
             <div className="mx-10 py-8">
                 {/* Page Header */}
                 <div className="mb-8 flex items-end justify-between">
+                    <Head title="Products | Macmac Hardware" />
                     <PageHeader
                         headerTitle="Inventory"
                         icon={<Package />}
@@ -257,36 +295,12 @@ export default function Index({ products, categories, units }: ProductProps) {
                         </button>
                     </Link>
                 </div>
-                {/* Search Bar */}
-                <div className="mb-4">
-                    <div className="relative">
-                        <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-slate-400" />
-                        <input
-                            type="text"
-                            placeholder="Search products by name or category..."
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full rounded-lg border border-slate-200 bg-white py-2.5 pr-4 pl-10 text-sm text-slate-700 placeholder:text-slate-400 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 focus:outline-none"
-                        />
-                        {searchQuery && (
-                            <button
-                                onClick={() => setSearchQuery('')}
-                                className="absolute top-1/2 right-3 -translate-y-1/2 text-slate-400 hover:text-slate-600"
-                            >
-                                <X className="h-4 w-4" />
-                            </button>
-                        )}
-                    </div>
-                </div>
+
                 {/* Summary Stats */}
                 <div className="mb-6 grid grid-cols-4 gap-4">
                     <button
                         onClick={() => setStockFilter('all')}
-                        className={`flex cursor-pointer flex-col items-start rounded-xl border bg-white p-4 transition-all hover:shadow-md ${
-                            stockFilter === 'all'
-                                ? 'border-blue-400 bg-blue-50 shadow-md ring-2 ring-blue-400'
-                                : 'border-blue-200 hover:bg-blue-50'
-                        }`}
+                        className={`flex cursor-pointer flex-col items-start rounded-xl border border-blue-400 bg-white p-4 transition-all hover:shadow-md`}
                     >
                         <p className="mb-2 text-xs font-semibold tracking-wider text-blue-400 uppercase">
                             Total Products
@@ -298,11 +312,7 @@ export default function Index({ products, categories, units }: ProductProps) {
 
                     <button
                         onClick={() => handleStockFilter('in_stock')}
-                        className={`hover:shadow-mdcursor-pointer flex flex-col items-start rounded-xl border bg-white p-4 transition-all cursor-pointer${
-                            stockFilter === 'in_stock'
-                                ? 'border-green-500 bg-green-50 shadow-md ring-2 ring-green-400'
-                                : 'border-green-300 hover:bg-green-50'
-                        }`}
+                        className={`flex cursor-pointer flex-col items-start rounded-xl border border-green-400 bg-white p-4 transition-all hover:shadow-md`}
                     >
                         <p className="mb-2 text-xs font-semibold tracking-wider text-green-500 uppercase">
                             In Stock
@@ -310,15 +320,17 @@ export default function Index({ products, categories, units }: ProductProps) {
                         <p className="font-mono text-2xl font-bold text-green-600">
                             {inStock}
                         </p>
+                        <span className="text-xs text-gray-500">
+                            {products.length > 0
+                                ? ((inStock / products.length) * 100).toFixed(1)
+                                : 0}
+                            % of total
+                        </span>
                     </button>
 
                     <button
                         onClick={() => handleStockFilter('low_stock')}
-                        className={`flex cursor-pointer flex-col items-start rounded-xl border bg-white p-4 transition-all hover:shadow-md ${
-                            stockFilter === 'low_stock'
-                                ? 'border-orange-400 bg-orange-50 shadow-md ring-2 ring-orange-400'
-                                : 'border-orange-200 hover:bg-orange-50'
-                        }`}
+                        className={`flex cursor-pointer flex-col items-start rounded-xl border border-orange-400 bg-white p-4 transition-all hover:shadow-md`}
                     >
                         <p className="mb-2 text-xs font-semibold tracking-wider text-orange-400 uppercase">
                             Low in Stock
@@ -326,15 +338,19 @@ export default function Index({ products, categories, units }: ProductProps) {
                         <p className="font-mono text-2xl font-bold text-orange-500">
                             {lowStock}
                         </p>
+                        <span className="text-xs text-gray-500">
+                            {products.length > 0
+                                ? ((lowStock / products.length) * 100).toFixed(
+                                      1,
+                                  )
+                                : 0}
+                            % of total
+                        </span>
                     </button>
 
                     <button
                         onClick={() => handleStockFilter('out_of_stock')}
-                        className={`flex cursor-pointer flex-col items-start rounded-xl border bg-white p-4 transition-all hover:shadow-md ${
-                            stockFilter === 'out_of_stock'
-                                ? 'border-red-500 bg-red-50 shadow-md ring-2 ring-red-400'
-                                : 'border-red-200 hover:bg-red-50'
-                        }`}
+                        className={`flex cursor-pointer flex-col items-start rounded-xl border border-red-400 bg-white p-4 transition-all hover:shadow-md`}
                     >
                         <p className="mb-2 text-xs font-semibold tracking-wider text-red-400 uppercase">
                             Out of Stock
@@ -342,56 +358,132 @@ export default function Index({ products, categories, units }: ProductProps) {
                         <p className="font-mono text-2xl font-bold text-red-500">
                             {outOfStock}
                         </p>
-                    </button>
-                </div>
-
-                {/* Category Filter Buttons */}
-                <div className="mb-4 flex flex-wrap gap-2">
-                    <button
-                        onClick={() => setActiveCategory(null)}
-                        className={`cursor-pointer rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
-                            activeCategory === null
-                                ? 'bg-slate-900 text-slate-100'
-                                : 'border border-slate-300 bg-slate-100 text-slate-600 hover:bg-slate-200'
-                        }`}
-                    >
-                        All Products
-                        <span
-                            className={`ml-2 rounded-full ${activeCategory === null ? 'bg-slate-700' : 'bg-slate-200'} px-2 py-0.5 text-xs`}
-                        >
-                            {products.length}
+                        <span className="text-xs text-gray-500">
+                            {products.length > 0
+                                ? (
+                                      (outOfStock / products.length) *
+                                      100
+                                  ).toFixed(1)
+                                : 0}
+                            % of total
                         </span>
                     </button>
-
-                    {categories.map((category) => (
-                        <button
-                            key={category.id}
-                            onClick={() =>
-                                setActiveCategory(
-                                    activeCategory === category.id
-                                        ? null
-                                        : category.id,
-                                )
-                            }
-                            className={`cursor-pointer rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
-                                activeCategory === category.id
-                                    ? 'bg-slate-900 text-white'
-                                    : 'border border-slate-300 bg-slate-100 text-slate-600 hover:bg-slate-200'
-                            }`}
-                        >
-                            {category.category_name}
-                            <span
-                                className={`ml-2 rounded-full px-2 py-0.5 text-xs ${
-                                    activeCategory === category.id
-                                        ? 'bg-white/20'
-                                        : 'bg-slate-200'
-                                }`}
-                            >
-                                {categoryCounts[category.id] || 0}
-                            </span>
-                        </button>
-                    ))}
                 </div>
+
+                {/* Search Bar + Filters */}
+                <div className="mb-4 flex flex-row items-center gap-4">
+                    <div className="relative w-full">
+                        <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                        <input
+                            type="text"
+                            placeholder="Search products by name or category..."
+                            value={searchInput}
+                            onChange={(e) => setSearchInput(e.target.value)}
+                            className="w-full rounded-lg border border-slate-200 bg-white py-2 pr-4 pl-10 text-sm text-slate-700 placeholder:text-slate-400 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 focus:outline-none"
+                        />
+                        {searchInput && (
+                            <button
+                                onClick={() => setSearchInput('')}
+                                className="absolute top-1/2 right-3 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                            >
+                                <X className="h-4 w-4" />
+                            </button>
+                        )}
+                    </div>
+
+                    {/* Category Filter */}
+                    <Select
+                        value={activeCategory?.toString() || 'all'}
+                        onValueChange={(value) => {
+                            setActiveCategory(
+                                value === 'all' ? null : Number(value),
+                            );
+                        }}
+                    >
+                        <SelectTrigger className="my-2 w-1/2 border border-gray-200 bg-white font-normal text-gray-600">
+                            <SelectValue placeholder="Select a category" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="all">All Categories</SelectItem>
+                            {categories.map((category) => (
+                                <SelectItem
+                                    key={category.id}
+                                    value={category.id.toString()}
+                                >
+                                    {category.category_name}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+
+                    {/* Stock Filter */}
+                    <Select
+                        value={stockFilter}
+                        onValueChange={(value) => {
+                            if (value === 'all') {
+                                setStockFilter('all');
+                            } else {
+                                handleStockFilter(
+                                    value as
+                                        | 'in_stock'
+                                        | 'low_stock'
+                                        | 'out_of_stock',
+                                );
+                            }
+                        }}
+                    >
+                        <SelectTrigger className="my-2 w-1/2 border border-gray-200 bg-white font-normal text-gray-600">
+                            <SelectValue placeholder="Select a stock" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="all">All Status</SelectItem>
+                            {stockFilters.map((stock) => (
+                                <SelectItem key={stock.id} value={stock.value}>
+                                    {stock.label}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+
+                    {/* Column Visibility Toggle */}
+                    <Select
+                        value="Select columns"
+                        onValueChange={(value) => {
+                            setHiddenColumns((prev) =>
+                                prev.includes(value)
+                                    ? prev.filter((c) => c !== value)
+                                    : [...prev, value],
+                            );
+                        }}
+                    >
+                        <SelectTrigger className="my-2 w-1/3 border border-gray-200 bg-white font-normal text-gray-600">
+                            <SelectValue>
+                                Filter Columns
+                            </SelectValue>
+                        </SelectTrigger>
+                        <SelectContent>
+                            {ProductTable.columns.map((col) => (
+                                <SelectItem key={col.key} value={col.key}>
+                                    <div className="flex w-full items-center justify-between gap-2">
+                                        <span
+                                            className={
+                                                hiddenColumns.includes(col.key)
+                                                    ? 'opacity-30'
+                                                    : ''
+                                            }
+                                        >
+                                            {hiddenColumns.includes(col.key)
+                                                ? ''
+                                                : '✓'}
+                                        </span>
+                                        <span>{col.label}</span>
+                                    </div>
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                </div>
+
                 {/* Active Filters Indicator */}
                 {hasActiveFilters && (
                     <div className="mb-4 flex items-center gap-2">
@@ -450,9 +542,10 @@ export default function Index({ products, categories, units }: ProductProps) {
                         </button>
                     </div>
                 )}
-                {/* Table with dynamic empty message */}
+
+                {/* Table */}
                 <TableList
-                    columns={ProductTable.columns}
+                    columns={visibleColumns}
                     actions={ProductTable.actions}
                     indexLabel="#"
                     indexStartFrom={1}

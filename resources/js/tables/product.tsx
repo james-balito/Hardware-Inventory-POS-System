@@ -13,52 +13,31 @@ export const ProductTable = {
                 row.category?.category_name || 'No Category',
         },
         {
-            key: 'stock_quantity',
+            key: 'stock_status',
             label: 'Stock Status',
-            render: (value: number, row: any) => {
-                const unit_abbreviation = row.unit?.abbreviation || 'unit';
-                const outOfStock = 'Out of Stock';
-                const inStock = 'In Stock';
-                const lowStock = 'Low Stock';
-                const displayValue =
-                    value > 1
-                        ? `${unit_abbreviation.toLowerCase()}s`
-                        : unit_abbreviation.toLowerCase();
+            render: (_value: any, row: any) => {
+                const value = row.stock_quantity; // Read from row, not from key
 
-                // Show warning border for low stock (less than 5)
                 if (value >= 5) {
                     return (
-                        <div>
-                            <span className={`text-xs text-green-600`}>
-                                &nbsp; {inStock}
-                            </span>
-                        </div>
+                        <span className="text-xs text-green-600">In Stock</span>
                     );
                 }
-                // Low Stock
                 if (value >= 1) {
                     return (
-                        <div>
-                            <span className={`text-xs text-orange-600`}>
-                                &nbsp; {lowStock}
-                            </span>
-                        </div>
+                        <span className="text-xs text-orange-600">
+                            Low Stock
+                        </span>
                     );
                 }
-
-                // Out of stock - red border
                 if (value === 0) {
                     return (
-                        <div>
-                            <span className={`text-xs text-red-500`}>
-                                &nbsp; {outOfStock}
-                            </span>
-                        </div>
+                        <span className="text-xs text-red-500">
+                            Out of Stock
+                        </span>
                     );
                 }
-
-                // Normal stock - no special styling
-                return `${value} ${displayValue}`;
+                return `${value}`;
             },
         },
         {
@@ -120,10 +99,12 @@ export const ProductTable = {
                 `₱${Number(value).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
         },
         {
-            key: 'sale_price',
+            key: 'total_value',
             label: 'Total Value',
             render: (value: number, row: any) => {
-                const totalValue = value * row.stock_quantity || '-';
+                const saleValue = row.sale_price;
+                const quantityValue = row.stock_quantity;
+                const totalValue = quantityValue * saleValue || '-';
                 return `₱${Number(totalValue).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
             },
         },
