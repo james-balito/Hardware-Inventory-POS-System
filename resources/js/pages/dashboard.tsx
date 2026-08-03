@@ -31,15 +31,15 @@ function DashboardSkeleton() {
                 {[...Array(4)].map((_, i) => (
                     <div
                         key={i}
-                        className="animate-pulse rounded-xl border border-slate-200 bg-white p-5"
+                        className="animate-pulse rounded-xl border border-slate-200 dark:border-slate-700 dark:bg-slate-600/10 bg-white p-5"
                     >
                         <div className="mb-3 flex items-center justify-between">
-                            <div className="h-10 w-10 rounded-lg bg-slate-200" />
-                            <div className="h-6 w-16 rounded-full bg-slate-200" />
+                            <div className="h-10 w-10 rounded-lg bg-slate-200 dark:bg-slate-700" />
+                            <div className="h-6 w-16 rounded-full bg-slate-200 dark:bg-slate-700" />
                         </div>
-                        <div className="mb-2 h-3 w-24 rounded bg-slate-200" />
-                        <div className="mb-2 h-8 w-32 rounded bg-slate-200" />
-                        <div className="h-3 w-20 rounded bg-slate-200" />
+                        <div className="mb-2 h-3 w-24 rounded bg-slate-200 dark:bg-slate-700" />
+                        <div className="mb-2 h-8 w-32 rounded bg-slate-200 dark:bg-slate-700" />
+                        <div className="h-3 w-20 rounded bg-slate-200 dark:bg-slate-700" />
                     </div>
                 ))}
             </div>
@@ -47,10 +47,10 @@ function DashboardSkeleton() {
             {/* Charts Section Skeleton */}
             <div className="grid grid-cols-3 gap-6">
                 {/* Bar Chart Skeleton */}
-                <div className="col-span-2 animate-pulse rounded-xl border border-slate-200 bg-white p-6">
+                <div className="col-span-2 animate-pulse rounded-xl border border-slate-200 dark:border-slate-700 dark:bg-slate-600/10 bg-white p-6">
                     <div className="mb-6 flex items-center gap-2">
-                        <div className="h-5 w-5 rounded bg-slate-200" />
-                        <div className="h-4 w-32 rounded bg-slate-200" />
+                        <div className="h-5 w-5 rounded bg-slate-200 dark:bg-slate-700" />
+                        <div className="h-4 w-32 rounded bg-slate-200 dark:bg-slate-700" />
                     </div>
 
                     <div className="flex h-48 items-end gap-3">
@@ -59,43 +59,43 @@ function DashboardSkeleton() {
                                 key={i}
                                 className="flex flex-1 flex-col items-center gap-2"
                             >
-                                <div className="h-4 w-12 rounded bg-slate-200" />
+                                <div className="h-4 w-12 rounded bg-slate-200 dark:bg-slate-700" />
                                 <div
-                                    className="w-full rounded-t-md bg-slate-200"
+                                    className="w-full rounded-t-md bg-slate-200 dark:bg-slate-700"
                                     style={{
                                         height: `${Math.random() * 120 + 20}px`,
                                     }}
                                 />
-                                <div className="h-3 w-8 rounded bg-slate-200" />
+                                <div className="h-3 w-8 rounded bg-slate-200 dark:bg-slate-700" />
                             </div>
                         ))}
                     </div>
 
-                    <div className="mt-4 border-t border-slate-100 pt-4">
+                    <div className="mt-4 border-t border-slate-100 dark:border-slate-800 pt-4">
                         <div className="flex items-center justify-between">
-                            <div className="h-4 w-24 rounded bg-slate-200" />
-                            <div className="h-4 w-28 rounded bg-slate-200" />
+                            <div className="h-4 w-24 rounded bg-slate-200 dark:bg-slate-700" />
+                            <div className="h-4 w-28 rounded bg-slate-200 dark:bg-slate-700" />
                         </div>
                     </div>
                 </div>
 
                 {/* Category Chart Skeleton */}
-                <div className="animate-pulse rounded-xl border border-slate-200 bg-white p-6">
+                <div className="animate-pulse rounded-xl border border-slate-200 dark:bg-slate-600/10 dark:border-slate-700 bg-white p-6">
                     <div className="mb-6 flex items-center gap-2">
-                        <div className="h-5 w-5 rounded bg-slate-200" />
-                        <div className="h-4 w-36 rounded bg-slate-200" />
+                        <div className="h-5 w-5 rounded bg-slate-200 dark:bg-slate-700" />
+                        <div className="h-4 w-36 rounded bg-slate-200 dark:bg-slate-700" />
                     </div>
 
                     <div className="space-y-3">
                         {[...Array(5)].map((_, i) => (
                             <div key={i} className="space-y-1">
                                 <div className="flex justify-between">
-                                    <div className="h-4 w-20 rounded bg-slate-200" />
-                                    <div className="h-4 w-12 rounded bg-slate-200" />
+                                    <div className="h-4 w-20 rounded bg-slate-200 dark:bg-slate-700" />
+                                    <div className="h-4 w-12 rounded bg-slate-200 dark:bg-slate-700" />
                                 </div>
-                                <div className="h-2 w-full rounded-full bg-slate-100">
+                                <div className="h-2 w-full rounded-full bg-slate-100 dark:bg-slate-700">
                                     <div
-                                        className="h-2 rounded-full bg-slate-200"
+                                        className="h-2 rounded-full bg-slate-200 dark:bg-slate-700"
                                         style={{
                                             width: `${Math.random() * 60 + 20}%`,
                                         }}
@@ -112,22 +112,22 @@ function DashboardSkeleton() {
                 {[...Array(2)].map((_, tableIndex) => (
                     <div
                         key={tableIndex}
-                        className="animate-pulse overflow-hidden rounded-xl border border-slate-200 bg-white"
+                        className="animate-pulse overflow-hidden rounded-xl border border-slate-200 dark:bg-slate-600/10     dark:border-slate-700 bg-white"
                     >
-                        <div className="border-b border-slate-200 px-6 py-4">
-                            <div className="h-4 w-28 rounded bg-slate-200" />
+                        <div className="border-b border-slate-200 dark:border-slate-700 px-6 py-4">
+                            <div className="h-4 w-28 rounded bg-slate-200 dark:bg-slate-800" />
                         </div>
-                        <div className="divide-y divide-slate-100">
+                        <div className="divide-y divide-slate-100 dark:divide-slate-700">
                             {[...Array(4)].map((_, rowIndex) => (
                                 <div
                                     key={rowIndex}
                                     className="flex items-center justify-between px-6 py-3"
                                 >
                                     <div className="space-y-1">
-                                        <div className="h-4 w-32 rounded bg-slate-200" />
-                                        <div className="h-3 w-20 rounded bg-slate-100" />
+                                        <div className="h-4 w-32 rounded bg-slate-200 dark:bg-slate-800" />
+                                        <div className="h-3 w-20 rounded bg-slate-100 dark:bg-slate-700" />
                                     </div>
-                                    <div className="h-4 w-20 rounded bg-slate-200" />
+                                    <div className="h-4 w-20 rounded bg-slate-200 dark:bg-slate-700" />
                                 </div>
                             ))}
                         </div>
@@ -323,26 +323,26 @@ export default function Dashboard({ products, sales }: DataProps) {
                 {/* ── Stats Cards ── */}
                 <div className="grid grid-cols-4 gap-4">
                     {/* Total Revenue */}
-                    <div className="rounded-xl border border-slate-200 bg-white p-5">
+                    <div className="rounded-xl border border-slate-200 bg-white dark:bg-slate-600/10 dark:border-slate-800 p-5">
                         <div className="mb-3 flex items-center justify-between">
-                            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-green-100">
-                                <DollarSign className="h-5 w-5 text-green-600" />
+                            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-green-100 dark:bg-green-900/60 border dark:border-green-700">
+                                <DollarSign className="h-5 w-5 text-green-600 dark:text-green-500" />
                             </div>
-                            <span className="flex items-center gap-1 rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-600">
+                            <span className="flex items-center gap-1 rounded-full bg-green-50 dark:bg-green-900/60 px-2 py-1 text-xs font-medium text-green-500 border dark:border-green-800">
                                 <ArrowUpRight className="h-3 w-3" />
                                 Revenue
                             </span>
                         </div>
-                        <p className="mb-1 text-xs font-semibold tracking-wider text-slate-400 uppercase">
+                        <p className="mb-1 text-xs font-semibold tracking-wider text-slate-400 dark:text-slate-300/60 uppercase">
                             Total Revenue
                         </p>
-                        <p className="font-mono text-2xl font-bold text-slate-900">
+                        <p className="font-mono text-2xl font-bold text-slate-900 dark:text-white">
                             ₱
                             {totalRevenue.toLocaleString('en-PH', {
                                 minimumFractionDigits: 2,
                             })}
                         </p>
-                        <p className="mt-1 text-xs text-slate-400">
+                        <p className="mt-1 text-xs text-slate-400 dark:text-slate-300/70">
                             Today: ₱
                             {todayRevenue.toLocaleString('en-PH', {
                                 minimumFractionDigits: 2,
@@ -351,45 +351,45 @@ export default function Dashboard({ products, sales }: DataProps) {
                     </div>
 
                     {/* Total Sales */}
-                    <div className="rounded-xl border border-slate-200 bg-white p-5">
+                    <div className="rounded-xl border border-slate-200 bg-white dark:bg-slate-600/10 dark:border-slate-800 p-5">
                         <div className="mb-3 flex items-center justify-between">
-                            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100">
+                            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-900/60 border dark:border-blue-800">
                                 <ReceiptText className="h-5 w-5 text-blue-600" />
                             </div>
-                            <span className="flex items-center gap-1 rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-600">
+                            <span className="flex items-center gap-1 rounded-full bg-blue-50 dark:bg-blue-900/60 border dark:border-blue-800 px-2 py-1 text-xs font-medium text-blue-600">
                                 <ShoppingCart className="h-3 w-3" />
                                 Sales
                             </span>
                         </div>
-                        <p className="mb-1 text-xs font-semibold tracking-wider text-slate-400 uppercase">
+                        <p className="mb-1 text-xs font-semibold tracking-wider text-slate-400 dark:text-slate-300/60 uppercase">
                             Total Sales
                         </p>
-                        <p className="font-mono text-2xl font-bold text-slate-900">
+                        <p className="font-mono text-2xl font-bold text-slate-900 dark:text-white">
                             {totalSales}
                         </p>
-                        <p className="mt-1 text-xs text-slate-400">
+                        <p className="mt-1 text-xs text-slate-400 dark:text-slate-300/70">
                             Total Orders: {totalOrders} items
                         </p>
                     </div>
 
                     {/* Total Products */}
-                    <div className="rounded-xl border border-slate-200 bg-white p-5">
+                    <div className="rounded-xl border border-slate-200 dark:bg-slate-600/10 dark:border-slate-800 bg-white p-5">
                         <div className="mb-3 flex items-center justify-between">
-                            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-purple-100">
+                            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-purple-100 dark:bg-purple-900/60 border dark:border-purple-800">
                                 <Package className="h-5 w-5 text-purple-600" />
                             </div>
-                            <span className="flex items-center gap-1 rounded-full bg-purple-50 px-2 py-1 text-xs font-medium text-purple-600">
+                            <span className="flex items-center gap-1 rounded-full bg-purple-50 dark:bg-purple-900/60 border dark:border-purple-800 px-2 py-1 text-xs font-medium text-purple-600">
                                 <TrendingUp className="h-3 w-3" />
                                 Inventory
                             </span>
                         </div>
-                        <p className="mb-1 text-xs font-semibold tracking-wider text-slate-400 uppercase">
+                        <p className="mb-1 text-xs font-semibold tracking-wider text-slate-400 dark:text-slate-300/70 uppercase">
                             Total Products
                         </p>
-                        <p className="font-mono text-2xl font-bold text-slate-900">
+                        <p className="font-mono text-2xl font-bold text-slate-900 dark:text-white">
                             {totalProducts}
                         </p>
-                        <p className="mt-1 text-xs text-slate-400">
+                        <p className="mt-1 text-xs text-slate-400 dark:text-slate-300/70">
                             Stock Value: ₱
                             {totalStockValue.toLocaleString('en-PH', {
                                 minimumFractionDigits: 2,
@@ -398,9 +398,9 @@ export default function Dashboard({ products, sales }: DataProps) {
                     </div>
 
                     {/* Stock Alerts */}
-                    <div className="rounded-xl border border-slate-200 bg-white p-5">
+                    <div className="rounded-xl border border-slate-200 bg-white dark:bg-slate-600/10 dark:border-slate-800 p-5">
                         <div className="mb-3 flex items-center justify-between">
-                            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-100">
+                            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-100 border dark:border-amber-700 dark:bg-amber-900/70">
                                 <AlertTriangle className="h-5 w-5 text-amber-600" />
                             </div>
                         </div>
@@ -428,11 +428,11 @@ export default function Dashboard({ products, sales }: DataProps) {
                     {/* Sales Bar Chart */}
                     <div
                         ref={barChartCardRef}
-                        className="col-span-2 rounded-xl border border-slate-200 bg-white p-6"
+                        className="col-span-2 rounded-xl border border-slate-200 bg-white dark:bg-slate-600/10 dark:border-slate-800 p-6"
                     >
                         <div className="mb-6 flex items-center gap-2">
                             <BarChart3 className="h-5 w-5 text-slate-500" />
-                            <h3 className="text-sm font-semibold text-slate-900">
+                            <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-400">
                                 Sales This Week
                             </h3>
                         </div>
@@ -444,7 +444,7 @@ export default function Dashboard({ products, sales }: DataProps) {
                                     className="flex flex-1 flex-col items-center gap-2"
                                 >
                                     <div className="flex w-full flex-col items-center gap-1">
-                                        <span className="text-xs font-medium text-slate-600">
+                                        <span className="text-xs font-medium text-slate-600 dark:text-slate-400">
                                             ₱
                                             {day.revenue.toLocaleString(
                                                 'en-PH',
@@ -465,7 +465,7 @@ export default function Dashboard({ products, sales }: DataProps) {
                                             }}
                                         />
                                     </div>
-                                    <span className="text-xs text-slate-400">
+                                    <span className="text-xs text-slate-400 dark:text-slate-300">
                                         {day.day}
                                     </span>
                                 </div>
@@ -474,10 +474,10 @@ export default function Dashboard({ products, sales }: DataProps) {
 
                         <div className="mt-4 border-t border-slate-100 pt-4">
                             <div className="flex items-center justify-between text-sm">
-                                <span className="text-slate-500">
+                                <span className="text-slate-500 dark:text-slate-400">
                                     Total this week
                                 </span>
-                                <span className="font-semibold text-slate-900">
+                                <span className="font-semibold text-slate-900 dark:text-slate-300">
                                     ₱
                                     {salesByDay
                                         .reduce((sum, d) => sum + d.revenue, 0)
@@ -492,11 +492,11 @@ export default function Dashboard({ products, sales }: DataProps) {
                     {/* Products by Category */}
                     <div
                         ref={categoryChartCardRef}
-                        className="rounded-xl border border-slate-200 bg-white p-6"
+                        className="rounded-xl border border-slate-200 bg-white dark:bg-slate-600/10 dark:border-slate-800 p-6"
                     >
                         <div className="mb-6 flex items-center gap-2">
-                            <PieChart className="h-5 w-5 text-slate-500" />
-                            <h3 className="text-sm font-semibold text-slate-900">
+                            <PieChart className="h-5 w-5 text-slate-500 dark:text-slate-300" />
+                            <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-300/80">
                                 Products by Category
                             </h3>
                         </div>
@@ -526,7 +526,7 @@ export default function Dashboard({ products, sales }: DataProps) {
                                             className="space-y-1"
                                         >
                                             <div className="flex justify-between text-sm">
-                                                <span className="text-slate-600">
+                                                <span className="text-slate-600 dark:text-slate-400">
                                                     {category}
                                                 </span>
                                                 <span className="font-medium text-slate-900">
@@ -540,7 +540,7 @@ export default function Dashboard({ products, sales }: DataProps) {
                                                             index
                                                         ] = el;
                                                     }}
-                                                    className={`${barColor} h-2 rounded-full transition-colors`}
+                                                    className={`${barColor} h-2 rounded-full transition-colors duration-300 border dark:border-slate-300/90`}
                                                     style={{
                                                         width: `${percentage}%`,
                                                     }}
@@ -557,13 +557,13 @@ export default function Dashboard({ products, sales }: DataProps) {
                 {/* ── Bottom Section: Tables ── */}
                 <div className="grid grid-cols-2 gap-6">
                     {/* Recent Sales */}
-                    <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
-                        <div className="border-b border-slate-200 px-6 py-4">
-                            <h3 className="text-sm font-semibold text-slate-900">
+                    <div className="overflow-hidden rounded-xl border border-slate-200 dark:bg-slate-600/10 dark:border-slate-800 bg-white">
+                        <div className="border-b border-slate-200 dark:border-slate-800 px-6 py-4">
+                            <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-400">
                                 Recent Sales
                             </h3>
                         </div>
-                        <div className="divide-y divide-slate-100">
+                        <div className="divide-y divide-slate-100 dark:divide-slate-800">
                             {recentSales.length === 0 ? (
                                 <div className="px-6 py-8 text-center text-sm text-slate-400">
                                     No sales yet
@@ -573,20 +573,20 @@ export default function Dashboard({ products, sales }: DataProps) {
                                     <a
                                         key={sale.id}
                                         href="/sales"
-                                        className="flex items-center justify-between px-6 py-3 transition-colors hover:bg-slate-50"
+                                        className="flex items-center justify-between px-6 py-3 transition-colors hover:bg-slate-50 dark:hover:bg-slate-900/40"
                                     >
                                         <div>
-                                            <p className="text-sm font-medium text-slate-900">
+                                            <p className="text-sm font-medium text-slate-900 dark:text-slate-300">
                                                 {sale.invoice_number}
                                             </p>
-                                            <p className="text-xs text-slate-400">
+                                            <p className="text-xs text-slate-400 dark:text-slate-300/70">
                                                 {formatDate(sale.created_at)}{' '}
                                                 {shortFormatTime(
                                                     sale.created_at,
                                                 )}
                                             </p>
                                         </div>
-                                        <p className="font-mono text-sm font-semibold text-slate-900">
+                                        <p className="font-mono text-sm font-semibold text-slate-900 dark:text-slate-300">
                                             ₱
                                             {Number(sale.total).toLocaleString(
                                                 'en-PH',
@@ -600,15 +600,15 @@ export default function Dashboard({ products, sales }: DataProps) {
                     </div>
 
                     {/* Top Products */}
-                    <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
-                        <div className="border-b border-slate-200 px-6 py-4">
-                            <h3 className="text-sm font-semibold text-slate-900">
+                    <div className="overflow-hidden rounded-xl border border-slate-200 dark:bg-slate-600/10 dark:border-slate-800 bg-white">
+                        <div className="border-b border-slate-200 dark:border-slate-800 px-6 py-4">
+                            <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-400">
                                 Top Products by Stock
                             </h3>
                         </div>
-                        <div className="divide-y divide-slate-100">
+                        <div className="divide-y divide-slate-100 dark:divide-slate-800">
                             {topProducts.length === 0 ? (
-                                <div className="px-6 py-8 text-center text-sm text-slate-400">
+                                <div className="px-6 py-8 text-center text-sm text-slate-400 dark:text-slate-300">
                                     No products yet
                                 </div>
                             ) : (
@@ -616,26 +616,26 @@ export default function Dashboard({ products, sales }: DataProps) {
                                     <a
                                         key={product.id}
                                         href="/products"
-                                        className="flex items-center gap-3 px-6 py-3 transition-colors hover:bg-slate-50"
+                                        className="flex items-center gap-3 px-6 py-3 transition-colors hover:bg-slate-50 dark:hover:bg-slate-900/40"
                                     >
-                                        <span className="w-5 text-xs font-bold text-slate-400">
+                                        <span className="w-5 text-xs font-bold text-slate-400 dark:text-slate-300">
                                             #{index + 1}
                                         </span>
                                         <div className="min-w-0 flex-1">
-                                            <p className="truncate text-sm font-medium text-slate-900">
+                                            <p className="truncate text-sm font-medium text-slate-900 dark:text-slate-300">
                                                 {product.product_name}
                                             </p>
-                                            <p className="text-xs text-slate-400">
+                                            <p className="text-xs text-slate-400 dark:text-slate-400/80">
                                                 {product.category
                                                     ?.category_name ||
                                                     'No Category'}
                                             </p>
                                         </div>
                                         <div className="text-right">
-                                            <p className="font-mono text-sm font-semibold text-slate-900">
+                                            <p className="font-mono text-sm font-semibold text-slate-900 dark:text-slate-400">
                                                 {product.stock_quantity}
                                             </p>
-                                            <p className="text-xs text-slate-400">
+                                            <p className="text-xs text-slate-400 dark:text-slate-300/60">
                                                 units
                                             </p>
                                         </div>
