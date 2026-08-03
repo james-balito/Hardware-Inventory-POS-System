@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react';
-import { Dialog, DialogContent, DialogHeader } from '@/components/ui/dialog'; // or your UI library
+import { Dialog, DialogContent} from '@/components/ui/dialog'; // or your UI library
 import { Sale } from '@/interfaces/Interfaces';
 import { formatDate, formatTime } from '@/components/format-time-and-date';
 import { PhilippinePeso, ReceiptText, X } from 'lucide-react';

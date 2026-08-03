@@ -1,17 +1,13 @@
 import { Link } from '@inertiajs/react';
 import { 
     LayoutGrid, 
-    ShoppingCart, 
     PlusCircle, 
     Clock,
     Package, 
     Tag, 
-    Ruler,
-    BookOpen, 
-    FolderGit2 
+    Ruler, 
 } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
-import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import {

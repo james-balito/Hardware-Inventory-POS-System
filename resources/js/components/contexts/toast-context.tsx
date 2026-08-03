@@ -1,6 +1,6 @@
 // resources/js/Contexts/ToastContext.tsx
 import { createContext, useContext, useState, useCallback } from 'react';
-import { CheckCircle, XCircle, AlertCircle, X } from 'lucide-react';
+import { CheckCircle, XCircle, X } from 'lucide-react';
 
 type ToastType = 'success' | 'error' | 'loading';
 

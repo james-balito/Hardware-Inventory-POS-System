@@ -1,6 +1,6 @@
 import { useRef, useLayoutEffect } from 'react';
 import gsap from 'gsap';
-import { Eye, Pencil, Trash2, Ellipsis, Plus } from 'lucide-react';
+import { Eye, Pencil, Trash2, Ellipsis } from 'lucide-react';
 import { TableListProps } from '@/interfaces/Props';
 import {
     DropdownMenu,

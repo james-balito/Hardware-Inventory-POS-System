@@ -150,11 +150,6 @@ export default function CreateSale({ products }: ProductProps) {
         );
     };
 
-    // Reset before repopulating via the ref callbacks in the map below —
-    // standard cleanup for a ref array so a shrinking `products` prop
-    // (unlikely here, but still) can't leave stale entries behind.
-    cardRefs.current = [];
-
     return (
         <div className="flex h-screen overflow-hidden bg-slate-50">
             <Head
