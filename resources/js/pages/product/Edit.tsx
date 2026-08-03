@@ -1,31 +1,72 @@
 // Product Interface
-import { Product, Category, Unit } from "@/interfaces/Interfaces";
+import { Product, Category, Unit } from '@/interfaces/Interfaces';
 
 // Form UI Components
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectTrigger, SelectValue, SelectGroup, SelectLabel, SelectItem } from '@/components/ui/select';
+import {
+    Select,
+    SelectContent,
+    SelectTrigger,
+    SelectValue,
+    SelectGroup,
+    SelectLabel,
+    SelectItem,
+} from '@/components/ui/select';
 
 // Form Hooks
 import { useForm, router } from '@inertiajs/react';
-import { FormEvent, useState } from "react";
+import { FormEvent, useState } from 'react';
 
 // Lucide Icons
-import { PhilippinePeso, PackageSearch, CheckCircle2, ArrowLeft } from 'lucide-react';
+import {
+    PhilippinePeso,
+    PackageSearch,
+    CheckCircle2,
+    ArrowLeft,
+} from 'lucide-react';
 
-export default function Edit({ product, categories, units }: {
-    product: Product;  
+import { Head } from '@inertiajs/react';
+
+Edit.layout = (props: { product: Product }) => ({
+    breadcrumbs: [
+        {
+            title: 'Inventory',
+            href: '/products/edit',
+        },
+        {
+            title: 'Product',
+            href: '/products/edit',
+        },
+        {
+            title: 'Edit Product',
+            href: '/products/edit',
+        },
+        {
+            title: props.product.product_name,
+            href: '/products/edit',
+        },
+    ],
+});
+
+export default function Edit({
+    product,
+    categories,
+    units,
+}: {
+    product: Product;
     categories: Category[];
     units: Unit[];
 }) {
-
     if (!product || !product.id) {
         return (
-            <div className="flex justify-center items-center h-screen">
+            <div className="flex h-screen items-center justify-center">
                 <div className="text-center">
-                    <p className="text-red-500 mb-2">Error: Product data not found!</p>
+                    <p className="mb-2 text-red-500">
+                        Error: Product data not found!
+                    </p>
                     <Button onClick={() => router.visit('/products')}>
                         Back to Products
                     </Button>
@@ -52,81 +93,106 @@ export default function Edit({ product, categories, units }: {
         // FIX 4: Product.id is now directly accessible
         put(`/products/${product.id}`, {
             onSuccess: () => {
-                setSuccessMessage('Product updated successfully! Redirecting...');
+                setSuccessMessage(
+                    'Product updated successfully! Redirecting...',
+                );
                 setTimeout(() => {
                     router.visit('/products');
                 }, 2000);
             },
             preserveScroll: true,
         });
-    }
+    };
 
     return (
-        <div className="flex flex-col items-center w-full py-10 px-4">
+        <div className="flex w-full flex-col items-center px-4 py-10">
             <div className="w-full max-w-4xl">
-
                 {/* Header */}
-                <div className="flex items-center justify-between mb-6">
+                <Head
+                    title={`Edit Product - ${product.product_name} | Macmac Hardware`}
+                />
+                <div className="mb-6 flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">
-                            <PackageSearch className="w-5 h-5 text-blue-600" />
+                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100">
+                            <PackageSearch className="h-5 w-5 text-blue-600" />
                         </div>
                         <div>
-                            <h1 className="text-lg font-semibold text-slate-900">Edit Product</h1>
-                            <p className="text-sm text-slate-500">{product.product_name}</p>
+                            <h1 className="text-lg font-semibold text-slate-900">
+                                Edit Product
+                            </h1>
+                            <p className="text-sm text-slate-500">
+                                {product.product_name}
+                            </p>
                         </div>
                     </div>
                     <button
                         type="button"
                         onClick={() => router.visit('/products')}
-                        className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-800 transition-colors cursor-pointer"
+                        className="flex cursor-pointer items-center gap-1.5 text-sm text-slate-500 transition-colors hover:text-slate-800"
                     >
-                        <ArrowLeft className="w-4 h-4" />
+                        <ArrowLeft className="h-4 w-4" />
                         Back to Products
                     </button>
                 </div>
 
                 {successMessage && (
-                    <div className="mb-6 flex items-center gap-2 p-4 bg-green-50 border border-green-200 text-green-700 rounded-lg text-sm">
-                        <CheckCircle2 className="w-4 h-4 shrink-0" />
+                    <div className="mb-6 flex items-center gap-2 rounded-lg border border-green-200 bg-green-50 p-4 text-sm text-green-700">
+                        <CheckCircle2 className="h-4 w-4 shrink-0" />
                         {successMessage}
                     </div>
                 )}
 
-                <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-6 sm:p-8">
+                <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
                     <form onSubmit={handleSubmit} className="space-y-8">
-
                         {/* Basic Information */}
                         <div className="space-y-4">
                             <div>
-                                <h2 className="text-sm font-semibold text-slate-900">Basic Information</h2>
-                                <p className="text-xs text-slate-400">Product name and stock on hand</p>
+                                <h2 className="text-sm font-semibold text-slate-900">
+                                    Basic Information
+                                </h2>
+                                <p className="text-xs text-slate-400">
+                                    Product name and stock on hand
+                                </p>
                             </div>
                             <div className="grid grid-cols-2 gap-x-8 gap-y-4">
                                 <div className="space-y-2">
                                     <Label htmlFor="product_name">
-                                        Product Name <span className="text-red-500">*</span>
+                                        Product Name{' '}
+                                        <span className="text-red-500">*</span>
                                     </Label>
                                     <Input
                                         id="product_name"
                                         value={data.product_name}
-                                        onChange={e => setData('product_name', e.target.value)}
+                                        onChange={(e) =>
+                                            setData(
+                                                'product_name',
+                                                e.target.value,
+                                            )
+                                        }
                                         placeholder="Enter product name"
                                         required
                                     />
                                     {errors.product_name && (
-                                        <p className="text-sm text-red-500">{errors.product_name}</p>
+                                        <p className="text-sm text-red-500">
+                                            {errors.product_name}
+                                        </p>
                                     )}
                                 </div>
 
                                 <div className="space-y-2">
                                     <Label htmlFor="stock_quantity">
-                                        Stock Quantity <span className="text-red-500">*</span>
+                                        Stock Quantity{' '}
+                                        <span className="text-red-500">*</span>
                                     </Label>
                                     <Input
                                         id="stock_quantity"
                                         value={data.stock_quantity}
-                                        onChange={e => setData('stock_quantity', parseInt(e.target.value) || 0)}
+                                        onChange={(e) =>
+                                            setData(
+                                                'stock_quantity',
+                                                parseInt(e.target.value) || 0,
+                                            )
+                                        }
                                         placeholder="Enter stock quantity"
                                         type="number"
                                         step="1"
@@ -135,7 +201,9 @@ export default function Edit({ product, categories, units }: {
                                         required
                                     />
                                     {errors.stock_quantity && (
-                                        <p className="text-sm text-red-500">{errors.stock_quantity}</p>
+                                        <p className="text-sm text-red-500">
+                                            {errors.stock_quantity}
+                                        </p>
                                     )}
                                 </div>
                             </div>
@@ -146,20 +214,32 @@ export default function Edit({ product, categories, units }: {
                         {/* Pricing */}
                         <div className="space-y-4">
                             <div>
-                                <h2 className="text-sm font-semibold text-slate-900">Pricing</h2>
-                                <p className="text-xs text-slate-400">Wholesale cost and customer-facing price</p>
+                                <h2 className="text-sm font-semibold text-slate-900">
+                                    Pricing
+                                </h2>
+                                <p className="text-xs text-slate-400">
+                                    Wholesale cost and customer-facing price
+                                </p>
                             </div>
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-2">
                                     <Label htmlFor="wholesale_price">
-                                        Wholesale Price <span className="text-red-500">*</span>
+                                        Wholesale Price{' '}
+                                        <span className="text-red-500">*</span>
                                     </Label>
                                     <div className="relative">
-                                        <PhilippinePeso className="absolute h-4 w-4 text-gray-500 top-1/2 -translate-y-1/2 left-3" />
+                                        <PhilippinePeso className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-gray-500" />
                                         <Input
                                             id="wholesale_price"
                                             value={data.wholesale_price}
-                                            onChange={e => setData('wholesale_price', parseFloat(e.target.value) || 0)}
+                                            onChange={(e) =>
+                                                setData(
+                                                    'wholesale_price',
+                                                    parseFloat(
+                                                        e.target.value,
+                                                    ) || 0,
+                                                )
+                                            }
                                             placeholder="Enter wholesale price"
                                             type="number"
                                             step="0.01"
@@ -170,20 +250,30 @@ export default function Edit({ product, categories, units }: {
                                         />
                                     </div>
                                     {errors.wholesale_price && (
-                                        <p className="text-sm text-red-500">{errors.wholesale_price}</p>
+                                        <p className="text-sm text-red-500">
+                                            {errors.wholesale_price}
+                                        </p>
                                     )}
                                 </div>
 
                                 <div className="space-y-2">
                                     <Label htmlFor="sale_price">
-                                        Sale Price <span className="text-red-500">*</span>
+                                        Sale Price{' '}
+                                        <span className="text-red-500">*</span>
                                     </Label>
                                     <div className="relative">
-                                        <PhilippinePeso className="absolute h-4 w-4 text-gray-500 top-1/2 -translate-y-1/2 left-3" />
+                                        <PhilippinePeso className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-gray-500" />
                                         <Input
                                             id="sale_price"
                                             value={data.sale_price}
-                                            onChange={e => setData('sale_price', parseFloat(e.target.value) || 0)}
+                                            onChange={(e) =>
+                                                setData(
+                                                    'sale_price',
+                                                    parseFloat(
+                                                        e.target.value,
+                                                    ) || 0,
+                                                )
+                                            }
                                             placeholder="Enter sale price"
                                             type="number"
                                             step="0.01"
@@ -194,7 +284,9 @@ export default function Edit({ product, categories, units }: {
                                         />
                                     </div>
                                     {errors.sale_price && (
-                                        <p className="text-sm text-red-500">{errors.sale_price}</p>
+                                        <p className="text-sm text-red-500">
+                                            {errors.sale_price}
+                                        </p>
                                     )}
                                 </div>
                             </div>
@@ -205,26 +297,41 @@ export default function Edit({ product, categories, units }: {
                         {/* Classification */}
                         <div className="space-y-4">
                             <div>
-                                <h2 className="text-sm font-semibold text-slate-900">Classification</h2>
-                                <p className="text-xs text-slate-400">How this product is grouped and measured</p>
+                                <h2 className="text-sm font-semibold text-slate-900">
+                                    Classification
+                                </h2>
+                                <p className="text-xs text-slate-400">
+                                    How this product is grouped and measured
+                                </p>
                             </div>
                             <div className="grid grid-cols-2 gap-x-8 gap-y-4">
                                 <div className="space-y-2">
                                     <Label htmlFor="category_id">
-                                        Category <span className="text-red-500">*</span>
+                                        Category{' '}
+                                        <span className="text-red-500">*</span>
                                     </Label>
                                     <Select
                                         value={data.category_id.toString()}
-                                        onValueChange={(value) => setData('category_id', parseInt(value))}
+                                        onValueChange={(value) =>
+                                            setData(
+                                                'category_id',
+                                                parseInt(value),
+                                            )
+                                        }
                                     >
                                         <SelectTrigger className="w-full">
                                             <SelectValue placeholder="Select a category" />
                                         </SelectTrigger>
                                         <SelectContent>
                                             <SelectGroup>
-                                                <SelectLabel>Categories</SelectLabel>
+                                                <SelectLabel>
+                                                    Categories
+                                                </SelectLabel>
                                                 {categories?.map((category) => (
-                                                    <SelectItem key={category.id} value={category.id.toString()}>
+                                                    <SelectItem
+                                                        key={category.id}
+                                                        value={category.id.toString()}
+                                                    >
                                                         {category.category_name}
                                                     </SelectItem>
                                                 ))}
@@ -232,17 +339,22 @@ export default function Edit({ product, categories, units }: {
                                         </SelectContent>
                                     </Select>
                                     {errors.category_id && (
-                                        <p className="text-sm text-red-500">{errors.category_id}</p>
+                                        <p className="text-sm text-red-500">
+                                            {errors.category_id}
+                                        </p>
                                     )}
                                 </div>
 
                                 <div className="space-y-2">
                                     <Label htmlFor="unit_id">
-                                        Unit <span className="text-red-500">*</span>
+                                        Unit{' '}
+                                        <span className="text-red-500">*</span>
                                     </Label>
                                     <Select
                                         value={data.unit_id.toString()}
-                                        onValueChange={(value) => setData('unit_id', parseInt(value))}
+                                        onValueChange={(value) =>
+                                            setData('unit_id', parseInt(value))
+                                        }
                                     >
                                         <SelectTrigger className="w-full">
                                             <SelectValue placeholder="Select a unit" />
@@ -251,7 +363,10 @@ export default function Edit({ product, categories, units }: {
                                             <SelectGroup>
                                                 <SelectLabel>Units</SelectLabel>
                                                 {units?.map((unit) => (
-                                                    <SelectItem key={unit.id} value={unit.id.toString()}>
+                                                    <SelectItem
+                                                        key={unit.id}
+                                                        value={unit.id.toString()}
+                                                    >
                                                         {unit.unit_name}
                                                     </SelectItem>
                                                 ))}
@@ -259,7 +374,9 @@ export default function Edit({ product, categories, units }: {
                                         </SelectContent>
                                     </Select>
                                     {errors.unit_id && (
-                                        <p className="text-sm text-red-500">{errors.unit_id}</p>
+                                        <p className="text-sm text-red-500">
+                                            {errors.unit_id}
+                                        </p>
                                     )}
                                 </div>
                             </div>
@@ -270,19 +387,27 @@ export default function Edit({ product, categories, units }: {
                         {/* Description */}
                         <div className="space-y-4">
                             <div>
-                                <h2 className="text-sm font-semibold text-slate-900">Description</h2>
-                                <p className="text-xs text-slate-400">Optional — shown to staff, not customers</p>
+                                <h2 className="text-sm font-semibold text-slate-900">
+                                    Description
+                                </h2>
+                                <p className="text-xs text-slate-400">
+                                    Optional — shown to staff, not customers
+                                </p>
                             </div>
                             <div className="space-y-2">
                                 <Textarea
                                     id="description"
                                     value={data.description}
-                                    onChange={e => setData('description', e.target.value)}
+                                    onChange={(e) =>
+                                        setData('description', e.target.value)
+                                    }
                                     placeholder="Enter product description"
                                     rows={4}
                                 />
                                 {errors.description && (
-                                    <p className="text-sm text-red-500">{errors.description}</p>
+                                    <p className="text-sm text-red-500">
+                                        {errors.description}
+                                    </p>
                                 )}
                             </div>
                         </div>

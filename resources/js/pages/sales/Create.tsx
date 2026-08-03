@@ -3,7 +3,7 @@ import gsap from 'gsap';
 import ProductCard from '@/components/product-card';
 import { ProductProps } from '@/interfaces/Props';
 import { Product } from '@/interfaces/Interfaces';
-import { router } from '@inertiajs/react';
+import { router, Head } from '@inertiajs/react';
 import PageHeader from '@/components/header';
 import { ShoppingCart } from 'lucide-react';
 
@@ -29,6 +29,19 @@ function SaleLineItem({ children }: { children: React.ReactNode }) {
     }, []);
 
     return <div ref={ref}>{children}</div>;
+}
+
+CreateSale.layout = {
+    breadcrumbs: [
+        {
+            title: 'Point of Sale',
+            href: '/sales',
+        },
+        {
+            title: 'Sales Form',
+            href: '/sales',
+        }
+    ]
 }
 
 export default function CreateSale({ products }: ProductProps) {
@@ -144,6 +157,9 @@ export default function CreateSale({ products }: ProductProps) {
 
     return (
         <div className="flex h-screen overflow-hidden bg-slate-50">
+            <Head
+            title = {'Point of Sale | Macmac Hardware'}
+            />
             <form onSubmit={handleSubmit} className="flex h-full w-full">
                 {/* ── Left: Product Grid ── */}
                 <div className="flex-1 overflow-y-auto p-8">

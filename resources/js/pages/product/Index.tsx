@@ -200,6 +200,7 @@ export default function Index({ products, categories, units }: ProductProps) {
     if (loading) {
         return (
             <div className="min-h-screen bg-slate-50">
+                <Head title="Products | Macmac Hardware" />
                 <div className="mx-10 py-8">
                     {/* Header skeleton */}
                     <div className="mb-8 flex items-end justify-between">

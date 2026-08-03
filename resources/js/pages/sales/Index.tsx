@@ -1,4 +1,4 @@
-import { Link, router } from '@inertiajs/react';
+import { Link, router, Head } from '@inertiajs/react';
 import { useState, useEffect } from 'react';
 import { Plus, ReceiptText } from 'lucide-react';
 import TableList from '@/components/table-list';
@@ -11,6 +11,19 @@ import PageHeader from '@/components/header';
 interface SaleProps {
     sales: Sale[];
 }
+
+Index.layout = {
+    breadcrumbs: [
+        {
+            title: 'Point of Sale',
+            href: '/sales',
+        },
+        {
+            title: 'Sales',
+            href: '/sales',
+        },
+    ],
+};
 
 export default function Index({ sales }: SaleProps) {
     const [showSales, setShowSales] = useState<Sale[]>([]);
@@ -36,6 +49,7 @@ export default function Index({ sales }: SaleProps) {
         return (
             <div className="min-h-screen bg-slate-50">
                 <div className="mx-8 px-6 py-8">
+                    <Head title="Sales | Macmac Hardware" />
                     {/* Header skeleton */}
                     <div className="mb-8 flex items-end justify-between">
                         <div className={`flex flex-row`}>
@@ -109,6 +123,7 @@ export default function Index({ sales }: SaleProps) {
 
     return (
         <div className="min-h-screen bg-slate-50">
+            <Head title="Sales | Macmac Hardware" />
             <div className="mx-auto max-w-6xl py-8">
                 {/* Page Header */}
                 <div className="mb-8 flex items-end justify-between">

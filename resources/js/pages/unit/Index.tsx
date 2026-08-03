@@ -25,6 +25,19 @@ interface UnitProps {
     units: Unit[];
 }
 
+Index.layout = {
+    breadcrumbs: [
+        {
+            title: 'Inventory',
+            href: '/units',
+        },
+        {
+            title: 'Units',
+            href: '/units',
+        },
+    ],
+};
+
 export default function Index({ units }: UnitProps) {
     const [showUnits, setShowUnits] = useState<Unit[]>([]);
     const [showCreate, setShowCreate] = useState(false);
@@ -69,7 +82,7 @@ export default function Index({ units }: UnitProps) {
 
     return (
         <div className="container py-8">
-            <Head title="Units" />
+            <Head title="Units | Macmac Hardware" />
             <div>
                 {loading ? (
                     <div className="min-h-screen bg-white">
@@ -111,6 +124,7 @@ export default function Index({ units }: UnitProps) {
                 ) : (
                     <>
                         <div className="mx-10 mb-6 flex items-center justify-between">
+                            <Head title="Units | Macmac Hardware" />
                             <PageHeader
                                 headerTitle="Inventory"
                                 icon={<Ruler />}
@@ -140,7 +154,7 @@ export default function Index({ units }: UnitProps) {
                         </div>
                     </>
                 )}
-        </div>
+            </div>
 
             {/* Alternative: Controlled modal approach */}
             <ShowListModal

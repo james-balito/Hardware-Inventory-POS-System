@@ -1,5 +1,5 @@
 // resources/js/Pages/Categories/Index.tsx
-import { Link, router } from '@inertiajs/react';
+import { Link, router, Head } from '@inertiajs/react';
 import { useState, useEffect } from 'react';
 import { Plus, Tag } from 'lucide-react';
 import ShowListModal from '@/components/show-list-modal';
@@ -14,6 +14,19 @@ import PageHeader from '@/components/header';
 interface CategoryProps {
     categories: Category[];
 }
+
+Index.layout = {
+    breadcrumbs: [
+        {
+            title: 'Inventory',
+            href: '/categories',
+        },
+        {
+            title: 'Categories',
+            href: '/categories',
+        },
+    ],
+};
 
 export default function Index({ categories }: CategoryProps) {
     const [showCategories, setShowCategories] = useState<Category[]>([]);
@@ -42,7 +55,7 @@ export default function Index({ categories }: CategoryProps) {
     };
 
     const handleEdit = (item: Category) => {
-        console.log('Full Item:' , item);
+        console.log('Full Item:', item);
         setSelectedCategory(item);
         setEditKey((prev) => prev + 1);
         setIsEditModalOpen(true);
@@ -81,6 +94,7 @@ export default function Index({ categories }: CategoryProps) {
     if (loading) {
         return (
             <div className="min-h-screen bg-slate-50">
+                <Head title={`Categories | Macmac Hardware`} />
                 <div className="mx-8 py-8">
                     <div className="mb-8 flex items-end justify-between">
                         <div className={`flex flex-row`}>
@@ -121,6 +135,7 @@ export default function Index({ categories }: CategoryProps) {
 
     return (
         <div className="mx-10 min-h-screen bg-slate-50 py-8">
+            <Head title={`Categories | Macmac Hardware`} />
             <div className="mb-8 flex items-end justify-between">
                 <PageHeader
                     headerTitle="Inventory"
