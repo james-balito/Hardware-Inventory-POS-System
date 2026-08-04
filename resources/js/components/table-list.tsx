@@ -1,7 +1,6 @@
-import { useRef, useLayoutEffect } from 'react';
 import gsap from 'gsap';
 import { Eye, Pencil, Trash2, Ellipsis } from 'lucide-react';
-import { TableListProps } from '@/interfaces/Props';
+import { useRef, useLayoutEffect } from 'react';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -10,6 +9,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import type { TableListProps } from '@/interfaces/Props';
 
 export default function TableList({
     columns = [],
@@ -41,7 +41,9 @@ export default function TableList({
     // knowing if a parent ever does something like `data={[...items]}`
     // on every render for unrelated reasons.
     useLayoutEffect(() => {
-        if (data.length === 0) return;
+        if (data.length === 0) {
+return;
+}
 
         gsap.fromTo(
             rowRefs.current.filter(Boolean),
@@ -58,32 +60,32 @@ export default function TableList({
     }, [data]);
 
     return (
-        <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
+        <div className="overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-950/70">
             <table className="min-w-full">
                 <thead>
-                    <tr className="border-b border-slate-200 bg-slate-50">
+                    <tr className="border-b border-slate-200 bg-slate-50 dark:border-slate-700 dark:bg-slate-900/80">
                         {showIndex && (
-                            <th className="w-14 px-6 py-3.5 text-left text-xs font-semibold tracking-wider text-slate-500 uppercase">
+                            <th className="w-14 px-6 py-3.5 text-left text-xs font-semibold tracking-wider text-slate-500 uppercase dark:text-slate-300">
                                 {indexLabel}
                             </th>
                         )}
                         {columns.map((column) => (
                             <th
                                 key={column.key}
-                                className="px-6 py-3.5 text-left text-xs font-semibold tracking-wider text-slate-500 uppercase"
+                                className="px-6 py-3.5 text-left text-xs font-semibold tracking-wider text-slate-500 uppercase dark:text-slate-300"
                             >
                                 {column.label}
                             </th>
                         ))}
                         {actions.length > 0 && (
-                            <th className="w-16 px-6 py-3.5 text-right text-xs font-semibold tracking-wider text-slate-500 uppercase">
+                            <th className="w-16 px-6 py-3.5 text-right text-xs font-semibold tracking-wider text-slate-500 uppercase dark:text-slate-300">
                                 Actions
                             </th>
                         )}
                     </tr>
                 </thead>
 
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800/90">
                     {data.length === 0 ? (
                         <tr>
                             <td
@@ -91,19 +93,19 @@ export default function TableList({
                                 className="px-6 py-16 text-center"
                             >
                                 {typeof emptyTableMessage === 'string' ? (
-                                    <p className="text-sm text-slate-500">
+                                    <p className="text-sm text-slate-500 dark:text-slate-300">
                                         {emptyTableMessage}
                                     </p>
                                 ) : (
                                     <div className="flex flex-col items-center gap-3">
-                                        <div className="flex h-14 w-14 items-center justify-center rounded-full bg-slate-100 text-slate-400">
+                                        <div className="flex h-14 w-14 items-center justify-center rounded-full bg-slate-100 text-slate-400 dark:bg-slate-700 dark:text-slate-500">
                                             {emptyTableMessage.icon}
                                         </div>
                                         <div>
-                                            <h3 className="mb-1 text-sm font-semibold text-slate-900">
+                                            <h3 className="mb-1 text-sm font-semibold text-slate-900 dark:text-slate-100">
                                                 {emptyTableMessage.title}
                                             </h3>
-                                            <p className="text-sm text-slate-500">
+                                            <p className="text-sm text-slate-500 dark:text-slate-300">
                                                 {emptyTableMessage.description}
                                             </p>
                                         </div>
@@ -129,17 +131,17 @@ export default function TableList({
                                 ref={(el) => {
                                     rowRefs.current[index] = el;
                                 }}
-                                className="transition-colors hover:bg-slate-50"
+                                className="transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/70"
                             >
                                 {showIndex && (
-                                    <td className="px-6 py-4 text-sm font-medium text-slate-400">
+                                    <td className="px-6 py-4 text-sm font-medium text-slate-400 dark:text-slate-400">
                                         {indexStartFrom + index}
                                     </td>
                                 )}
                                 {columns.map((column) => (
                                     <td
                                         key={column.key}
-                                        className="px-6 py-4 text-sm text-left text-slate-700"
+                                        className="px-6 py-4 text-left text-sm text-slate-700 dark:text-slate-200"
                                     >
                                         {column.render
                                             ? column.render(
@@ -157,7 +159,7 @@ export default function TableList({
                                         onView ? (
                                             <button
                                                 onClick={() => onView(item)}
-                                                className="cursor-pointer rounded-lg p-1.5 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700"
+                                                className="cursor-pointer rounded-lg p-1.5 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white"
                                             >
                                                 <Eye className="h-4 w-4" />
                                             </button>
@@ -165,7 +167,7 @@ export default function TableList({
                                             /* Dropdown menu */
                                             <DropdownMenu>
                                                 <DropdownMenuTrigger asChild>
-                                                    <button className="rounded-lg p-1.5 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700">
+                                                    <button className="rounded-lg p-1.5 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white">
                                                         <Ellipsis className="h-4 w-4" />
                                                     </button>
                                                 </DropdownMenuTrigger>

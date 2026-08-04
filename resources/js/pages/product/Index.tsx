@@ -199,7 +199,7 @@ export default function Index({ products, categories, units }: ProductProps) {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-slate-50">
+            <div className="min-h-screen bg-slate-50 dark:bg-slate-600/10">
                 <Head title="Products | Macmac Hardware" />
                 <div className="mx-10 py-8">
                     {/* Header skeleton */}
@@ -221,7 +221,7 @@ export default function Index({ products, categories, units }: ProductProps) {
                         {[...Array(4)].map((_, i) => (
                             <div
                                 key={i}
-                                className="animate-pulse rounded-xl border border-slate-200 bg-white p-4"
+                                className="animate-pulse rounded-xl border border-slate-200 bg-white p-4 dark:border-slate-600 dark:bg-slate-900/70"
                             >
                                 <div className="mb-3 h-3 w-24 rounded bg-slate-100" />
                                 <div className="h-8 w-16 rounded bg-slate-100" />
@@ -239,7 +239,7 @@ export default function Index({ products, categories, units }: ProductProps) {
                     </div>
 
                     {/* Table skeleton */}
-                    <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
+                    <div className="overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-slate-600 dark:bg-slate-900/70">
                         <div className="flex animate-pulse gap-3 border-b border-slate-200 bg-slate-50 px-6 py-3.5">
                             <div className="mr-10 h-5 w-6 rounded bg-slate-200" />
                             {[...Array(7)].map((_, i) => (
@@ -279,7 +279,7 @@ export default function Index({ products, categories, units }: ProductProps) {
     }, [hiddenColumns]);
 
     return (
-        <div className="min-h-screen bg-slate-50">
+        <div className="min-h-screen bg-slate-50 dark:bg-slate-600/10">
             <div className="mx-10 py-8">
                 {/* Page Header */}
                 <div className="mb-8 flex items-end justify-between">
@@ -301,7 +301,7 @@ export default function Index({ products, categories, units }: ProductProps) {
                 <div className="mb-6 grid grid-cols-4 gap-4">
                     <button
                         onClick={() => setStockFilter('all')}
-                        className={`flex cursor-pointer flex-col items-start rounded-xl border border-blue-400 bg-white p-4 transition-all hover:shadow-md`}
+                        className={`flex cursor-pointer flex-col items-start rounded-xl border border-blue-400 bg-white p-4 transition-all hover:shadow-md dark:bg-slate-900/70`}
                     >
                         <p className="mb-2 text-xs font-semibold tracking-wider text-blue-400 uppercase">
                             Total Products
@@ -313,7 +313,7 @@ export default function Index({ products, categories, units }: ProductProps) {
 
                     <button
                         onClick={() => handleStockFilter('in_stock')}
-                        className={`flex cursor-pointer flex-col items-start rounded-xl border border-green-400 bg-white p-4 transition-all hover:shadow-md`}
+                        className={`flex cursor-pointer flex-col items-start rounded-xl border border-green-400 bg-white p-4 transition-all hover:shadow-md dark:bg-slate-900/70`}
                     >
                         <p className="mb-2 text-xs font-semibold tracking-wider text-green-500 uppercase">
                             In Stock
@@ -321,7 +321,7 @@ export default function Index({ products, categories, units }: ProductProps) {
                         <p className="font-mono text-2xl font-bold text-green-600">
                             {inStock}
                         </p>
-                        <span className="text-xs text-gray-500">
+                        <span className="text-xs text-gray-500 dark:text-slate-400">
                             {products.length > 0
                                 ? ((inStock / products.length) * 100).toFixed(1)
                                 : 0}
@@ -331,7 +331,7 @@ export default function Index({ products, categories, units }: ProductProps) {
 
                     <button
                         onClick={() => handleStockFilter('low_stock')}
-                        className={`flex cursor-pointer flex-col items-start rounded-xl border border-orange-400 bg-white p-4 transition-all hover:shadow-md`}
+                        className={`flex cursor-pointer flex-col items-start rounded-xl border border-orange-400 bg-white p-4 transition-all hover:shadow-md dark:bg-slate-900/70`}
                     >
                         <p className="mb-2 text-xs font-semibold tracking-wider text-orange-400 uppercase">
                             Low in Stock
@@ -339,7 +339,7 @@ export default function Index({ products, categories, units }: ProductProps) {
                         <p className="font-mono text-2xl font-bold text-orange-500">
                             {lowStock}
                         </p>
-                        <span className="text-xs text-gray-500">
+                        <span className="text-xs text-gray-500 dark:text-slate-400">
                             {products.length > 0
                                 ? ((lowStock / products.length) * 100).toFixed(
                                       1,
@@ -351,7 +351,7 @@ export default function Index({ products, categories, units }: ProductProps) {
 
                     <button
                         onClick={() => handleStockFilter('out_of_stock')}
-                        className={`flex cursor-pointer flex-col items-start rounded-xl border border-red-400 bg-white p-4 transition-all hover:shadow-md`}
+                        className={`flex cursor-pointer flex-col items-start rounded-xl border border-red-400 bg-white p-4 transition-all hover:shadow-md dark:bg-slate-900/70`}
                     >
                         <p className="mb-2 text-xs font-semibold tracking-wider text-red-400 uppercase">
                             Out of Stock
@@ -359,7 +359,7 @@ export default function Index({ products, categories, units }: ProductProps) {
                         <p className="font-mono text-2xl font-bold text-red-500">
                             {outOfStock}
                         </p>
-                        <span className="text-xs text-gray-500">
+                        <span className="text-xs text-gray-500 dark:text-slate-400">
                             {products.length > 0
                                 ? (
                                       (outOfStock / products.length) *
@@ -380,7 +380,7 @@ export default function Index({ products, categories, units }: ProductProps) {
                             placeholder="Search products by name or category..."
                             value={searchInput}
                             onChange={(e) => setSearchInput(e.target.value)}
-                            className="w-full rounded-lg border border-slate-200 bg-white py-2 pr-4 pl-10 text-sm text-slate-700 placeholder:text-slate-400 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 focus:outline-none"
+                            className="w-full rounded-lg border border-slate-200 bg-white py-2 pr-4 pl-10 text-sm text-slate-700 placeholder:text-slate-400 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 focus:outline-none dark:border-slate-600 dark:bg-slate-900/70 dark:text-slate-200 dark:placeholder:text-slate-500"
                         />
                         {searchInput && (
                             <button
@@ -401,7 +401,7 @@ export default function Index({ products, categories, units }: ProductProps) {
                             );
                         }}
                     >
-                        <SelectTrigger className="my-2 w-1/2 border border-gray-200 bg-white font-normal text-gray-600">
+                        <SelectTrigger className="my-2 w-1/2 border border-gray-200 bg-white font-normal text-gray-600 dark:border-slate-600 dark:bg-slate-900/70 dark:text-slate-300">
                             <SelectValue placeholder="Select a category" />
                         </SelectTrigger>
                         <SelectContent>
@@ -433,7 +433,7 @@ export default function Index({ products, categories, units }: ProductProps) {
                             }
                         }}
                     >
-                        <SelectTrigger className="my-2 w-1/2 border border-gray-200 bg-white font-normal text-gray-600">
+                        <SelectTrigger className="my-2 w-1/2 border border-gray-200 bg-white font-normal text-gray-600 dark:border-slate-600 dark:bg-slate-900/70 dark:text-slate-300">
                             <SelectValue placeholder="Select a stock" />
                         </SelectTrigger>
                         <SelectContent>
@@ -457,7 +457,7 @@ export default function Index({ products, categories, units }: ProductProps) {
                             );
                         }}
                     >
-                        <SelectTrigger className="my-2 w-1/3 border border-gray-200 bg-white font-normal text-gray-600">
+                        <SelectTrigger className="my-2 w-1/3 border border-gray-200 bg-white font-normal text-gray-600 dark:border-slate-600 dark:bg-slate-900/70 dark:text-slate-300">
                             <SelectValue>
                                 Filter Columns
                             </SelectValue>

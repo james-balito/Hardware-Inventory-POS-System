@@ -1,6 +1,6 @@
 // resources/js/Contexts/ToastContext.tsx
-import { createContext, useContext, useState, useCallback } from 'react';
 import { CheckCircle, XCircle, X } from 'lucide-react';
+import { createContext, useContext, useState, useCallback } from 'react';
 
 type ToastType = 'success' | 'error' | 'loading';
 
@@ -24,6 +24,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
     const addToast = useCallback((type: ToastType, message: string) => {
         const id = Date.now();
         setToasts(prev => [...prev, { id, type, message }]);
+
         return id;
     }, []);
 
@@ -69,16 +70,19 @@ function ToastItem({ toast, onClose }: { toast: Toast; onClose: () => void }) {
     };
 
     const bgColors = {
-        success: 'bg-green-50 border-green-200',
-        error: 'bg-red-50 border-red-200',
-        loading: 'bg-blue-50 border-blue-200',
+        success:
+            'border-green-200 bg-green-50 dark:border-slate-600 dark:bg-slate-900/95',
+        error:
+            'border-red-200 bg-red-50 dark:border-slate-600 dark:bg-slate-900/95',
+        loading:
+            'border-blue-200 bg-blue-50 dark:border-slate-600 dark:bg-slate-900/95',
     };
 
     return (
-        <div className={`flex items-center gap-3 p-4 border rounded-xl shadow-lg ${bgColors[toast.type]} animate-slide-in`}>
+        <div className={`flex items-center gap-3 rounded-xl border p-4 shadow-lg ${bgColors[toast.type]} animate-slide-in`}>
             {icons[toast.type]}
-            <p className="text-sm font-medium flex-1">{toast.message}</p>
-            <button onClick={onClose} className="text-slate-400 hover:text-slate-600">
+            <p className="flex-1 text-sm font-medium text-slate-700 dark:text-slate-200">{toast.message}</p>
+            <button onClick={onClose} className="text-slate-400 transition hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-200">
                 <X className="w-4 h-4" />
             </button>
         </div>
@@ -88,8 +92,10 @@ function ToastItem({ toast, onClose }: { toast: Toast; onClose: () => void }) {
 // Hook to use toast
 export function useToast() {
     const context = useContext(ToastContext);
+
     if (!context) {
         throw new Error('useToast must be used within a ToastProvider');
     }
+
     return context;
 }

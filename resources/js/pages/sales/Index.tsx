@@ -47,7 +47,7 @@ export default function Index({ sales }: SaleProps) {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-slate-50">
+            <div className="min-h-screen bg-slate-50 dark:bg-slate-900/70">
                 <div className="mx-8 px-6 py-8">
                     <Head title="Sales | Macmac Hardware" />
                     {/* Header skeleton */}
@@ -122,7 +122,7 @@ export default function Index({ sales }: SaleProps) {
     });
 
     return (
-        <div className="min-h-screen bg-slate-50">
+        <div className="min-h-screen bg-slate-50 dark:bg-slate-900/30">
             <Head title="Sales | Macmac Hardware" />
             <div className="mx-auto max-w-6xl py-8">
                 {/* Page Header */}
@@ -133,7 +133,7 @@ export default function Index({ sales }: SaleProps) {
                         title="Sales"
                     />
                     <Link href="/sales/create">
-                        <button className="flex cursor-pointer items-center gap-2 rounded-xl bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-600">
+                        <button className="flex cursor-pointer items-center gap-2 rounded-xl bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white border dark:border-slate-600 dark:bg-slate-900/70 dark:hover:bg-slate-900 dark:text-slate-50 transition-colors hover:bg-blue-600">
                             <Plus className="h-4 w-4" />
                             New Sale
                         </button>
@@ -142,11 +142,11 @@ export default function Index({ sales }: SaleProps) {
 
                 {/* Summary Stats */}
                 <div className="mb-6 grid grid-cols-4 gap-4">
-                    <div className="rounded-xl border border-slate-400 bg-white p-4">
-                        <p className="mb-2 text-xs font-semibold tracking-wider text-slate-500 uppercase">
+                    <div className="rounded-xl border border-slate-400 bg-white dark:bg-slate-900/30 p-4">
+                        <p className="mb-2 text-xs font-semibold tracking-wider text-slate-500 dark:text-slate-300 uppercase">
                             Total Revenue
                         </p>
-                        <p className="font-mono text-2xl font-bold text-slate-600">
+                        <p className="font-mono text-2xl font-bold text-slate-600 dark:text-slate-300">
                             ₱
                             {totalRevenue.toLocaleString('en-PH', {
                                 minimumFractionDigits: 2,
@@ -154,8 +154,8 @@ export default function Index({ sales }: SaleProps) {
                             })}
                         </p>
                     </div>
-                    <div className="rounded-xl border border-green-300 bg-green-200/10 p-4">
-                        <p className="mb-2 text-xs font-semibold tracking-wider text-green-600 uppercase">
+                    <div className="rounded-xl border border-green-300 bg-green-600/10 p-4">
+                        <p className="mb-2 text-xs font-semibold tracking-wider text-green-500 uppercase">
                             Total Sales
                         </p>
                         <p className="font-mono text-2xl font-bold text-green-600">

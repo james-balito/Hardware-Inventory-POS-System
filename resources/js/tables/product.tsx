@@ -15,19 +15,19 @@ export const ProductTable = {
 
                 if (value >= 5) {
                     return (
-                        <span className="text-xs text-green-600">In Stock</span>
+                        <span className="text-xs text-green-600 dark:text-green-400">In Stock</span>
                     );
                 }
                 if (value >= 1) {
                     return (
-                        <span className="text-xs text-orange-600">
+                        <span className="text-xs text-orange-600 dark:text-orange-400">
                             Low Stock
                         </span>
                     );
                 }
                 if (value === 0) {
                     return (
-                        <span className="text-xs text-red-500">
+                        <span className="text-xs text-red-500 dark:text-red-400">
                             Out of Stock
                         </span>
                     );
@@ -49,7 +49,7 @@ export const ProductTable = {
                 if (value >= 5) {
                     return (
                         <div>
-                            <span className="inline-block rounded-xl border border-green-400 bg-green-50 px-2 py-1 text-xs font-medium text-green-700">
+                            <span className="inline-block rounded-xl border border-green-400 bg-green-50 px-2 py-1 text-xs font-medium text-green-700 dark:bg-green-500/10 dark:text-green-400">
                                 {value} {displayValue}
                             </span>
                         </div>
@@ -59,7 +59,7 @@ export const ProductTable = {
                 if (value >= 1) {
                     return (
                         <div>
-                            <span className="inline-block rounded-xl border border-orange-400 bg-orange-50 px-2 py-1 text-xs font-medium text-orange-700">
+                            <span className="inline-block rounded-xl border border-orange-400 bg-orange-50 px-2 py-1 text-xs font-medium text-orange-700 dark:bg-orange-500/10 dark:text-orange-400">
                                 {value} {displayValue}
                             </span>
                         </div>
@@ -70,7 +70,7 @@ export const ProductTable = {
                 if (value === 0) {
                     return (
                         <div>
-                            <span className="inline-block rounded-xl border border-red-400 bg-red-50 px-2 py-1 text-xs font-medium text-red-700">
+                            <span className="inline-block rounded-xl border border-red-400 bg-red-50 px-2 py-1 text-xs font-medium text-red-700 dark:bg-red-500/10 dark:text-red-400">
                                 {value} {displayValue}
                             </span>
                         </div>
