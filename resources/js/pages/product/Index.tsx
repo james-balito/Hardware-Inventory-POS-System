@@ -205,16 +205,15 @@ export default function Index({ products, categories, units }: ProductProps) {
                     {/* Header skeleton */}
                     <div className="mb-8 flex items-end justify-between">
                         <div className={`flex flex-row`}>
-                            <div className="h-12 w-13 animate-pulse rounded bg-slate-200" />
+                            <div className="h-12 w-13 animate-pulse rounded bg-slate-200 dark:bg-slate-700" />
                             <div className={`ml-4 flex flex-col`}>
-                                <div className="h-4 w-20 animate-pulse rounded bg-slate-200" />
-                                <div className="mt-1 h-7 w-25 animate-pulse rounded bg-slate-200" />
+                                <div className="h-4 w-20 animate-pulse rounded bg-slate-200 dark:bg-slate-700" />
+                                <div className="mt-1 h-7 w-25 animate-pulse rounded bg-slate-200 dark:bg-slate-700" />
                             </div>
                         </div>
-                        <div className="h-10 w-36 animate-pulse rounded-xl bg-slate-200" />
-                    </div>
 
-                    <div className="mb-4 h-10 w-full animate-pulse rounded-xl bg-slate-200" />
+                        <div className="h-10 w-35 animate-pulse rounded-xl bg-slate-200 dark:bg-slate-700" />
+                    </div>
 
                     {/* Stats skeleton */}
                     <div className="mb-6 grid grid-cols-4 gap-4">
@@ -223,29 +222,28 @@ export default function Index({ products, categories, units }: ProductProps) {
                                 key={i}
                                 className="animate-pulse rounded-xl border border-slate-200 bg-white p-4 dark:border-slate-600 dark:bg-slate-900/70"
                             >
-                                <div className="mb-3 h-3 w-24 rounded bg-slate-100" />
-                                <div className="h-8 w-16 rounded bg-slate-100" />
+                                <div className="mb-3 h-3 w-24 rounded bg-slate-100 dark:bg-slate-700" />
+                                <div className="h-8 w-10 rounded bg-slate-100 dark:bg-slate-700" />
+                                <div className="my-2 h-4 w-16 rounded bg-slate-100 dark:bg-slate-700" />
                             </div>
                         ))}
                     </div>
 
-                    <div className="flex animate-pulse gap-5 bg-slate-50">
-                        {[...Array(10)].map((_, i) => (
-                            <div
-                                key={i}
-                                className="my-2 h-7 w-28 rounded bg-slate-200"
-                            />
-                        ))}
+                    <div className="flex animate-pulse gap-5 bg-slate-50 mb-1 dark:bg-slate-900/10">
+                        <div className="mb-4 h-7 w-3/4 rounded bg-slate-200 dark:bg-slate-700" />
+                        <div className="mb-4 h-7 w-1/2 rounded bg-slate-200 dark:bg-slate-700" />
+                        <div className="mb-4 h-7 w-1/2 rounded bg-slate-200 dark:bg-slate-700" />
+                        <div className="mb-4 h-7 w-1/2 rounded bg-slate-200 dark:bg-slate-700" />
                     </div>
 
                     {/* Table skeleton */}
-                    <div className="overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-slate-600 dark:bg-slate-900/70">
-                        <div className="flex animate-pulse gap-3 border-b border-slate-200 bg-slate-50 px-6 py-3.5">
-                            <div className="mr-10 h-5 w-6 rounded bg-slate-200" />
-                            {[...Array(7)].map((_, i) => (
+                    <div className="overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-slate-600 dark:bg-slate-600/10">
+                        <div className="flex animate-pulse gap-3 border-b border-slate-200 bg-slate-50 px-6 py-3.5 dark:border-slate-600 dark:bg-slate-600/10">
+                            <div className="mr-10 h-5 w-6 rounded bg-slate-200 dark:bg-slate-700" />
+                            {[...Array(9)].map((_, i) => (
                                 <div
                                     key={i}
-                                    className="mr-10 h-5 w-20 rounded bg-slate-200"
+                                    className="mr-10 h-5 w-20 rounded bg-slate-200 dark:bg-slate-700"
                                 />
                             ))}
                         </div>
@@ -253,16 +251,12 @@ export default function Index({ products, categories, units }: ProductProps) {
                         {[...Array(10)].map((_, i) => (
                             <div
                                 key={i}
-                                className="mr-10 flex animate-pulse flex-row items-start justify-items-start gap-8 border-b border-slate-100 px-6 py-4"
+                                className="flex animate-pulse flex-row items-start justify-items-start gap-8 gap-10 border-b border-slate-100 dark:border-slate-700 px-6 py-4"
                             >
-                                <div className="my-2 h-4 w-6 justify-self-start rounded bg-slate-100" />
-                                <div className="my-2 h-4 w-32 justify-self-start rounded bg-slate-100" />
-                                <div className="my-2 h-4 w-20 justify-self-start rounded bg-slate-100" />
-                                <div className="my-2 h-4 w-24 justify-self-start rounded bg-slate-100" />
-                                <div className="my-2 h-4 w-20 justify-self-start rounded bg-slate-100" />
-                                <div className="my-2 h-4 w-20 justify-self-start rounded bg-slate-100" />
-                                <div className="my-2 h-4 w-24 justify-self-start rounded bg-slate-100" />
-                                <div className="my-2 h-4 w-20 justify-self-start rounded bg-slate-100" />
+                                <div className="my-2 h-4 w-6 justify-self-start rounded bg-slate-100 dark:bg-slate-600" />
+                                {[...Array(9)].map((_, i) => (
+                                    <div className="my-2 h-4 w-32 justify-self-start rounded bg-slate-100 dark:bg-slate-600" />
+                                ))}
                             </div>
                         ))}
                     </div>
@@ -401,15 +395,23 @@ export default function Index({ products, categories, units }: ProductProps) {
                             );
                         }}
                     >
-                        <SelectTrigger className="my-2 w-1/2 border border-gray-200 bg-white font-normal text-gray-600 dark:border-slate-600 dark:bg-slate-900/70 dark:text-slate-300">
+                        <SelectTrigger className="my-2 w-1/2 border border-gray-200 bg-white font-normal text-gray-600 dark:border-slate-600 dark:bg-slate-900/70 dark:text-slate-300 dark:ring-slate-600 dark:hover:bg-slate-800">
                             <SelectValue placeholder="Select a category" />
                         </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="all">All Categories</SelectItem>
+                        <SelectContent
+                            className={`bg-white font-normal text-gray-600 dark:border-slate-600 dark:bg-slate-900/70 dark:text-slate-300`}
+                        >
+                            <SelectItem
+                                value="all"
+                                className={`bg-white font-normal text-gray-600 dark:border-slate-600 dark:bg-slate-900/70 dark:text-slate-300 dark:hover:bg-slate-800`}
+                            >
+                                All Categories
+                            </SelectItem>
                             {categories.map((category) => (
                                 <SelectItem
                                     key={category.id}
                                     value={category.id.toString()}
+                                    className={`bg-white font-normal text-gray-600 dark:border-slate-600 dark:bg-slate-900/70 dark:text-slate-300 dark:hover:bg-slate-800`}
                                 >
                                     {category.category_name}
                                 </SelectItem>
@@ -433,13 +435,22 @@ export default function Index({ products, categories, units }: ProductProps) {
                             }
                         }}
                     >
-                        <SelectTrigger className="my-2 w-1/2 border border-gray-200 bg-white font-normal text-gray-600 dark:border-slate-600 dark:bg-slate-900/70 dark:text-slate-300">
+                        <SelectTrigger className="my-2 w-1/2 border border-gray-200 bg-white font-normal text-gray-600 dark:border-slate-600 dark:bg-slate-900/70 dark:text-slate-300 dark:ring-slate-600 dark:hover:bg-slate-800">
                             <SelectValue placeholder="Select a stock" />
                         </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="all">All Status</SelectItem>
+                        <SelectContent className="border border-gray-200 bg-white font-normal text-gray-600 dark:border-slate-600 dark:bg-slate-900/70 dark:text-slate-300">
+                            <SelectItem
+                                value="all"
+                                className={`bg-white font-normal text-gray-600 dark:border-slate-600 dark:bg-slate-900/70 dark:text-slate-300`}
+                            >
+                                All Status
+                            </SelectItem>
                             {stockFilters.map((stock) => (
-                                <SelectItem key={stock.id} value={stock.value}>
+                                <SelectItem
+                                    key={stock.id}
+                                    value={stock.value}
+                                    className={`cursor-pointer bg-white font-normal text-gray-600 dark:border-slate-600 dark:bg-slate-900/70 dark:text-slate-300 dark:hover:bg-slate-800`}
+                                >
                                     {stock.label}
                                 </SelectItem>
                             ))}
@@ -457,14 +468,18 @@ export default function Index({ products, categories, units }: ProductProps) {
                             );
                         }}
                     >
-                        <SelectTrigger className="my-2 w-1/3 border border-gray-200 bg-white font-normal text-gray-600 dark:border-slate-600 dark:bg-slate-900/70 dark:text-slate-300">
-                            <SelectValue>
-                                Filter Columns
-                            </SelectValue>
+                        <SelectTrigger className="my-2 w-1/2 border border-gray-200 bg-white font-normal text-gray-600 dark:border-slate-600 dark:bg-slate-900/70 dark:text-slate-300 dark:ring-slate-600 dark:hover:bg-slate-800">
+                            <SelectValue>Filter Columns</SelectValue>
                         </SelectTrigger>
-                        <SelectContent>
+                        <SelectContent
+                            className={`cursor-pointer bg-white font-normal text-gray-600 dark:border-slate-600 dark:bg-slate-900/70 dark:text-slate-300`}
+                        >
                             {ProductTable.columns.map((col) => (
-                                <SelectItem key={col.key} value={col.key}>
+                                <SelectItem
+                                    key={col.key}
+                                    value={col.key}
+                                    className={`cursor-pointer bg-white font-normal text-gray-600 dark:border-slate-600 dark:bg-slate-900/70 dark:text-slate-300 dark:hover:bg-slate-800`}
+                                >
                                     <div className="flex w-full items-center justify-between gap-2">
                                         <span
                                             className={
@@ -474,7 +489,7 @@ export default function Index({ products, categories, units }: ProductProps) {
                                             }
                                         >
                                             {hiddenColumns.includes(col.key)
-                                                ? ''
+                                                ? '\u00A0\u00A0\u00A0\u00A0'
                                                 : '✓'}
                                         </span>
                                         <span>{col.label}</span>
@@ -488,8 +503,8 @@ export default function Index({ products, categories, units }: ProductProps) {
                 {/* Active Filters Indicator */}
                 {hasActiveFilters && (
                     <div className="mb-4 flex items-center gap-2">
-                        <Filter className="h-3.5 w-3.5 text-slate-400" />
-                        <span className="text-xs text-slate-500">
+                        <Filter className="h-3.5 w-3.5 text-slate-400 dark:text-slate-500" />
+                        <span className="text-xs text-slate-500 dark:text-slate-400">
                             Active filters:
                         </span>
 
@@ -513,10 +528,10 @@ export default function Index({ products, categories, units }: ProductProps) {
                             <span
                                 className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium ${
                                     stockFilter === 'in_stock'
-                                        ? 'bg-green-50 text-green-700'
+                                        ? 'bg-green-50 text-green-700 border dark:bg-green-500/10 dark:text-green-400 dark:border-green-400/50'
                                         : stockFilter === 'low_stock'
-                                          ? 'bg-amber-50 text-amber-700'
-                                          : 'bg-red-50 text-red-700'
+                                          ? 'bg-amber-50 border text-amber-700 dark:bg-amber-500/10 dark:text-amber-400 dark:border-amber-300/50'
+                                          : 'bg-red-50 border text-red-700 dark:bg-red-500/10 dark:text-red-400 dark:border-red-400/50'
                                 }`}
                             >
                                 {stockFilter === 'in_stock' && 'In Stock'}
@@ -525,7 +540,7 @@ export default function Index({ products, categories, units }: ProductProps) {
                                     'Out of Stock'}
                                 <button
                                     onClick={() => setStockFilter('all')}
-                                    className="ml-0.5 rounded-full p-0.5 hover:bg-black/10"
+                                    className="ml-0.5 rounded-full p-0.5 hover:bg-black/10 dark:hover:bg-white/10 cursor-pointer"
                                 >
                                     <X className="h-3 w-3" />
                                 </button>
@@ -537,7 +552,7 @@ export default function Index({ products, categories, units }: ProductProps) {
                                 setActiveCategory(null);
                                 setStockFilter('all');
                             }}
-                            className="cursor-pointer text-xs text-slate-500 underline hover:text-slate-700"
+                            className="cursor-pointer text-xs text-slate-500 underline hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300"
                         >
                             Clear all filters
                         </button>
