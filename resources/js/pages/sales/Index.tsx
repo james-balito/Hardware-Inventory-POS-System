@@ -47,20 +47,20 @@ export default function Index({ sales }: SaleProps) {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-slate-50 dark:bg-slate-900/70">
-                <div className="mx-8 px-6 py-8">
+            <div className="min-h-screen bg-slate-50 dark:bg-slate-600/10">
+                <div className="mx-6 px-6 py-8">
                     <Head title="Sales | Macmac Hardware" />
                     {/* Header skeleton */}
                     <div className="mb-8 flex items-end justify-between">
                         <div className={`flex flex-row`}>
                             {/* <div className="mb-3 h-3 w-20 animate-pulse rounded bg-slate-200" /> */}
-                            <div className="h-12 w-13 animate-pulse rounded bg-slate-200" />
+                            <div className="h-12 w-13 animate-pulse rounded bg-slate-200 dark:bg-slate-700" />
                             <div className={`ml-4 flex flex-col`}>
-                                <div className="h-4 w-25 animate-pulse rounded bg-slate-200" />
-                                <div className="mt-1 h-7 w-15 animate-pulse rounded bg-slate-200" />
+                                <div className="h-4 w-25 animate-pulse rounded bg-slate-200 dark:bg-slate-700" />
+                                <div className="mt-1 h-7 w-15 animate-pulse rounded bg-slate-200 dark:bg-slate-700" />
                             </div>
                         </div>
-                        <div className="h-10 w-36 animate-pulse rounded-xl bg-slate-200" />
+                        <div className="h-10 w-36 animate-pulse rounded-xl bg-slate-200 dark:bg-slate-700" />
                     </div>
 
                     {/* Stats skeleton */}
@@ -68,34 +68,34 @@ export default function Index({ sales }: SaleProps) {
                         {[...Array(4)].map((_, i) => (
                             <div
                                 key={i}
-                                className="animate-pulse rounded-xl border border-slate-200 bg-white p-4"
+                                className="animate-pulse rounded-xl border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-600/10 p-4"
                             >
-                                <div className="mb-3 h-3 w-24 rounded bg-slate-100" />
-                                <div className="h-8 w-16 rounded bg-slate-100" />
+                                <div className="mb-3 h-3 w-24 rounded bg-slate-100 dark:bg-slate-700" />
+                                <div className="h-8 w-16 rounded bg-slate-100 dark:bg-slate-700" />
                             </div>
                         ))}
                     </div>
 
                     {/* Table skeleton */}
-                    <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
-                        <div className="flex animate-pulse gap-8 border-b border-slate-200 bg-slate-50 px-6 py-3.5">
+                    <div className="overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-600/10">
+                        <div className="flex animate-pulse gap-8 border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-6 py-3.5">
                             {[...Array(5)].map((_, i) => (
                                 <div
                                     key={i}
-                                    className="h-3 w-20 rounded bg-slate-200"
+                                    className="h-3 w-20 rounded bg-slate-200 dark:bg-slate-700"
                                 />
                             ))}
                         </div>
-                        {[...Array(5)].map((_, i) => (
+                        {[...Array(10)].map((_, i) => (
                             <div
                                 key={i}
-                                className="flex animate-pulse gap-8 border-b border-slate-100 px-6 py-4"
+                                className="flex animate-pulse gap-8 border-b border-slate-100 dark:border-slate-700 px-6 py-4"
                             >
-                                <div className="h-4 w-6 rounded bg-slate-100" />
-                                <div className="h-4 w-32 rounded bg-slate-100" />
-                                <div className="h-4 w-20 rounded bg-slate-100" />
-                                <div className="h-4 w-24 rounded bg-slate-100" />
-                                <div className="h-4 w-20 rounded bg-slate-100" />
+                                <div className="h-4 w-6 rounded bg-slate-100 dark:bg-slate-700" />
+                                <div className="h-4 w-32 rounded bg-slate-100 dark:bg-slate-700" />
+                                {[...Array(8)].map((_, i) => (
+                                <div key={i} className="h-4 w-20 rounded bg-slate-100 dark:bg-slate-700" />
+                                ))}
                             </div>
                         ))}
                     </div>
@@ -142,7 +142,7 @@ export default function Index({ sales }: SaleProps) {
 
                 {/* Summary Stats */}
                 <div className="mb-6 grid grid-cols-4 gap-4">
-                    <div className="rounded-xl border border-slate-400 bg-white dark:bg-slate-900/30 p-4">
+                    <div className="rounded-xl border border-slate-400 bg-white dark:bg-slate-600/10 dark:border-slate-600 p-4">
                         <p className="mb-2 text-xs font-semibold tracking-wider text-slate-500 dark:text-slate-300 uppercase">
                             Total Revenue
                         </p>
@@ -154,7 +154,7 @@ export default function Index({ sales }: SaleProps) {
                             })}
                         </p>
                     </div>
-                    <div className="rounded-xl border border-green-300 bg-green-600/10 p-4">
+                    <div className="rounded-xl border border-green-300 bg-green-600/10 dark:bg-green-600/10 dark:border-green-600 p-4">
                         <p className="mb-2 text-xs font-semibold tracking-wider text-green-500 uppercase">
                             Total Sales
                         </p>
@@ -162,19 +162,19 @@ export default function Index({ sales }: SaleProps) {
                             {totalSales}
                         </p>
                     </div>
-                    <div className="rounded-xl border border-orange-300 bg-orange-200/10 p-4">
-                        <p className="mb-2 text-xs font-semibold tracking-wider text-orange-500 uppercase">
+                    <div className="rounded-xl border border-orange-300 bg-orange-200/10 dark:bg-orange-600/10 dark:border-orange-600 p-4">
+                        <p className="mb-2 text-xs font-semibold tracking-wider text-orange-500 dark:text-orange-400 uppercase">
                             Month of{' '}
                             {new Date().toLocaleString('en-US', {
                                 month: 'long',
                             })}{' '}
                             Sales
                         </p>
-                        <p className="font-mono text-2xl font-bold text-orange-600">
+                        <p className="font-mono text-2xl font-bold text-orange-600 dark:text-orange-500">
                             {monthlySales.length}
                         </p>
                     </div>
-                    <div className="rounded-xl border border-blue-300 bg-blue-200/10 p-4">
+                    <div className="rounded-xl border border-blue-300 bg-blue-200/10 dark:bg-blue-600/10 dark:border-blue-600 p-4">
                         <p className="mb-2 text-xs font-semibold tracking-wider text-blue-500 uppercase">
                             Today's Sales
                         </p>

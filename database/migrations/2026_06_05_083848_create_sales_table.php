@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('invoice_number')->unique();
             $table->decimal('sub_total', 10, 2);
+            $table->decimal('delivery_cost', 10, 2)->default(0);
             $table->decimal('discount', 10, 2)->default(0);
             $table->decimal('total', 10, 2);
             $table->string('status')->default('completed');

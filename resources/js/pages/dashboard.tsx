@@ -529,7 +529,7 @@ export default function Dashboard({ products, sales }: DataProps) {
                                                 <span className="text-slate-600 dark:text-slate-400">
                                                     {category}
                                                 </span>
-                                                <span className="font-medium text-slate-900">
+                                                <span className="font-medium text-slate-900 dark:text-slate-400">
                                                     {count} ({percentage}%)
                                                 </span>
                                             </div>

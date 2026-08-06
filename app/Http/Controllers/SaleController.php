@@ -49,12 +49,14 @@ class SaleController extends Controller
         try {
             $subTotal = 0;
             $items    = [];
+            $deliveryCost = $request->delivery_cost ?? 0;
 
             foreach ($request->products as $item) {
                 $product  = Product::lockForUpdate()->findOrFail($item['id']);
                 $quantity = $item['quantity'];
                 $price    = $product->sale_price;
                 $total    = $price * $quantity;
+
 
                 if ($product->stock_quantity < $quantity) {
                     DB::rollBack();
@@ -77,7 +79,8 @@ class SaleController extends Controller
             $sale = Sale::create([
                 'invoice_number' => 'INV-' . strtoupper(uniqid()),
                 'sub_total'      => $subTotal,
-                'total'          => $subTotal,
+                'delivery_cost'  => $deliveryCost,
+                'total'          => $subTotal + $deliveryCost,
                 'status'         => 'completed',
             ]);
 

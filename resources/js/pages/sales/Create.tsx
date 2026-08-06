@@ -65,6 +65,8 @@ export default function CreateSale({ products }: ProductProps) {
     const [search, setSearch] = useState('');
     const [activeCategory, setActiveCategory] = useState('All');
     const [view, setView] = useState<'grid' | 'list'>('grid');
+    const [deliveryCost, setDeliveryCost] = useState(0);
+    const [showDeliveryInput, setShowDeliveryInput] = useState(false);
     const pageRef = useRef<HTMLDivElement>(null);
     const sidebarRef = useRef<HTMLElement>(null);
 
@@ -137,7 +139,7 @@ export default function CreateSale({ products }: ProductProps) {
     const grandTotal = selectedProducts.reduce(
         (sum, product) => sum + Number(product.sale_price) * getQty(product.id),
         0,
-    );
+    ) + deliveryCost;
 
     const notify = (type: 'success' | 'error' | 'loading', message: string) => {
         const toastId = addToast(type, message);
@@ -218,6 +220,7 @@ export default function CreateSale({ products }: ProductProps) {
                     id: product.id,
                     quantity: getQty(product.id),
                 })),
+                delivery_cost: deliveryCost,
             },
             {
                 onSuccess: () => {
@@ -343,15 +346,105 @@ export default function CreateSale({ products }: ProductProps) {
                                     : 'Add products to begin'}
                             </p>
                         </div>
-                        {selectedProducts.length > 0 && (
+                        <div>
+                            {selectedProducts.length > 0 && (
+                                <button
+                                    type="button"
+                                    onClick={clearOrder}
+                                    className="flex items-center gap-1.5 text-xs font-semibold text-red-500 transition hover:text-red-700"
+                                >
+                                    <Trash2 className="h-3.5 w-3.5" /> Clear
+                                    order
+                                </button>
+                            )}
+                        </div>
+
+                        <div className="absolute top-11 right-5">
                             <button
                                 type="button"
-                                onClick={clearOrder}
-                                className="flex items-center gap-1.5 text-xs font-semibold text-red-500 transition hover:text-red-700"
+                                onClick={() =>
+                                    setShowDeliveryInput(!showDeliveryInput)
+                                }
+                                className={`flex items-center gap-2 rounded-lg border px-3 py-1.5 text-xs font-medium transition ${
+                                    deliveryCost > 0
+                                        ? 'border-amber-300 bg-amber-50 text-amber-700 dark:border-amber-800 dark:bg-amber-500/10 dark:text-amber-400'
+                                        : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-600/10 dark:text-slate-300'
+                                }`}
                             >
-                                <Trash2 className="h-3.5 w-3.5" /> Clear order
+                                <svg
+                                    className="h-3.5 w-3.5"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M13 10V3L4 14h7v7l9-11h-7z"
+                                    />
+                                </svg>
+                                {deliveryCost > 0
+                                    ? `Delivery: ${formatCurrency(deliveryCost)}`
+                                    : 'Add Delivery'}
                             </button>
-                        )}
+
+                            {showDeliveryInput && (
+                                <div className="absolute top-full right-0 z-10 mt-2 w-56 rounded-xl border border-slate-200 bg-white p-4 shadow-lg dark:border-slate-800 dark:bg-slate-950">
+                                    <label className="text-xs font-semibold text-slate-600 dark:text-slate-400">
+                                        Delivery Cost
+                                    </label>
+                                    <div className="mt-2 flex items-center gap-2">
+                                        <span className="text-sm text-slate-500">
+                                            ₱
+                                        </span>
+                                        <input
+                                            type="number"
+                                            value={deliveryCost || ''}
+                                            onChange={(e) =>
+                                                setDeliveryCost(
+                                                    Number(e.target.value) || 0,
+                                                )
+                                            }
+                                            placeholder="0.00"
+                                            min="0"
+                                            step="0.01"
+                                            className="w-full rounded-lg border border-slate-200 px-3 py-1.5 text-sm text-slate-700 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 dark:border-slate-800 dark:bg-slate-600/10 dark:text-slate-200"
+                                        />
+                                    </div>
+                                    <div className="mt-3 flex gap-2">
+                                        {[50, 100, 150].map((amount) => (
+                                            <button
+                                                key={amount}
+                                                type="button"
+                                                onClick={() =>
+                                                    setDeliveryCost(amount)
+                                                }
+                                                className={`flex-1 rounded-lg border px-2 py-1 text-xs font-medium transition ${
+                                                    deliveryCost === amount
+                                                        ? 'border-blue-500 bg-blue-50 text-blue-700'
+                                                        : 'border-slate-200 text-slate-600 hover:bg-slate-50 dark:border-slate-800 dark:text-slate-400'
+                                                }`}
+                                            >
+                                                ₱{amount}
+                                            </button>
+                                        ))}
+                                    </div>
+                                    {deliveryCost > 0 && (
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                setDeliveryCost(0);
+                                                setShowDeliveryInput(false);
+                                            }}
+                                            className="mt-2 w-full text-xs text-red-500 hover:text-red-700"
+                                        >
+                                            Remove delivery cost
+                                        </button>
+                                    )}
+                                </div>
+                            )}
+                        </div>
                     </div>
 
                     <div className="min-h-0 flex-1 overflow-y-auto px-5 py-3">
@@ -471,12 +564,6 @@ export default function CreateSale({ products }: ProductProps) {
                                 <span>Subtotal ({itemCount} items)</span>
                                 <span className="font-medium text-slate-700 dark:text-slate-300">
                                     {formatCurrency(grandTotal)}
-                                </span>
-                            </div>
-                            <div className="flex justify-between text-slate-500 dark:text-slate-400">
-                                <span>Tax</span>
-                                <span className="font-medium text-slate-700 dark:text-slate-300">
-                                    ₱0.00
                                 </span>
                             </div>
                             <div className="flex items-end justify-between pt-2">

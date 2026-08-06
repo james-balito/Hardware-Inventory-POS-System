@@ -93,38 +93,38 @@ export default function Index({ categories }: CategoryProps) {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-slate-50">
+            <div className="min-h-screen bg-slate-50 dark:bg-slate-600/10">
                 <Head title={`Categories | Macmac Hardware`} />
-                <div className="mx-8 py-8">
+                <div className="mx-10 py-8">
                     <div className="mb-8 flex items-end justify-between">
                         <div className={`flex flex-row`}>
                             {/* <div className="mb-3 h-3 w-20 animate-pulse rounded bg-slate-200" /> */}
-                            <div className="h-12 w-13 animate-pulse rounded bg-slate-200" />
+                            <div className="h-12 w-13 animate-pulse rounded bg-slate-200 dark:bg-slate-700" />
                             <div className={`ml-4 flex flex-col`}>
-                                <div className="h-4 w-20 animate-pulse rounded bg-slate-200" />
-                                <div className="mt-1 h-7 w-30 animate-pulse rounded bg-slate-200" />
+                                <div className="h-4 w-20 animate-pulse rounded bg-slate-200 dark:bg-slate-700" />
+                                <div className="mt-1 h-7 w-30 animate-pulse rounded bg-slate-200 dark:bg-slate-700" />
                             </div>
                         </div>
-                        <div className="h-10 w-32 animate-pulse rounded-xl bg-slate-200" />
+                        <div className="h-10 w-32 animate-pulse rounded-xl bg-slate-200 dark:bg-slate-700" />
                     </div>
 
-                    <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
-                        <div className="flex animate-pulse gap-20 border-b border-slate-200 bg-slate-50 px-6 py-3.5">
+                    <div className="overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-950/70">
+                        <div className="flex animate-pulse gap-20 border-b border-slate-200 bg-slate-50 px-6 py-3.5 dark:border-slate-700 dark:bg-slate-900/80">
                             {[...Array(8)].map((_, i) => (
                                 <div
                                     key={i}
-                                    className="h-3 w-20 rounded bg-slate-200"
+                                    className="h-3 w-20 rounded bg-slate-200 dark:bg-slate-700"
                                 />
                             ))}
                         </div>
                         {[...Array(10)].map((_, i) => (
                             <div
                                 key={i}
-                                className="flex animate-pulse gap-8 border-b border-slate-100 px-6 py-4"
+                                className="flex animate-pulse gap-8 border-b border-slate-100 px-6 py-4 dark:border-slate-800"
                             >
-                                <div className="h-4 w-6 rounded bg-slate-100" />
-                                <div className="h-4 w-24 rounded bg-slate-100" />
-                                <div className="h-4 w-40 rounded bg-slate-100" />
+                                <div className="h-4 w-6 rounded bg-slate-100 dark:bg-slate-800" />
+                                <div className="h-4 w-24 rounded bg-slate-100 dark:bg-slate-800" />
+                                <div className="h-4 w-40 rounded bg-slate-100 dark:bg-slate-800" />
                             </div>
                         ))}
                     </div>
@@ -134,7 +134,7 @@ export default function Index({ categories }: CategoryProps) {
     }
 
     return (
-        <div className="mx-10 min-h-screen bg-slate-50 py-8">
+        <div className="mx-10 min-h-screen bg-slate-50 py-8 dark:bg-slate-900/10">
             <Head title={`Categories | Macmac Hardware`} />
             <div className="mb-8 flex items-end justify-between">
                 <PageHeader

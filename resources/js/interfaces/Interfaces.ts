@@ -39,9 +39,10 @@ export interface SaleProduct {
     pivot: {
         quantity: number;
         item_price: number;
-        unit:string;
+        unit: string;
         total: number;
     };
+
 }
 
 export interface Sale {
@@ -52,6 +53,7 @@ export interface Sale {
     products: SaleProduct[];
     created_at: string;
     updated_at: string;
+    delivery_cost?: number;
 }
 
 // Column Interface for TableList

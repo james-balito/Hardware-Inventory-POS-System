@@ -1,4 +1,4 @@
-import { Dialog, DialogContent} from '@/components/ui/dialog'; // or your UI library
+import { Dialog, DialogContent } from '@/components/ui/dialog'; // or your UI library
 import { Sale } from '@/interfaces/Interfaces';
 import { formatDate, formatTime } from '@/components/format-time-and-date';
 import { PhilippinePeso, ReceiptText, X } from 'lucide-react';
@@ -31,7 +31,9 @@ export default function SalesModal({ isOpen, onClose, sale }: SalesModalProps) {
                             </p>
                         </div>
                         <button onClick={onClose}>
-                            <X className = {`text-white h-4 w-4 hover:text-slate-400 cursor-pointer`} />
+                            <X
+                                className={`h-4 w-4 cursor-pointer text-white hover:text-slate-400`}
+                            />
                         </button>
                     </div>
 
@@ -84,6 +86,27 @@ export default function SalesModal({ isOpen, onClose, sale }: SalesModalProps) {
                                         </p>
                                     </div>
                                 ))}
+
+                                {/* Show delivery cost if exists */}
+                                {/* {Number(sale.delivery_cost) > 0 && ( */}
+                                    <>
+                                        <div className="my-4 border-t border-dashed border-slate-300" />
+                                        <div className="flex items-center justify-between">
+                                            <span className="text-xs font-semibold tracking-wide text-slate-500 uppercase">
+                                                Delivery Fee
+                                            </span>
+                                            <span className="font-mono text-sm text-amber-600">
+                                                ₱
+                                                {Number(
+                                                    sale.delivery_cost || 0,
+                                                ).toLocaleString('en-PH', {
+                                                    minimumFractionDigits: 2,
+                                                    maximumFractionDigits: 2,
+                                                })}
+                                            </span>
+                                        </div>
+                                    </>
+                                {/* )} */}
                             </div>
 
                             <div className="my-4 border-t border-dashed border-slate-300" />

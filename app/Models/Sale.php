@@ -11,6 +11,7 @@ class Sale extends Model
         'invoice_number',
         'sub_total',
         'discount',
+        'delivery_cost',
         'total',
         'status'
     ];
