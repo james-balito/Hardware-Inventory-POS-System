@@ -5,7 +5,7 @@ import TableList from '@/components/table-list';
 import { ProductTable } from '@/tables/product';
 import { Product } from '@/interfaces/Interfaces';
 import { ProductProps } from '@/interfaces/Props';
-import { Package, Plus, Search, Filter, X } from 'lucide-react';
+import { Package, Plus, Search, Filter, X, Divide } from 'lucide-react';
 import { Head } from '@inertiajs/react';
 import PageHeader from '@/components/header';
 import {
@@ -15,6 +15,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { Modal } from '@/components/modal';
 
 Index.layout = {
     breadcrumbs: [
@@ -107,6 +108,7 @@ export default function Index({ products, categories, units }: ProductProps) {
 
     // Product Actions Function
     const handleShowModal = (product: Product) => {
+        console.log('Full Item:', product);
         setSelectedProduct(product);
         setIsModalOpen(true);
     };
@@ -199,7 +201,7 @@ export default function Index({ products, categories, units }: ProductProps) {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-slate-50 dark:bg-slate-600/10">
+            <div className="min-h-screen bg-slate-50 dark:bg-slate-900/10">
                 <Head title="Products | Macmac Hardware" />
                 <div className="mx-10 py-8">
                     {/* Header skeleton */}
@@ -229,7 +231,7 @@ export default function Index({ products, categories, units }: ProductProps) {
                         ))}
                     </div>
 
-                    <div className="flex animate-pulse gap-5 bg-slate-50 mb-1 dark:bg-slate-900/10">
+                    <div className="mb-1 flex animate-pulse gap-5 bg-slate-50 dark:bg-slate-900/10">
                         <div className="mb-4 h-7 w-3/4 rounded bg-slate-200 dark:bg-slate-700" />
                         <div className="mb-4 h-7 w-1/2 rounded bg-slate-200 dark:bg-slate-700" />
                         <div className="mb-4 h-7 w-1/2 rounded bg-slate-200 dark:bg-slate-700" />
@@ -251,7 +253,7 @@ export default function Index({ products, categories, units }: ProductProps) {
                         {[...Array(10)].map((_, i) => (
                             <div
                                 key={i}
-                                className="flex animate-pulse flex-row items-start justify-items-start gap-8 gap-10 border-b border-slate-100 dark:border-slate-700 px-6 py-4"
+                                className="flex animate-pulse flex-row items-start justify-items-start gap-8 gap-10 border-b border-slate-100 px-6 py-4 dark:border-slate-700"
                             >
                                 <div className="my-2 h-4 w-6 justify-self-start rounded bg-slate-100 dark:bg-slate-600" />
                                 {[...Array(9)].map((_, i) => (
@@ -273,7 +275,7 @@ export default function Index({ products, categories, units }: ProductProps) {
     }, [hiddenColumns]);
 
     return (
-        <div className="min-h-screen bg-slate-50 dark:bg-slate-600/10">
+        <div className="min-h-screen bg-slate-50 dark:bg-slate-900/10">
             <div className="mx-10 py-8">
                 {/* Page Header */}
                 <div className="mb-8 flex items-end justify-between">
@@ -295,7 +297,7 @@ export default function Index({ products, categories, units }: ProductProps) {
                 <div className="mb-6 grid grid-cols-4 gap-4">
                     <button
                         onClick={() => setStockFilter('all')}
-                        className={`flex cursor-pointer flex-col items-start rounded-xl border border-blue-400 bg-white p-4 transition-all hover:shadow-md dark:bg-slate-900/70`}
+                        className={`hover:dark: flex cursor-pointer flex-col items-start rounded-xl border border-blue-400 bg-white p-4 transition-all hover:shadow-md dark:bg-slate-900/70`}
                     >
                         <p className="mb-2 text-xs font-semibold tracking-wider text-blue-400 uppercase">
                             Total Products
@@ -303,6 +305,17 @@ export default function Index({ products, categories, units }: ProductProps) {
                         <p className="font-mono text-2xl font-bold text-blue-700">
                             {products.length}
                         </p>
+                        <button
+                            className={`cursor-pointer text-xs text-gray-500 hover:text-slate-600 dark:text-slate-400 hover:dark:text-slate-100`}
+                            // using the document and linking the id and adds a scroll animation and smooth rendering the behavior
+                            onClick={() => {
+                                document
+                                    .getElementById('product')
+                                    ?.scrollIntoView({ behavior: 'smooth' });
+                            }}
+                        >
+                            View all
+                        </button>
                     </button>
 
                     <button
@@ -528,10 +541,10 @@ export default function Index({ products, categories, units }: ProductProps) {
                             <span
                                 className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium ${
                                     stockFilter === 'in_stock'
-                                        ? 'bg-green-50 text-green-700 border dark:bg-green-500/10 dark:text-green-400 dark:border-green-400/50'
+                                        ? 'border bg-green-50 text-green-700 dark:border-green-400/50 dark:bg-green-500/10 dark:text-green-400'
                                         : stockFilter === 'low_stock'
-                                          ? 'bg-amber-50 border text-amber-700 dark:bg-amber-500/10 dark:text-amber-400 dark:border-amber-300/50'
-                                          : 'bg-red-50 border text-red-700 dark:bg-red-500/10 dark:text-red-400 dark:border-red-400/50'
+                                          ? 'border bg-amber-50 text-amber-700 dark:border-amber-300/50 dark:bg-amber-500/10 dark:text-amber-400'
+                                          : 'border bg-red-50 text-red-700 dark:border-red-400/50 dark:bg-red-500/10 dark:text-red-400'
                                 }`}
                             >
                                 {stockFilter === 'in_stock' && 'In Stock'}
@@ -540,7 +553,7 @@ export default function Index({ products, categories, units }: ProductProps) {
                                     'Out of Stock'}
                                 <button
                                     onClick={() => setStockFilter('all')}
-                                    className="ml-0.5 rounded-full p-0.5 hover:bg-black/10 dark:hover:bg-white/10 cursor-pointer"
+                                    className="ml-0.5 cursor-pointer rounded-full p-0.5 hover:bg-black/10 dark:hover:bg-white/10"
                                 >
                                     <X className="h-3 w-3" />
                                 </button>
@@ -560,22 +573,166 @@ export default function Index({ products, categories, units }: ProductProps) {
                 )}
 
                 {/* Table */}
-                <TableList
-                    columns={visibleColumns}
-                    actions={ProductTable.actions}
-                    indexLabel="#"
-                    indexStartFrom={1}
-                    showIndex={true}
-                    data={filteredProducts}
-                    onView={handleShowModal}
-                    onEdit={(item) => handleEdit(item.id)}
-                    onDelete={(item) => handleDelete(item.id)}
-                    emptyTableMessage={getEmptyMessage()}
-                    useDropdown={true}
-                />
+                <section id="product">
+                    <TableList
+                        columns={visibleColumns}
+                        actions={ProductTable.actions}
+                        indexLabel="#"
+                        indexStartFrom={1}
+                        showIndex={true}
+                        data={filteredProducts}
+                        onView={handleShowModal}
+                        onEdit={(item) => handleEdit(item.id)}
+                        onDelete={(item) => handleDelete(item.id)}
+                        emptyTableMessage={getEmptyMessage()}
+                        useDropdown={true}
+                    />
+                </section>
 
                 {/* View Modal */}
-                <div className={`${isModalOpen ? 'block' : 'hidden'}`}></div>
+                <Modal
+                    isOpen={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                    size="sm"
+                    title="Product Details"
+                    children={
+                        <div className="flex flex-col gap-5">
+                            {/* Header */}
+                            <div className="flex items-center justify-between gap-3 border-b border-slate-200 pb-4 dark:border-slate-700">
+                                <div className="flex items-center gap-3">
+                                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-slate-100 dark:bg-slate-800">
+                                        <Package className="h-5 w-5 text-slate-500 dark:text-slate-400" />
+                                    </div>
+                                    <div>
+                                        <p className="text-sm font-semibold text-slate-800 dark:text-slate-100">
+                                            {selectedProduct?.product_name ||
+                                                '—'}
+                                        </p>
+                                        <p className="text-xs text-slate-400 dark:text-slate-500">
+                                            ID: {selectedProduct?.id ?? '—'}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {/* Stock status badge */}
+                                <span
+                                    className={`shrink-0 rounded-full border px-2.5 py-1 text-[11px] font-semibold whitespace-nowrap ${
+                                        Number(
+                                            selectedProduct?.stock_quantity,
+                                        ) === 0
+                                            ? 'border-red-200 bg-red-50 text-red-600 dark:border-red-400/30 dark:bg-red-500/10 dark:text-red-400'
+                                            : Number(
+                                                    selectedProduct?.stock_quantity,
+                                                ) <= 4
+                                              ? 'border-orange-200 bg-orange-50 text-orange-600 dark:border-orange-400/30 dark:bg-orange-500/10 dark:text-orange-400'
+                                              : 'border-green-200 bg-green-50 text-green-600 dark:border-green-400/30 dark:bg-green-500/10 dark:text-green-400'
+                                    }`}
+                                >
+                                    {Number(selectedProduct?.stock_quantity) ===
+                                    0
+                                        ? 'Out of Stock'
+                                        : Number(
+                                                selectedProduct?.stock_quantity,
+                                            ) <= 4
+                                          ? 'Low Stock'
+                                          : 'In Stock'}
+                                </span>
+                            </div>
+
+                            {/* General Info */}
+                            <div className="flex flex-col gap-2">
+                                <p className="text-[11px] font-semibold tracking-wider text-slate-400 uppercase dark:text-slate-500">
+                                    General
+                                </p>
+                                <div className="flex flex-col divide-y divide-slate-100 rounded-lg border border-slate-200 bg-white dark:divide-slate-800 dark:border-slate-700 dark:bg-slate-900/70">
+                                    <div className="flex items-center justify-between px-3 py-2.5">
+                                        <span className="text-xs text-slate-500 dark:text-slate-400">
+                                            Category
+                                        </span>
+                                        <span className="text-sm font-medium text-slate-700 dark:text-slate-200">
+                                            {selectedProduct?.category
+                                                ?.category_name || '—'}
+                                        </span>
+                                    </div>
+                                    <div className="flex items-center justify-between px-3 py-2.5">
+                                        <span className="text-xs text-slate-500 dark:text-slate-400">
+                                            Unit
+                                        </span>
+                                        <span className="text-sm font-medium text-slate-700 dark:text-slate-200">
+                                            {selectedProduct?.unit?.unit_name ||
+                                                '—'}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Inventory & Pricing */}
+                            <div className="flex flex-col gap-2">
+                                <p className="text-[11px] font-semibold tracking-wider text-slate-400 uppercase dark:text-slate-500">
+                                    Inventory &amp; Pricing
+                                </p>
+                                <div className="grid grid-cols-2 gap-3">
+                                    <div
+                                        className={`flex flex-col justify-between rounded-lg border p-3 ${
+                                            Number(
+                                                selectedProduct?.stock_quantity,
+                                            ) === 0
+                                                ? 'border-red-200 bg-red-50 dark:border-red-400/30 dark:bg-red-500/10'
+                                                : Number(
+                                                        selectedProduct?.stock_quantity,
+                                                    ) <= 4
+                                                  ? 'border-orange-200 bg-orange-50 dark:border-orange-400/30 dark:bg-orange-500/10'
+                                                  : 'border-green-200 bg-green-50 dark:border-green-400/30 dark:bg-green-500/10'
+                                        }`}
+                                    >
+                                        <p
+                                            className={`text-[11px] font-semibold tracking-wider uppercase ${
+                                                Number(
+                                                    selectedProduct?.stock_quantity,
+                                                ) === 0
+                                                    ? 'text-red-500 dark:text-red-400'
+                                                    : Number(
+                                                            selectedProduct?.stock_quantity,
+                                                        ) <= 4
+                                                      ? 'text-orange-500 dark:text-orange-400'
+                                                      : 'text-green-500 dark:text-green-400'
+                                            }`}
+                                        >
+                                            Stock
+                                        </p>
+                                        <p
+                                            className={`mt-1 font-mono text-sm font-semibold ${
+                                                Number(
+                                                    selectedProduct?.stock_quantity,
+                                                ) === 0
+                                                    ? 'text-red-600 dark:text-red-400'
+                                                    : Number(
+                                                            selectedProduct?.stock_quantity,
+                                                        ) <= 4
+                                                      ? 'text-orange-600 dark:text-orange-400'
+                                                      : 'text-green-600 dark:text-green-400'
+                                            }`}
+                                        >
+                                            {selectedProduct?.stock_quantity ??
+                                                '—'}
+                                        </p>
+                                    </div>
+
+                                    <div className="flex flex-col justify-between rounded-lg border border-blue-200 bg-blue-50 p-3 dark:border-blue-400/30 dark:bg-blue-500/10">
+                                        <p className="text-[11px] font-semibold tracking-wider text-blue-500 uppercase dark:text-blue-400">
+                                            Price
+                                        </p>
+                                        <p className="mt-1 font-mono text-sm font-semibold text-blue-700 dark:text-blue-400">
+                                            {selectedProduct?.sale_price
+                                                ? `₱${Number(selectedProduct.sale_price).toLocaleString()}`
+                                                : '—'}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                />
             </div>
         </div>
     );

@@ -93,7 +93,7 @@ export default function Index({ categories }: CategoryProps) {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-slate-50 dark:bg-slate-600/10">
+            <div className="min-h-screen bg-slate-50 dark:bg-slate-900/10">
                 <Head title={`Categories | Macmac Hardware`} />
                 <div className="mx-10 py-8">
                     <div className="mb-8 flex items-end justify-between">

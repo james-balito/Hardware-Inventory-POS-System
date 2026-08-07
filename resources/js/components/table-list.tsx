@@ -60,10 +60,10 @@ return;
     }, [data]);
 
     return (
-        <div className="overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-950/70">
+        <div className="overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900/10">
             <table className="min-w-full">
                 <thead>
-                    <tr className="border-b border-slate-200 bg-slate-50 dark:border-slate-700 dark:bg-slate-900/80">
+                    <tr className="border-b border-slate-200 bg-slate-50 dark:border-slate-700 dark:bg-slate-900/50">
                         {showIndex && (
                             <th className="w-14 px-6 py-3.5 text-left text-xs font-semibold tracking-wider text-slate-500 uppercase dark:text-slate-300">
                                 {indexLabel}

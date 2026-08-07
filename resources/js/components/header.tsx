@@ -17,7 +17,7 @@ export default function PageHeader({
                     {headerTitle}
                 </p>
 
-                <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-300/90">{title}</h1>
+                <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-400/90">{title}</h1>
             </div>
         </div>
     );
