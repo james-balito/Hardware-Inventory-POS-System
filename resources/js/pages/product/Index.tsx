@@ -5,7 +5,7 @@ import TableList from '@/components/table-list';
 import { ProductTable } from '@/tables/product';
 import { Product } from '@/interfaces/Interfaces';
 import { ProductProps } from '@/interfaces/Props';
-import { Package, Plus, Search, Filter, X, Divide } from 'lucide-react';
+import { Package, Plus, Search, Filter, X, PhilippinePeso } from 'lucide-react';
 import { Head } from '@inertiajs/react';
 import PageHeader from '@/components/header';
 import {
@@ -15,6 +15,14 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import {
+    Combobox,
+    ComboboxContent,
+    ComboboxEmpty,
+    ComboboxInput,
+    ComboboxItem,
+    ComboboxList,
+} from '@/components/ui/combobox';
 import { Modal } from '@/components/modal';
 
 Index.layout = {
@@ -199,9 +207,34 @@ export default function Index({ products, categories, units }: ProductProps) {
         (p) => Number(p.stock_quantity) === 0,
     ).length;
 
+    // Shared stock-status classifier, used identically by the stat cards
+    // above and the detail modal below, so a product's status always
+    // reads the same color/label no matter where you're looking at it.
+    const getStockStatus = (qty: number) => {
+        if (qty === 0) {
+            return {
+                label: 'Out of Stock',
+                classes:
+                    'bg-red-50 text-red-700 dark:bg-red-500/10 dark:text-red-400',
+            };
+        }
+        if (qty < 5) {
+            return {
+                label: 'Low Stock',
+                classes:
+                    'bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400',
+            };
+        }
+        return {
+            label: 'In Stock',
+            classes:
+                'bg-green-50 text-green-700 dark:bg-green-500/10 dark:text-green-400',
+        };
+    };
+
     if (loading) {
         return (
-            <div className="min-h-screen bg-slate-50 dark:bg-slate-900/10">
+            <div className="min-h-screen bg-slate-50 dark:bg-slate-600/10">
                 <Head title="Products | Macmac Hardware" />
                 <div className="mx-10 py-8">
                     {/* Header skeleton */}
@@ -274,8 +307,12 @@ export default function Index({ products, categories, units }: ProductProps) {
         );
     }, [hiddenColumns]);
 
+    const selectedStockStatus = selectedProduct
+        ? getStockStatus(Number(selectedProduct.stock_quantity))
+        : null;
+
     return (
-        <div className="min-h-screen bg-slate-50 dark:bg-slate-900/10">
+        <div className="min-h-screen bg-slate-50 dark:bg-slate-600/10">
             <div className="mx-10 py-8">
                 {/* Page Header */}
                 <div className="mb-8 flex items-end justify-between">
@@ -400,37 +437,60 @@ export default function Index({ products, categories, units }: ProductProps) {
                     </div>
 
                     {/* Category Filter */}
-                    <Select
-                        value={activeCategory?.toString() || 'all'}
+                    <Combobox
+                        value={
+                            activeCategory === null
+                                ? 'All Categories'
+                                : categories.find(
+                                      (c) => c.id === activeCategory,
+                                  )?.category_name || ''
+                        }
                         onValueChange={(value) => {
-                            setActiveCategory(
-                                value === 'all' ? null : Number(value),
+                            if (value === 'All Categories') {
+                                setActiveCategory(null);
+                            } else {
+                                const found = categories.find(
+                                    (c) => c.category_name === value,
+                                );
+                                setActiveCategory(found ? found.id : null);
+                            }
+                        }}
+                        filter={(itemValue: any, query: string) => {
+                            if (!query.trim()) return true;
+                            const q = query.toLowerCase();
+                            if (itemValue === 'all') return 'all'.includes(q);
+                            const category = categories.find(
+                                (c) => c.id.toString() === itemValue,
+                            );
+                            return (
+                                itemValue.includes(q) ||
+                                category?.category_name
+                                    ?.toLowerCase()
+                                    .includes(q)
                             );
                         }}
                     >
-                        <SelectTrigger className="my-2 w-1/2 border border-gray-200 bg-white font-normal text-gray-600 dark:border-slate-600 dark:bg-slate-900/70 dark:text-slate-300 dark:ring-slate-600 dark:hover:bg-slate-800">
-                            <SelectValue placeholder="Select a category" />
-                        </SelectTrigger>
-                        <SelectContent
-                            className={`bg-white font-normal text-gray-600 dark:border-slate-600 dark:bg-slate-900/70 dark:text-slate-300`}
-                        >
-                            <SelectItem
-                                value="all"
-                                className={`bg-white font-normal text-gray-600 dark:border-slate-600 dark:bg-slate-900/70 dark:text-slate-300 dark:hover:bg-slate-800`}
-                            >
-                                All Categories
-                            </SelectItem>
-                            {categories.map((category) => (
-                                <SelectItem
-                                    key={category.id}
-                                    value={category.id.toString()}
-                                    className={`bg-white font-normal text-gray-600 dark:border-slate-600 dark:bg-slate-900/70 dark:text-slate-300 dark:hover:bg-slate-800`}
+                        <ComboboxInput className="my-2 w-1/2 border border-gray-200 bg-white font-normal text-gray-600 dark:border-slate-600 dark:bg-slate-900/70 dark:text-slate-300 dark:ring-slate-600 dark:hover:bg-slate-800" />
+                        <ComboboxContent>
+                            <ComboboxList className="max-h-48 overflow-y-auto border border-gray-200 bg-white font-normal text-gray-600 dark:border-slate-600 dark:bg-slate-900/70 dark:text-slate-300">
+                                <ComboboxItem
+                                    value="all"
+                                    className="bg-white font-normal text-gray-600 dark:border-slate-600 dark:bg-slate-900/70 dark:text-slate-300 dark:hover:bg-slate-800"
                                 >
-                                    {category.category_name}
-                                </SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
+                                    All Categories
+                                </ComboboxItem>
+                                {categories.map((category) => (
+                                    <ComboboxItem
+                                        key={category.id}
+                                        value={category.id.toString()}
+                                        className="cursor-pointer bg-white font-normal text-gray-600 dark:border-slate-600 dark:bg-slate-900/70 dark:text-slate-300 dark:hover:bg-slate-800"
+                                    >
+                                        {category.category_name}
+                                    </ComboboxItem>
+                                ))}
+                            </ComboboxList>
+                        </ComboboxContent>
+                    </Combobox>
 
                     {/* Stock Filter */}
                     <Select
@@ -594,142 +654,97 @@ export default function Index({ products, categories, units }: ProductProps) {
                     isOpen={isModalOpen}
                     onClose={() => setIsModalOpen(false)}
                     size="sm"
-                    title="Product Details"
+                    title={'Product Details'}
                     children={
-                        <div className="flex flex-col gap-5">
-                            {/* Header */}
-                            <div className="flex items-center justify-between gap-3 border-b border-slate-200 pb-4 dark:border-slate-700">
-                                <div className="flex items-center gap-3">
-                                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-slate-100 dark:bg-slate-800">
-                                        <Package className="h-5 w-5 text-slate-500 dark:text-slate-400" />
-                                    </div>
+                        <div className="space-y-5">
+                            {/* Name + badges */}
+                            <div>
+                                <h3 className="text-base font-semibold text-slate-900 dark:text-slate-100">
+                                    {selectedProduct?.product_name}
+                                </h3>
+                                <div className="mt-2 flex flex-wrap items-center gap-2">
+                                    {selectedProduct?.category
+                                        ?.category_name && (
+                                        <span className="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+                                            {
+                                                selectedProduct.category
+                                                    .category_name
+                                            }
+                                        </span>
+                                    )}
+                                    {selectedProduct?.unit?.unit_name && (
+                                        <span className="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+                                            {selectedProduct.unit.unit_name}
+                                        </span>
+                                    )}
+                                    {selectedStockStatus && (
+                                        <span
+                                            className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${selectedStockStatus.classes}`}
+                                        >
+                                            {selectedStockStatus.label}
+                                        </span>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className="border-t border-slate-100 dark:border-slate-700" />
+
+                            {/* Detail rows */}
+                            <div className="space-y-3">
+                                <div className="flex items-center justify-between">
+                                    <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
+                                        Product ID
+                                    </span>
+                                    <span className="font-mono text-sm text-slate-700 dark:text-slate-200">
+                                        {selectedProduct?.id}
+                                    </span>
+                                </div>
+                                <div className="flex items-center justify-between">
+                                    <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
+                                        Stock Quantity
+                                    </span>
+                                    <span className="font-mono text-sm text-slate-700 dark:text-slate-200">
+                                        {selectedProduct?.stock_quantity}
+                                    </span>
+                                </div>
+                                <div className="flex items-center justify-between">
+                                    <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
+                                        Wholesale Price
+                                    </span>
+                                    <span className="flex items-center gap-0.5 font-mono text-sm text-slate-700 dark:text-slate-200">
+                                        <PhilippinePeso className="h-3 w-3" />
+                                        {Number(
+                                            selectedProduct?.wholesale_price ??
+                                                0,
+                                        ).toFixed(2)}
+                                    </span>
+                                </div>
+                                <div className="flex items-center justify-between">
+                                    <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
+                                        Sale Price
+                                    </span>
+                                    <span className="flex items-center gap-0.5 font-mono text-sm text-slate-700 dark:text-slate-200">
+                                        <PhilippinePeso className="h-3 w-3" />
+                                        {Number(
+                                            selectedProduct?.sale_price ?? 0,
+                                        ).toFixed(2)}
+                                    </span>
+                                </div>
+                            </div>
+
+                            {selectedProduct?.description && (
+                                <>
+                                    <div className="border-t border-slate-100 dark:border-slate-700" />
                                     <div>
-                                        <p className="text-sm font-semibold text-slate-800 dark:text-slate-100">
-                                            {selectedProduct?.product_name ||
-                                                '—'}
+                                        <p className="mb-1 text-xs font-medium text-slate-500 dark:text-slate-400">
+                                            Description
                                         </p>
-                                        <p className="text-xs text-slate-400 dark:text-slate-500">
-                                            ID: {selectedProduct?.id ?? '—'}
-                                        </p>
-                                    </div>
-                                </div>
-
-                                {/* Stock status badge */}
-                                <span
-                                    className={`shrink-0 rounded-full border px-2.5 py-1 text-[11px] font-semibold whitespace-nowrap ${
-                                        Number(
-                                            selectedProduct?.stock_quantity,
-                                        ) === 0
-                                            ? 'border-red-200 bg-red-50 text-red-600 dark:border-red-400/30 dark:bg-red-500/10 dark:text-red-400'
-                                            : Number(
-                                                    selectedProduct?.stock_quantity,
-                                                ) <= 4
-                                              ? 'border-orange-200 bg-orange-50 text-orange-600 dark:border-orange-400/30 dark:bg-orange-500/10 dark:text-orange-400'
-                                              : 'border-green-200 bg-green-50 text-green-600 dark:border-green-400/30 dark:bg-green-500/10 dark:text-green-400'
-                                    }`}
-                                >
-                                    {Number(selectedProduct?.stock_quantity) ===
-                                    0
-                                        ? 'Out of Stock'
-                                        : Number(
-                                                selectedProduct?.stock_quantity,
-                                            ) <= 4
-                                          ? 'Low Stock'
-                                          : 'In Stock'}
-                                </span>
-                            </div>
-
-                            {/* General Info */}
-                            <div className="flex flex-col gap-2">
-                                <p className="text-[11px] font-semibold tracking-wider text-slate-400 uppercase dark:text-slate-500">
-                                    General
-                                </p>
-                                <div className="flex flex-col divide-y divide-slate-100 rounded-lg border border-slate-200 bg-white dark:divide-slate-800 dark:border-slate-700 dark:bg-slate-900/70">
-                                    <div className="flex items-center justify-between px-3 py-2.5">
-                                        <span className="text-xs text-slate-500 dark:text-slate-400">
-                                            Category
-                                        </span>
-                                        <span className="text-sm font-medium text-slate-700 dark:text-slate-200">
-                                            {selectedProduct?.category
-                                                ?.category_name || '—'}
-                                        </span>
-                                    </div>
-                                    <div className="flex items-center justify-between px-3 py-2.5">
-                                        <span className="text-xs text-slate-500 dark:text-slate-400">
-                                            Unit
-                                        </span>
-                                        <span className="text-sm font-medium text-slate-700 dark:text-slate-200">
-                                            {selectedProduct?.unit?.unit_name ||
-                                                '—'}
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Inventory & Pricing */}
-                            <div className="flex flex-col gap-2">
-                                <p className="text-[11px] font-semibold tracking-wider text-slate-400 uppercase dark:text-slate-500">
-                                    Inventory &amp; Pricing
-                                </p>
-                                <div className="grid grid-cols-2 gap-3">
-                                    <div
-                                        className={`flex flex-col justify-between rounded-lg border p-3 ${
-                                            Number(
-                                                selectedProduct?.stock_quantity,
-                                            ) === 0
-                                                ? 'border-red-200 bg-red-50 dark:border-red-400/30 dark:bg-red-500/10'
-                                                : Number(
-                                                        selectedProduct?.stock_quantity,
-                                                    ) <= 4
-                                                  ? 'border-orange-200 bg-orange-50 dark:border-orange-400/30 dark:bg-orange-500/10'
-                                                  : 'border-green-200 bg-green-50 dark:border-green-400/30 dark:bg-green-500/10'
-                                        }`}
-                                    >
-                                        <p
-                                            className={`text-[11px] font-semibold tracking-wider uppercase ${
-                                                Number(
-                                                    selectedProduct?.stock_quantity,
-                                                ) === 0
-                                                    ? 'text-red-500 dark:text-red-400'
-                                                    : Number(
-                                                            selectedProduct?.stock_quantity,
-                                                        ) <= 4
-                                                      ? 'text-orange-500 dark:text-orange-400'
-                                                      : 'text-green-500 dark:text-green-400'
-                                            }`}
-                                        >
-                                            Stock
-                                        </p>
-                                        <p
-                                            className={`mt-1 font-mono text-sm font-semibold ${
-                                                Number(
-                                                    selectedProduct?.stock_quantity,
-                                                ) === 0
-                                                    ? 'text-red-600 dark:text-red-400'
-                                                    : Number(
-                                                            selectedProduct?.stock_quantity,
-                                                        ) <= 4
-                                                      ? 'text-orange-600 dark:text-orange-400'
-                                                      : 'text-green-600 dark:text-green-400'
-                                            }`}
-                                        >
-                                            {selectedProduct?.stock_quantity ??
-                                                '—'}
+                                        <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+                                            {selectedProduct.description}
                                         </p>
                                     </div>
-
-                                    <div className="flex flex-col justify-between rounded-lg border border-blue-200 bg-blue-50 p-3 dark:border-blue-400/30 dark:bg-blue-500/10">
-                                        <p className="text-[11px] font-semibold tracking-wider text-blue-500 uppercase dark:text-blue-400">
-                                            Price
-                                        </p>
-                                        <p className="mt-1 font-mono text-sm font-semibold text-blue-700 dark:text-blue-400">
-                                            {selectedProduct?.sale_price
-                                                ? `₱${Number(selectedProduct.sale_price).toLocaleString()}`
-                                                : '—'}
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
+                                </>
+                            )}
                         </div>
                     }
                 />
