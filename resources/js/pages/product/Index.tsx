@@ -15,14 +15,6 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import {
-    Combobox,
-    ComboboxContent,
-    ComboboxEmpty,
-    ComboboxInput,
-    ComboboxItem,
-    ComboboxList,
-} from '@/components/ui/combobox';
 import { Modal } from '@/components/modal';
 
 Index.layout = {
@@ -69,6 +61,13 @@ export default function Index({ products, categories, units }: ProductProps) {
     const [searchInput, setSearchInput] = useState('');
     const [hiddenColumns, setHiddenColumns] = useState<string[]>([]);
     const debouncedSearch = useDebounce(searchInput, 300);
+
+    // Pagination
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
+
+    
+
 
     useEffect(() => {
         const id = setTimeout(() => setLoading(false), 800);
@@ -134,6 +133,11 @@ export default function Index({ products, categories, units }: ProductProps) {
         filter: 'in_stock' | 'low_stock' | 'out_of_stock',
     ) => {
         setStockFilter(stockFilter === filter ? 'all' : filter);
+    };
+
+    // Category filter handler
+    const handleCategoryFilter = (value: string) => {
+        setActiveCategory(value === 'all' ? null : Number(value));
     };
 
     const stockFilters = [
@@ -437,60 +441,31 @@ export default function Index({ products, categories, units }: ProductProps) {
                     </div>
 
                     {/* Category Filter */}
-                    <Combobox
-                        value={
-                            activeCategory === null
-                                ? 'All Categories'
-                                : categories.find(
-                                      (c) => c.id === activeCategory,
-                                  )?.category_name || ''
-                        }
-                        onValueChange={(value) => {
-                            if (value === 'All Categories') {
-                                setActiveCategory(null);
-                            } else {
-                                const found = categories.find(
-                                    (c) => c.category_name === value,
-                                );
-                                setActiveCategory(found ? found.id : null);
-                            }
-                        }}
-                        filter={(itemValue: any, query: string) => {
-                            if (!query.trim()) return true;
-                            const q = query.toLowerCase();
-                            if (itemValue === 'all') return 'all'.includes(q);
-                            const category = categories.find(
-                                (c) => c.id.toString() === itemValue,
-                            );
-                            return (
-                                itemValue.includes(q) ||
-                                category?.category_name
-                                    ?.toLowerCase()
-                                    .includes(q)
-                            );
-                        }}
+                    <Select
+                        value={activeCategory?.toString() || 'all'}
+                        onValueChange={(value) => handleCategoryFilter(value)}
                     >
-                        <ComboboxInput className="my-2 w-1/2 border border-gray-200 bg-white font-normal text-gray-600 dark:border-slate-600 dark:bg-slate-900/70 dark:text-slate-300 dark:ring-slate-600 dark:hover:bg-slate-800" />
-                        <ComboboxContent>
-                            <ComboboxList className="max-h-48 overflow-y-auto border border-gray-200 bg-white font-normal text-gray-600 dark:border-slate-600 dark:bg-slate-900/70 dark:text-slate-300">
-                                <ComboboxItem
-                                    value="all"
-                                    className="bg-white font-normal text-gray-600 dark:border-slate-600 dark:bg-slate-900/70 dark:text-slate-300 dark:hover:bg-slate-800"
+                        <SelectTrigger className="my-2 w-1/2 border border-gray-200 bg-white font-normal text-gray-600 dark:border-slate-600 dark:bg-slate-900/70 dark:text-slate-300 dark:ring-slate-600 dark:hover:bg-slate-800">
+                            <SelectValue placeholder="Select a category" />
+                        </SelectTrigger>
+                        <SelectContent className="max-h-45 overflow-y-auto border border-gray-200 bg-white font-normal text-gray-600 dark:border-slate-600 dark:bg-slate-900/70 dark:text-slate-300">
+                            <SelectItem
+                                value="all"
+                                className={`cursor-pointer bg-white font-normal text-gray-600 dark:border-slate-600 dark:bg-slate-900/70 dark:text-slate-300 dark:hover:bg-slate-800`}
+                            >
+                                All Categories
+                            </SelectItem>
+                            {categories.map((category) => (
+                                <SelectItem
+                                    value={category.id.toString()}
+                                    key={category.id}
+                                    className={`cursor-pointer bg-white font-normal text-gray-600 dark:border-slate-600 dark:bg-slate-900/70 dark:text-slate-300 dark:hover:bg-slate-800`}
                                 >
-                                    All Categories
-                                </ComboboxItem>
-                                {categories.map((category) => (
-                                    <ComboboxItem
-                                        key={category.id}
-                                        value={category.id.toString()}
-                                        className="cursor-pointer bg-white font-normal text-gray-600 dark:border-slate-600 dark:bg-slate-900/70 dark:text-slate-300 dark:hover:bg-slate-800"
-                                    >
-                                        {category.category_name}
-                                    </ComboboxItem>
-                                ))}
-                            </ComboboxList>
-                        </ComboboxContent>
-                    </Combobox>
+                                    {category.category_name}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
 
                     {/* Stock Filter */}
                     <Select

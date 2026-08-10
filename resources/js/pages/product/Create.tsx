@@ -15,6 +15,23 @@ import { SuccessBanner } from '@/components/form/success-banner';
 import { FormLayout } from '@/components/form/form-layout';
 import { ProductPreview } from '@/components/product-preview';
 
+Create.layout =  {
+    breadcrumbs: [
+        {
+            title: 'Inventory',
+            href: '/products',
+        },
+        {
+            title: 'Products',
+            href: '/products',
+        },
+        {
+            title: 'Add New Product',
+            href: '/products/create',
+        },
+    ]
+}
+
 export default function Create({ categories, units }: { categories: Category[], units: Unit[] }) {
     const { data, setData, post, processing, errors } = useForm({
         product_name: '',
@@ -40,12 +57,12 @@ export default function Create({ categories, units }: { categories: Category[], 
     const margin = Number(data.sale_price) - Number(data.wholesale_price);
 
     return (
-        <div className="min-h-screen bg-slate-50">
+        <div className="min-h-screen bg-slate-50 dark:bg-slate-900/10">
             <div className="max-w-5xl mx-auto py-8">
                 <FormPageHeader 
                     title="Add New Product"
                     subtitle="Inventory"
-                    backUrl="/products"
+                    backUrl="/products" 
                     backLabel="Back to Products"
                 />
 

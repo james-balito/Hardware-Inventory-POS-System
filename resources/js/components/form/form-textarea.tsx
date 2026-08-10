@@ -18,7 +18,7 @@ export function FormTextarea({
 }: FormTextareaProps) {
     return (
         <div className="space-y-1.5">
-            <Label htmlFor={id} className="text-sm font-medium text-slate-700">
+            <Label htmlFor={id} className="text-sm font-medium text-slate-700 dark:text-slate-400">
                 {label}
                 {optional && <span className="text-slate-400 font-normal ml-1">(optional)</span>}
             </Label>

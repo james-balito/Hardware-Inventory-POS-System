@@ -22,13 +22,13 @@ export function FormNumberInput({
 }: FormNumberInputProps) {
     return (
         <div className="space-y-1.5">
-            <Label htmlFor={id} className="text-sm font-medium text-slate-700">
+            <Label htmlFor={id} className="text-sm font-medium text-slate-700 dark:text-slate-400">
                 {label}
                 {required && <span className="text-red-500 ml-1">*</span>}
             </Label>
             <div className="relative">
                 {icon && (
-                    <div className="absolute h-4 w-4 text-slate-400 top-1/2 -translate-y-1/2 left-3 pointer-events-none">
+                    <div className="absolute h-4 w-4 text-slate-400 dark:text-slate-400/80 top-1/2 -translate-y-1/2 left-3 pointer-events-none">
                         {icon}
                     </div>
                 )}

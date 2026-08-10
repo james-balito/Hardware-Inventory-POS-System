@@ -18,9 +18,9 @@ export function FormTextInput({
 }: FormTextInputProps) {
     return (
         <div className="space-y-1.5">
-            <Label htmlFor={id} className="text-sm font-medium text-slate-700">
+            <Label htmlFor={id} className="text-sm font-medium text-slate-700 dark:text-slate-400">
                 {label}
-                {required && <span className="text-red-500 ml-1">*</span>}
+                {required && <span className="text-red-500 dark:text-red-400 ml-1">*</span>}
             </Label>
             <Input
                 id={id}
