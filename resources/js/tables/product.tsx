@@ -13,9 +13,18 @@ export const ProductTable = {
             render: (_value: any, row: any) => {
                 const value = row.stock_quantity; // Read from row, not from key
 
+                if (value >= 1000) {
+                    return (
+                        <span className="text-[10px] text-green-600 dark:text-green-400">
+                            In Stock
+                        </span>
+                    );
+                }
                 if (value >= 5) {
                     return (
-                        <span className="text-xs text-green-600 dark:text-green-400">In Stock</span>
+                        <span className="text-xs text-green-600 dark:text-green-400">
+                            In Stock
+                        </span>
                     );
                 }
                 if (value >= 1) {
