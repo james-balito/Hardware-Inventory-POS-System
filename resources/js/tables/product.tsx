@@ -1,5 +1,6 @@
 export const ProductTable = {
     columns: [
+        { key: 'id', label: '#' },
         { key: 'product_name', label: 'Product' },
         {
             key: 'category',
@@ -13,13 +14,6 @@ export const ProductTable = {
             render: (_value: any, row: any) => {
                 const value = row.stock_quantity; // Read from row, not from key
 
-                if (value >= 1000) {
-                    return (
-                        <span className="text-[10px] text-green-600 dark:text-green-400">
-                            In Stock
-                        </span>
-                    );
-                }
                 if (value >= 5) {
                     return (
                         <span className="text-xs text-green-600 dark:text-green-400">
@@ -53,6 +47,16 @@ export const ProductTable = {
                     value > 1
                         ? `${unit_abbreviation.toLowerCase()}s`
                         : unit_abbreviation.toLowerCase();
+
+                if (value >= 1000) {
+                    return (
+                        <div>
+                            <span className="inline-block rounded-xl border border-green-400 bg-green-50 px-2 py-1 text-[10px] font-medium text-green-700 dark:bg-green-500/10 dark:text-green-400">
+                                {value} {displayValue}
+                            </span>
+                        </div>
+                    );
+                }
 
                 // Show warning border for low stock (less than 5)
                 if (value >= 5) {

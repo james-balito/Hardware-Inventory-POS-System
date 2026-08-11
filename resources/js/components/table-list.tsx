@@ -42,8 +42,8 @@ export default function TableList({
     // on every render for unrelated reasons.
     useLayoutEffect(() => {
         if (data.length === 0) {
-return;
-}
+            return;
+        }
 
         gsap.fromTo(
             rowRefs.current.filter(Boolean),

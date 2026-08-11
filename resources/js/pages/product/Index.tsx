@@ -5,7 +5,15 @@ import TableList from '@/components/table-list';
 import { ProductTable } from '@/tables/product';
 import { Product } from '@/interfaces/Interfaces';
 import { ProductProps } from '@/interfaces/Props';
-import { Package, Plus, Search, Filter, X, PhilippinePeso } from 'lucide-react';
+import {
+    Package,
+    Plus,
+    Search,
+    Filter,
+    X,
+    PhilippinePeso,
+    ChevronLeft,
+} from 'lucide-react';
 import { Head } from '@inertiajs/react';
 import PageHeader from '@/components/header';
 import {
@@ -15,7 +23,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import { CustomPagination } from '@/components/custom-pagination';
+import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import {
     Pagination,
     PaginationContent,
@@ -142,12 +150,17 @@ export default function Index({ products, categories, units }: ProductProps) {
         const id = setTimeout(() => setLoading(false), 800);
         return () => clearTimeout(id);
     }, [products]);
+
     const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
 
-    const numPages = Array.from(
-        { length: totalPages },
-        (_, index) => index + 1,
-    );
+    // Pagination button functions
+    const firstPage = () => {
+        setCurrentPage(1);
+    };
+
+    const lastPage = () => {
+        setCurrentPage(totalPages);
+    };
 
     const handlePrev = () => {
         if (currentPage === 1) return null;
@@ -158,6 +171,7 @@ export default function Index({ products, categories, units }: ProductProps) {
         if (currentPage === totalPages) return null;
         setCurrentPage((prevPage) => prevPage + 1);
     };
+    // end of pagination button functions
 
     const paginatedProducts = useMemo(() => {
         const start = (currentPage - 1) * itemsPerPage;
@@ -669,7 +683,7 @@ export default function Index({ products, categories, units }: ProductProps) {
                         actions={ProductTable.actions}
                         indexLabel="#"
                         indexStartFrom={1}
-                        showIndex={true}
+                        showIndex={false}
                         data={paginatedProducts}
                         onView={handleShowModal}
                         onEdit={(item) => handleEdit(item.id)}
@@ -683,19 +697,30 @@ export default function Index({ products, categories, units }: ProductProps) {
                         <div className="min-w-[140px] text-xs text-slate-500 dark:text-slate-400">
                             <span className="font-medium text-slate-700 dark:text-slate-300">
                                 <span className="text-slate-400">Page</span>{' '}
-                                {currentPage} <span className="text-slate-400">of</span> {totalPages || 1}
+                                {currentPage}{' '}
+                                <span className="text-slate-400">of</span>{' '}
+                                {totalPages || 1}
                             </span>
                         </div>
 
                         <Pagination>
                             <PaginationContent>
+                                <PaginationLink
+                                    onClick={firstPage}
+                                    className={`-mr-3 ml-3 flex cursor-pointer hover:bg-transparent dark:hover:text-slate-400 ${currentPage === 1 ? 'pointer-events-none opacity-40' : 'cursor-pointer'}`}
+                                >
+                                    <ChevronLeftIcon
+                                        className={`-mr-5 h-4 w-4`}
+                                    />
+                                    <ChevronLeftIcon className={`h-4 w-4`} />
+                                </PaginationLink>
                                 <PaginationItem>
                                     <PaginationPrevious
                                         onClick={handlePrev}
                                         className={
                                             currentPage === 1
                                                 ? 'pointer-events-none opacity-40'
-                                                : 'cursor-pointer'
+                                                : 'cursor-pointer hover:bg-transparent hover:text-slate-400'
                                         }
                                     />
                                 </PaginationItem>
@@ -732,10 +757,19 @@ export default function Index({ products, categories, units }: ProductProps) {
                                             currentPage === totalPages ||
                                             totalPages === 0
                                                 ? 'pointer-events-none opacity-40'
-                                                : 'cursor-pointer'
+                                                : 'cursor-pointer hover:bg-transparent hover:text-slate-400'
                                         }
                                     />
                                 </PaginationItem>
+                                <PaginationLink
+                                    onClick={lastPage}
+                                    className={`-ml-3 mr-3 flex cursor-pointer hover:bg-transparent dark:hover:text-slate-400 ${currentPage === totalPages ? 'pointer-events-none opacity-40' : 'cursor-pointer'}`}
+                                >
+                                    <ChevronRightIcon
+                                        className={` h-4 w-4`}
+                                    />
+                                    <ChevronRightIcon className={`h-4 w-4 -ml-5`} />
+                                </PaginationLink>
                             </PaginationContent>
                         </Pagination>
 
