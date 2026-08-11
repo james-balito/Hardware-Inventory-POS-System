@@ -15,6 +15,16 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { CustomPagination } from '@/components/custom-pagination';
+import {
+    Pagination,
+    PaginationContent,
+    PaginationLink,
+    PaginationItem,
+    PaginationPrevious,
+    PaginationNext,
+    PaginationEllipsis,
+} from '@/components/ui/pagination';
 import { Modal } from '@/components/modal';
 
 Index.layout = {
@@ -62,18 +72,6 @@ export default function Index({ products, categories, units }: ProductProps) {
     const [hiddenColumns, setHiddenColumns] = useState<string[]>([]);
     const debouncedSearch = useDebounce(searchInput, 300);
 
-    // Pagination
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 10;
-
-    
-
-
-    useEffect(() => {
-        const id = setTimeout(() => setLoading(false), 800);
-        return () => clearTimeout(id);
-    }, [products]);
-
     // Combined filter logic
     const filteredProducts = useMemo(() => {
         let result = products;
@@ -112,6 +110,40 @@ export default function Index({ products, categories, units }: ProductProps) {
 
         return result;
     }, [products, activeCategory, stockFilter, debouncedSearch]);
+
+    // Pagination
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
+
+    useEffect(() => {
+        const id = setTimeout(() => setLoading(false), 800);
+        return () => clearTimeout(id);
+    }, [products]);
+    const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+
+    const numPages = Array.from(
+        { length: totalPages },
+        (_, index) => index + 1,
+    );
+
+    const handlePrev = () => {
+        if (currentPage === 1) return null;
+        setCurrentPage((prevPage) => prevPage - 1);
+    };
+
+    const handleNext = () => {
+        if (currentPage === totalPages) return null;
+        setCurrentPage((prevPage) => prevPage + 1);
+    };
+
+    const paginatedProducts = useMemo(() => {
+        const start = (currentPage - 1) * itemsPerPage;
+        return filteredProducts.slice(start, start + itemsPerPage);
+    }, [filteredProducts, currentPage]);
+
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [activeCategory, stockFilter, debouncedSearch]);
 
     // Product Actions Function
     const handleShowModal = (product: Product) => {
@@ -615,13 +647,50 @@ export default function Index({ products, categories, units }: ProductProps) {
                         indexLabel="#"
                         indexStartFrom={1}
                         showIndex={true}
-                        data={filteredProducts}
+                        data={paginatedProducts}
                         onView={handleShowModal}
                         onEdit={(item) => handleEdit(item.id)}
                         onDelete={(item) => handleDelete(item.id)}
                         emptyTableMessage={getEmptyMessage()}
                         useDropdown={true}
                     />
+
+                    {/* <CustomPagination
+                        currentPage={currentPage}
+                        totalItems={products.length}
+                        totalPages={totalPages}
+                        onPageChange={setCurrentPage}
+                    /> */}
+                    <div
+                        className={`flex items-center justify-evenly border-t border-slate-200 px-4 py-3 dark:border-slate-700`}
+                    >
+                        <div className={`flex flex-col text-xs`}>
+                            Page {currentPage} of {totalPages}
+                        </div>
+
+                        <Pagination>
+                            <PaginationPrevious onClick={handlePrev} />
+                            {numPages.map((page, i) => (
+                                <PaginationItem
+                                    onClick={() => setCurrentPage(page)}
+                                >
+                                    <PaginationLink
+                                        isActive={page === currentPage}
+                                    >
+                                        {page}
+                                    </PaginationLink>
+                                </PaginationItem>
+                            ))}
+                            <PaginationNext
+                                onClick={handleNext}
+                            />
+                        </Pagination>
+                        <div>
+                            <span className = {`flex flex-col text-xs`}>
+                                {paginatedProducts.length} of {products.length}
+                            </span>
+                        </div>
+                    </div>
                 </section>
 
                 {/* View Modal */}
