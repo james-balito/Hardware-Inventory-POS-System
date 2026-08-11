@@ -609,7 +609,7 @@ export default function Index({ products, categories, units }: ProductProps) {
                                                 ? '\u00A0\u00A0\u00A0\u00A0'
                                                 : '✓'}
                                         </span>
-                                        <span>{col.label}</span>
+                                        <span>{col.label === '#' ? 'ID' : col.label}</span>
                                     </div>
                                 </SelectItem>
                             ))}
@@ -707,7 +707,7 @@ export default function Index({ products, categories, units }: ProductProps) {
                             <PaginationContent>
                                 <PaginationLink
                                     onClick={firstPage}
-                                    className={`-mr-3 ml-3 flex cursor-pointer hover:bg-transparent dark:hover:text-slate-400 ${currentPage === 1 ? 'pointer-events-none opacity-40' : 'cursor-pointer'}`}
+                                    className={`-mr-3 ml-3 flex cursor-pointer hover:bg-transparent hover:text-slate-500  dark:hover:text-slate-400 ${currentPage === 1 ? 'pointer-events-none opacity-40' : 'cursor-pointer'}`}
                                 >
                                     <ChevronLeftIcon
                                         className={`-mr-5 h-4 w-4`}
@@ -763,19 +763,30 @@ export default function Index({ products, categories, units }: ProductProps) {
                                 </PaginationItem>
                                 <PaginationLink
                                     onClick={lastPage}
-                                    className={`-ml-3 mr-3 flex cursor-pointer hover:bg-transparent dark:hover:text-slate-400 ${currentPage === totalPages ? 'pointer-events-none opacity-40' : 'cursor-pointer'}`}
+                                    className={`mr-3 -ml-3 flex cursor-pointer hover:bg-transparent hover:text-slate-500 dark:hover:text-slate-400 ${currentPage === totalPages ? 'pointer-events-none opacity-40' : 'cursor-pointer'}`}
                                 >
+                                    <ChevronRightIcon className={`h-4 w-4`} />
                                     <ChevronRightIcon
-                                        className={` h-4 w-4`}
+                                        className={`-ml-5 h-4 w-4`}
                                     />
-                                    <ChevronRightIcon className={`h-4 w-4 -ml-5`} />
                                 </PaginationLink>
                             </PaginationContent>
                         </Pagination>
 
                         <span className="min-w-[140px] text-right text-xs text-slate-500 dark:text-slate-400">
-                            Showing {paginatedProducts.length} of{' '}
-                            {products.length} results
+                            Showing{' '}
+                            <span
+                                className={`text-slate-700 dark:text-slate-200`}
+                            >
+                                {paginatedProducts.length}
+                            </span>{' '}
+                            of{' '}
+                            <span
+                                className={`text-slate-700 dark:text-slate-200`}
+                            >
+                                {products.length}
+                            </span>{' '}
+                            results
                         </span>
                     </div>
                 </section>
