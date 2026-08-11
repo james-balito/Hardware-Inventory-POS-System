@@ -115,6 +115,29 @@ export default function Index({ products, categories, units }: ProductProps) {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 10;
 
+    function getPaginationRange(
+        current: number,
+        total: number,
+    ): (number | '...')[] {
+        if (total <= 7) {
+            return Array.from({ length: total }, (_, i) => i + 1);
+        }
+
+        const range: (number | '...')[] = [1];
+
+        if (current > 3) range.push('...');
+
+        const start = Math.max(2, current - 1);
+        const end = Math.min(total - 1, current + 1);
+        for (let i = start; i <= end; i++) range.push(i);
+
+        if (current < total - 2) range.push('...');
+
+        range.push(total);
+
+        return range;
+    }
+
     useEffect(() => {
         const id = setTimeout(() => setLoading(false), 800);
         return () => clearTimeout(id);
@@ -655,41 +678,71 @@ export default function Index({ products, categories, units }: ProductProps) {
                         useDropdown={true}
                     />
 
-                    {/* <CustomPagination
-                        currentPage={currentPage}
-                        totalItems={products.length}
-                        totalPages={totalPages}
-                        onPageChange={setCurrentPage}
-                    /> */}
-                    <div
-                        className={`flex items-center justify-evenly border-t border-slate-200 px-4 py-3 dark:border-slate-700`}
-                    >
-                        <div className={`flex flex-col text-xs`}>
-                            Page {currentPage} of {totalPages}
+                    {/* Pagination footer */}
+                    <div className="flex flex-col items-center justify-between gap-3 border-t border-slate-200 px-4 py-3 sm:flex-row dark:border-slate-700">
+                        <div className="min-w-[140px] text-xs text-slate-500 dark:text-slate-400">
+                            <span className="font-medium text-slate-700 dark:text-slate-300">
+                                <span className="text-slate-400">Page</span>{' '}
+                                {currentPage} <span className="text-slate-400">of</span> {totalPages || 1}
+                            </span>
                         </div>
 
                         <Pagination>
-                            <PaginationPrevious onClick={handlePrev} />
-                            {numPages.map((page, i) => (
-                                <PaginationItem
-                                    onClick={() => setCurrentPage(page)}
-                                >
-                                    <PaginationLink
-                                        isActive={page === currentPage}
-                                    >
-                                        {page}
-                                    </PaginationLink>
+                            <PaginationContent>
+                                <PaginationItem>
+                                    <PaginationPrevious
+                                        onClick={handlePrev}
+                                        className={
+                                            currentPage === 1
+                                                ? 'pointer-events-none opacity-40'
+                                                : 'cursor-pointer'
+                                        }
+                                    />
                                 </PaginationItem>
-                            ))}
-                            <PaginationNext
-                                onClick={handleNext}
-                            />
+
+                                {getPaginationRange(
+                                    currentPage,
+                                    totalPages,
+                                ).map((page, i) =>
+                                    page === '...' ? (
+                                        <PaginationItem key={`ellipsis-${i}`}>
+                                            <PaginationEllipsis />
+                                        </PaginationItem>
+                                    ) : (
+                                        <PaginationItem key={page}>
+                                            <PaginationLink
+                                                isActive={page === currentPage}
+                                                onClick={() =>
+                                                    setCurrentPage(
+                                                        page as number,
+                                                    )
+                                                }
+                                                className="cursor-pointer"
+                                            >
+                                                {page}
+                                            </PaginationLink>
+                                        </PaginationItem>
+                                    ),
+                                )}
+
+                                <PaginationItem>
+                                    <PaginationNext
+                                        onClick={handleNext}
+                                        className={
+                                            currentPage === totalPages ||
+                                            totalPages === 0
+                                                ? 'pointer-events-none opacity-40'
+                                                : 'cursor-pointer'
+                                        }
+                                    />
+                                </PaginationItem>
+                            </PaginationContent>
                         </Pagination>
-                        <div>
-                            <span className = {`flex flex-col text-xs`}>
-                                {paginatedProducts.length} of {products.length}
-                            </span>
-                        </div>
+
+                        <span className="min-w-[140px] text-right text-xs text-slate-500 dark:text-slate-400">
+                            Showing {paginatedProducts.length} of{' '}
+                            {products.length} results
+                        </span>
                     </div>
                 </section>
 
