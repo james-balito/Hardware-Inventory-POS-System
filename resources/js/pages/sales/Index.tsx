@@ -68,7 +68,7 @@ export default function Index({ sales }: SaleProps) {
                         {[...Array(4)].map((_, i) => (
                             <div
                                 key={i}
-                                className="animate-pulse rounded-xl border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-600/10 p-4"
+                                className="animate-pulse rounded-xl border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-600/10"
                             >
                                 <div className="mb-3 h-3 w-24 rounded bg-slate-100 dark:bg-slate-700" />
                                 <div className="h-8 w-16 rounded bg-slate-100 dark:bg-slate-700" />
@@ -78,7 +78,7 @@ export default function Index({ sales }: SaleProps) {
 
                     {/* Table skeleton */}
                     <div className="overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-600/10">
-                        <div className="flex animate-pulse gap-8 border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-6 py-3.5">
+                        <div className="flex animate-pulse gap-8 border-b border-slate-200 bg-slate-50 px-6 py-3.5 dark:border-slate-700 dark:bg-slate-800">
                             {[...Array(5)].map((_, i) => (
                                 <div
                                     key={i}
@@ -89,12 +89,15 @@ export default function Index({ sales }: SaleProps) {
                         {[...Array(10)].map((_, i) => (
                             <div
                                 key={i}
-                                className="flex animate-pulse gap-8 border-b border-slate-100 dark:border-slate-700 px-6 py-4"
+                                className="flex animate-pulse gap-8 border-b border-slate-100 px-6 py-4 dark:border-slate-700"
                             >
                                 <div className="h-4 w-6 rounded bg-slate-100 dark:bg-slate-700" />
                                 <div className="h-4 w-32 rounded bg-slate-100 dark:bg-slate-700" />
                                 {[...Array(8)].map((_, i) => (
-                                <div key={i} className="h-4 w-20 rounded bg-slate-100 dark:bg-slate-700" />
+                                    <div
+                                        key={i}
+                                        className="h-4 w-20 rounded bg-slate-100 dark:bg-slate-700"
+                                    />
                                 ))}
                             </div>
                         ))}
@@ -132,18 +135,20 @@ export default function Index({ sales }: SaleProps) {
                         icon={<Clock />}
                         title="Sales"
                     />
-                    <Link href="/sales/create">
-                        <button className="flex cursor-pointer items-center gap-2 rounded-xl bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white border dark:border-slate-600 dark:bg-slate-900/70 dark:hover:bg-slate-900 dark:text-slate-50 transition-colors hover:bg-blue-600">
-                            <Plus className="h-4 w-4" />
-                            New Sale
-                        </button>
-                    </Link>
+                    {sales.length >= 1 && (
+                        <Link href="/sales/create">
+                            <button className="flex cursor-pointer items-center gap-2 rounded-xl border bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-600 dark:border-slate-600 dark:bg-slate-900/70 dark:text-slate-50 dark:hover:bg-slate-900">
+                                <Plus className="h-4 w-4" />
+                                New Sale
+                            </button>
+                        </Link>
+                    )}
                 </div>
 
                 {/* Summary Stats */}
                 <div className="mb-6 grid grid-cols-4 gap-4">
-                    <div className="rounded-xl border border-slate-400 bg-white dark:bg-slate-600/10 dark:border-slate-600 p-4">
-                        <p className="mb-2 text-xs font-semibold tracking-wider text-slate-500 dark:text-slate-300 uppercase">
+                    <div className="rounded-xl border border-slate-400 bg-white p-4 dark:border-slate-600 dark:bg-slate-600/10">
+                        <p className="mb-2 text-xs font-semibold tracking-wider text-slate-500 uppercase dark:text-slate-300">
                             Total Revenue
                         </p>
                         <p className="font-mono text-2xl font-bold text-slate-600 dark:text-slate-300">
@@ -154,7 +159,7 @@ export default function Index({ sales }: SaleProps) {
                             })}
                         </p>
                     </div>
-                    <div className="rounded-xl border border-green-300 bg-green-600/10 dark:bg-green-600/10 dark:border-green-600 p-4">
+                    <div className="rounded-xl border border-green-300 bg-green-600/10 p-4 dark:border-green-600 dark:bg-green-600/10">
                         <p className="mb-2 text-xs font-semibold tracking-wider text-green-500 uppercase">
                             Total Sales
                         </p>
@@ -162,8 +167,8 @@ export default function Index({ sales }: SaleProps) {
                             {totalSales}
                         </p>
                     </div>
-                    <div className="rounded-xl border border-orange-300 bg-orange-200/10 dark:bg-orange-600/10 dark:border-orange-600 p-4">
-                        <p className="mb-2 text-xs font-semibold tracking-wider text-orange-500 dark:text-orange-400 uppercase">
+                    <div className="rounded-xl border border-orange-300 bg-orange-200/10 p-4 dark:border-orange-600 dark:bg-orange-600/10">
+                        <p className="mb-2 text-xs font-semibold tracking-wider text-orange-500 uppercase dark:text-orange-400">
                             Month of{' '}
                             {new Date().toLocaleString('en-US', {
                                 month: 'long',
@@ -174,7 +179,7 @@ export default function Index({ sales }: SaleProps) {
                             {monthlySales.length}
                         </p>
                     </div>
-                    <div className="rounded-xl border border-blue-300 bg-blue-200/10 dark:bg-blue-600/10 dark:border-blue-600 p-4">
+                    <div className="rounded-xl border border-blue-300 bg-blue-200/10 p-4 dark:border-blue-600 dark:bg-blue-600/10">
                         <p className="mb-2 text-xs font-semibold tracking-wider text-blue-500 uppercase">
                             Today's Sales
                         </p>
@@ -185,44 +190,23 @@ export default function Index({ sales }: SaleProps) {
                 </div>
 
                 {/* Sales Table */}
-                {sales.length > 0 ? (
-                    <TableList
-                        columns={SaleTable.columns}
-                        actions={SaleTable.actions}
-                        indexLabel="#"
-                        indexStartFrom={1}
-                        showIndex={true}
-                        data={showSales}
-                        onView={handleView}
-                        emptyTableMessage={{
-                            icon: <ReceiptText />,
-                            title: 'No sales yet',
-                            description:
-                                'Start a new transaction to see it listed here.',
-                            onActionClick: () => router.visit('/sales/create'),
-                            buttonText: 'New Sale',
-                        }}
-                    />
-                ) : (
-                    <div className="flex flex-col items-center justify-center rounded-xl border border-slate-200 bg-white p-12 text-center">
-                        <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-slate-100">
-                            <ReceiptText className="h-8 w-8 text-slate-400" />
-                        </div>
-                        <h3 className="mb-1 text-lg font-semibold text-slate-900">
-                            No sales yet
-                        </h3>
-                        <p className="mb-6 max-w-sm text-sm text-slate-500">
-                            Your sales history will appear here once you start
-                            processing transactions.
-                        </p>
-                        <Link href="/sales/create">
-                            <button className="flex items-center gap-2 rounded-xl bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-600">
-                                <Plus className="h-4 w-4" />
-                                Create Your First Sale
-                            </button>
-                        </Link>
-                    </div>
-                )}
+                <TableList
+                    columns={SaleTable.columns}
+                    actions={SaleTable.actions}
+                    indexLabel="#"
+                    indexStartFrom={1}
+                    showIndex={true}
+                    data={showSales}
+                    onView={handleView}
+                    emptyTableMessage={{
+                        icon: <ReceiptText />,
+                        title: 'No sales yet',
+                        description:
+                            'Start a new transaction to see it listed here.',
+                        onActionClick: () => router.visit('/sales/create'),
+                        buttonText: 'New Sale',
+                    }}
+                />
 
                 <SalesModal
                     onClose={() => {

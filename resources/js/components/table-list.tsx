@@ -1,5 +1,5 @@
 import gsap from 'gsap';
-import { Eye, Pencil, Trash2, Ellipsis } from 'lucide-react';
+import { Eye, Pencil, Trash2, Ellipsis, Plus } from 'lucide-react';
 import { useRef, useLayoutEffect } from 'react';
 import {
     DropdownMenu,
@@ -109,7 +109,7 @@ export default function TableList({
                                                 {emptyTableMessage.description}
                                             </p>
                                         </div>
-                                        {/* <button
+                                        <button
                                             onClick={() =>
                                                 emptyTableMessage.onActionClick?.()
                                             }
@@ -119,7 +119,7 @@ export default function TableList({
                                             Add{' '}
                                             {emptyTableMessage.buttonText ??
                                                 'Item'}
-                                        </button> */}
+                                        </button>
                                     </div>
                                 )}
                             </td>

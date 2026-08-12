@@ -71,34 +71,27 @@ export default function CreateSale({ products }: ProductProps) {
     const sidebarRef = useRef<HTMLElement>(null);
 
     useLayoutEffect(() => {
-        const context = gsap.context(() => {
-            gsap.fromTo(
-                '[data-pos-intro]',
-                { opacity: 0, y: 14 },
-                {
-                    opacity: 1,
-                    y: 0,
-                    duration: 0.45,
-                    stagger: 0.08,
-                    ease: 'power2.out',
-                },
-            );
-            gsap.fromTo(
-                sidebarRef.current,
-                { opacity: 0, x: 28 },
-                {
-                    opacity: 1,
-                    x: 0,
-                    duration: 0.5,
-                    delay: 0.12,
-                    ease: 'power2.out',
-                },
-            );
+        const ctx = gsap.context(() => {
+            gsap.set('[data-pos-intro]', { opacity: 0 });
+            gsap.set(sidebarRef.current, { opacity: 0, x: 28 });
+
+            gsap.to('[data-pos-intro]', {
+                opacity: 1,
+                duration: 0.45,
+                stagger: 0.08,
+                ease: 'power2.out',
+            });
+            gsap.to(sidebarRef.current, {
+                opacity: 1,
+                x: 0,
+                duration: 0.5,
+                delay: 0.12,
+                ease: 'power2.out',
+            });
         }, pageRef);
 
-        return () => context.revert();
+        return () => ctx.revert();
     }, []);
-
     const categories = useMemo(
         () => [
             'All',
@@ -136,10 +129,12 @@ export default function CreateSale({ products }: ProductProps) {
         (total, product) => total + getQty(product.id),
         0,
     );
-    const grandTotal = selectedProducts.reduce(
-        (sum, product) => sum + Number(product.sale_price) * getQty(product.id),
-        0,
-    ) + deliveryCost;
+    const grandTotal =
+        selectedProducts.reduce(
+            (sum, product) =>
+                sum + Number(product.sale_price) * getQty(product.id),
+            0,
+        ) + deliveryCost;
 
     const notify = (type: 'success' | 'error' | 'loading', message: string) => {
         const toastId = addToast(type, message);
@@ -243,65 +238,64 @@ export default function CreateSale({ products }: ProductProps) {
     return (
         <div
             ref={pageRef}
-            className="min-h-[calc(100vh-4rem)] bg-slate-50 text-slate-900 dark:bg-slate-600/10 dark:text-slate-100"
+            className="flex h-[calc(100vh-4rem)] overflow-hidden bg-slate-50 text-slate-900 dark:bg-slate-600/10 dark:text-slate-100"
         >
             <Head title="Point of Sale | Macmac Hardware" />
-            <div className="grid min-h-[calc(100vh-10.5rem)] xl:grid-cols-[minmax(0,1fr)_25rem]">
-                <main className="min-w-0 p-5 sm:p-8">
-                    <div
-                        data-pos-intro
-                        className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between"
-                    >
-                        <label className="relative block max-w-xl flex-1">
-                            <Search className="pointer-events-none absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2 text-slate-400" />
-                            <input
-                                value={search}
-                                onChange={(event) =>
-                                    setSearch(event.target.value)
-                                }
-                                placeholder="Search products by name or category…"
-                                className="h-11 w-full rounded-xl border border-slate-200 bg-white pr-4 pl-11 text-sm text-slate-700 shadow-sm transition outline-none placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:border-slate-800 dark:bg-slate-600/10 dark:text-slate-200 dark:placeholder:text-slate-500 dark:focus:ring-blue-500/20"
-                            />
-                        </label>
 
-                        <div className="inline-flex w-fit rounded-xl border border-slate-200 bg-white p-1 shadow-sm dark:border-slate-800 dark:bg-slate-600/10">
-                            <button
-                                type="button"
-                                onClick={() => setView('grid')}
-                                className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition ${view === 'grid' ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800'}`}
-                            >
-                                <Grid2X2 className="h-4 w-4" /> Grid
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => setView('list')}
-                                className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition ${view === 'list' ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800'}`}
-                            >
-                                <List className="h-4 w-4" /> List
-                            </button>
-                        </div>
+            <main className="flex min-w-0 flex-1 flex-col overflow-hidden px-8 py-6">
+                <div
+                    data-pos-intro
+                    className="flex shrink-0 flex-col gap-3 lg:flex-row lg:items-center lg:justify-between"
+                >
+                    <label className="relative block max-w-xl flex-1">
+                        <Search className="pointer-events-none absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                        <input
+                            value={search}
+                            onChange={(event) => setSearch(event.target.value)}
+                            placeholder="Search products by name or category…"
+                            className="h-11 w-full rounded-xl border border-slate-200 bg-white pr-4 pl-11 text-sm text-slate-700 shadow-sm transition outline-none placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:border-slate-800 dark:bg-slate-600/10 dark:text-slate-200 dark:placeholder:text-slate-500 dark:focus:ring-blue-500/20"
+                        />
+                    </label>
+
+                    <div className="inline-flex w-fit rounded-xl border border-slate-200 bg-white p-1 shadow-sm dark:border-slate-800 dark:bg-slate-600/10">
+                        <button
+                            type="button"
+                            onClick={() => setView('grid')}
+                            className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition ${view === 'grid' ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800'}`}
+                        >
+                            <Grid2X2 className="h-4 w-4" /> Grid
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => setView('list')}
+                            className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition ${view === 'list' ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800'}`}
+                        >
+                            <List className="h-4 w-4" /> List
+                        </button>
                     </div>
+                </div>
 
-                    <div
-                        data-pos-intro
-                        className="mt-5 flex gap-2 overflow-x-auto pb-1"
-                    >
-                        {categories.map((category) => (
-                            <button
-                                key={category}
-                                type="button"
-                                onClick={() => setActiveCategory(category)}
-                                className={`rounded-xl border px-4 py-2 text-sm font-medium whitespace-nowrap transition ${activeCategory === category ? 'border-blue-600 bg-blue-600 text-white shadow-sm' : 'border-slate-200 bg-white text-slate-600 hover:border-blue-200 hover:text-blue-700 dark:border-slate-800 dark:bg-slate-600/10 dark:text-slate-300 dark:hover:border-slate-700 dark:hover:text-blue-300'}`}
-                            >
-                                {category}
-                            </button>
-                        ))}
-                    </div>
+                <div
+                    data-pos-intro
+                    className="mt-5 flex shrink-0 gap-2 overflow-x-auto pb-1"
+                >
+                    {categories.map((category) => (
+                        <button
+                            key={category}
+                            type="button"
+                            onClick={() => setActiveCategory(category)}
+                            className={`rounded-xl border px-4 py-2 text-sm font-medium whitespace-nowrap transition ${activeCategory === category ? 'border-blue-600 bg-blue-600 text-white shadow-sm' : 'border-slate-200 bg-white text-slate-600 hover:border-blue-200 hover:text-blue-700 dark:border-slate-800 dark:bg-slate-600/10 dark:text-slate-300 dark:hover:border-slate-700 dark:hover:text-blue-300'}`}
+                        >
+                            {category}
+                        </button>
+                    ))}
+                </div>
 
+                <div className="mt-6 min-h-0 flex-1 overflow-y-auto pr-1">
                     {visibleProducts.length ? (
                         <div
                             data-pos-intro
-                            className={`mt-6 ${view === 'grid' ? 'grid grid-cols-1 gap-4 sm:grid-cols-2 2xl:grid-cols-3' : 'grid grid-cols-1 gap-3'}`}
+                            className={`${view === 'grid' ? 'grid grid-cols-1 gap-4 sm:grid-cols-2 2xl:grid-cols-3' : 'grid grid-cols-1 gap-3'} pb-6`}
                         >
                             {visibleProducts.map((product) => (
                                 <ProductCard
@@ -318,7 +312,7 @@ export default function CreateSale({ products }: ProductProps) {
                     ) : (
                         <div
                             data-pos-intro
-                            className="mt-6 flex min-h-72 flex-col items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-white p-8 text-center dark:border-slate-800 dark:bg-slate-600/10"
+                            className="flex min-h-72 flex-col items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-white p-8 text-center dark:border-slate-800 dark:bg-slate-600/10"
                         >
                             <PackageOpen className="h-10 w-10 text-slate-300 dark:text-slate-600" />
                             <h2 className="mt-3 font-semibold text-slate-800 dark:text-slate-200">
@@ -329,264 +323,252 @@ export default function CreateSale({ products }: ProductProps) {
                             </p>
                         </div>
                     )}
-                </main>
+                </div>
+            </main>
 
-                <aside
-                    ref={sidebarRef}
-                    className="flex min-h-[34rem] flex-col border-t border-slate-200 bg-white xl:min-h-0 xl:border-t-0 xl:border-l dark:border-slate-800 dark:bg-slate-600/10"
-                >
-                    <div className="flex items-start justify-between border-b border-slate-100 px-5 py-5 dark:border-slate-800">
-                        <div>
-                            <h2 className="font-semibold text-slate-950 dark:text-slate-100">
-                                Current Order
-                            </h2>
-                            <p className="mt-1 text-xs text-slate-500">
-                                {itemCount
-                                    ? `${itemCount} item${itemCount === 1 ? '' : 's'} in this order`
-                                    : 'Add products to begin'}
-                            </p>
-                        </div>
-                        <div>
-                            {selectedProducts.length > 0 && (
-                                <button
-                                    type="button"
-                                    onClick={clearOrder}
-                                    className="flex items-center gap-1.5 text-xs font-semibold text-red-500 transition hover:text-red-700"
-                                >
-                                    <Trash2 className="h-3.5 w-3.5" /> Clear
-                                    order
-                                </button>
-                            )}
-                        </div>
-
-                        <div className="absolute top-11 right-5">
-                            <button
-                                type="button"
-                                onClick={() =>
-                                    setShowDeliveryInput(!showDeliveryInput)
-                                }
-                                className={`flex items-center gap-2 rounded-lg border px-3 py-1.5 text-xs font-medium transition ${
-                                    deliveryCost > 0
-                                        ? 'border-amber-300 bg-amber-50 text-amber-700 dark:border-amber-800 dark:bg-amber-500/10 dark:text-amber-400'
-                                        : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-600/10 dark:text-slate-300'
-                                }`}
-                            >
-                                <svg
-                                    className="h-3.5 w-3.5"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M13 10V3L4 14h7v7l9-11h-7z"
-                                    />
-                                </svg>
-                                {deliveryCost > 0
-                                    ? `Delivery: ${formatCurrency(deliveryCost)}`
-                                    : 'Add Delivery'}
-                            </button>
-
-                            {showDeliveryInput && (
-                                <div className="absolute top-full right-0 z-10 mt-2 w-56 rounded-xl border border-slate-200 bg-white p-4 shadow-lg dark:border-slate-800 dark:bg-slate-950">
-                                    <label className="text-xs font-semibold text-slate-600 dark:text-slate-400">
-                                        Delivery Cost
-                                    </label>
-                                    <div className="mt-2 flex items-center gap-2">
-                                        <span className="text-sm text-slate-500">
-                                            ₱
-                                        </span>
-                                        <input
-                                            type="number"
-                                            value={deliveryCost || ''}
-                                            onChange={(e) =>
-                                                setDeliveryCost(
-                                                    Number(e.target.value) || 0,
-                                                )
-                                            }
-                                            placeholder="0.00"
-                                            min="0"
-                                            step="0.01"
-                                            className="w-full rounded-lg border border-slate-200 px-3 py-1.5 text-sm text-slate-700 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 dark:border-slate-800 dark:bg-slate-600/10 dark:text-slate-200"
-                                        />
-                                    </div>
-                                    <div className="mt-3 flex gap-2">
-                                        {[50, 100, 150].map((amount) => (
-                                            <button
-                                                key={amount}
-                                                type="button"
-                                                onClick={() =>
-                                                    setDeliveryCost(amount)
-                                                }
-                                                className={`flex-1 rounded-lg border px-2 py-1 text-xs font-medium transition ${
-                                                    deliveryCost === amount
-                                                        ? 'border-blue-500 bg-blue-50 text-blue-700'
-                                                        : 'border-slate-200 text-slate-600 hover:bg-slate-50 dark:border-slate-800 dark:text-slate-400'
-                                                }`}
-                                            >
-                                                ₱{amount}
-                                            </button>
-                                        ))}
-                                    </div>
-                                    {deliveryCost > 0 && (
-                                        <button
-                                            type="button"
-                                            onClick={() => {
-                                                setDeliveryCost(0);
-                                                setShowDeliveryInput(false);
-                                            }}
-                                            className="mt-2 w-full text-xs text-red-500 hover:text-red-700"
-                                        >
-                                            Remove delivery cost
-                                        </button>
-                                    )}
-                                </div>
-                            )}
-                        </div>
+            <aside
+                ref={sidebarRef}
+                className="flex w-96 shrink-0 flex-col border-l border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-600/10"
+            >
+                <div className="relative flex shrink-0 items-start justify-between border-b border-slate-100 px-5 py-5 dark:border-slate-800">
+                    <div>
+                        <h2 className="font-semibold text-slate-950 dark:text-slate-100">
+                            Current Order
+                        </h2>
+                        <p className="mt-1 text-xs text-slate-500">
+                            {itemCount
+                                ? `${itemCount} item${itemCount === 1 ? '' : 's'} in this order`
+                                : 'Add products to begin'}
+                        </p>
                     </div>
+                    {selectedProducts.length > 0 && (
+                        <button
+                            type="button"
+                            onClick={clearOrder}
+                            className="flex items-center gap-1.5 text-xs font-semibold text-red-500 transition hover:text-red-700"
+                        >
+                            <Trash2 className="h-3.5 w-3.5" /> Clear order
+                        </button>
+                    )}
 
-                    <div className="min-h-0 flex-1 overflow-y-auto px-5 py-3">
-                        {!selectedProducts.length ? (
-                            <div className="flex h-full min-h-56 flex-col items-center justify-center text-center">
-                                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-blue-50 dark:bg-blue-500/10">
-                                    <ShoppingBag className="h-6 w-6 text-blue-500" />
+                    <div className="absolute top-11 right-5">
+                        <button
+                            type="button"
+                            onClick={() =>
+                                setShowDeliveryInput(!showDeliveryInput)
+                            }
+                            className={`flex items-center gap-2 rounded-lg border px-3 py-1.5 text-xs font-medium transition disabled:opacity-50 ${
+                                deliveryCost > 0
+                                    ? 'border-amber-300 bg-amber-50 text-amber-700 dark:border-amber-800 dark:bg-amber-500/10 dark:text-amber-400'
+                                    : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-600/10 dark:text-slate-300'
+                            }`}
+                            disabled={selectedProducts.length === 0}
+                        >
+                            <svg
+                                className="h-3.5 w-3.5"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M13 10V3L4 14h7v7l9-11h-7z"
+                                />
+                            </svg>
+                            {deliveryCost > 0
+                                ? `Delivery: ${formatCurrency(deliveryCost)}`
+                                : 'Add Delivery'}
+                        </button>
+
+                        {showDeliveryInput && (
+                            <div className="absolute top-full right-0 z-10 mt-2 w-56 rounded-xl border border-slate-200 bg-white p-4 shadow-lg dark:border-slate-800 dark:bg-slate-950">
+                                <label className="text-xs font-semibold text-slate-600 dark:text-slate-400">
+                                    Delivery Cost
+                                </label>
+                                <div className="mt-2 flex items-center gap-2">
+                                    <span className="text-sm text-slate-500">
+                                        ₱
+                                    </span>
+                                    <input
+                                        type="number"
+                                        value={deliveryCost || ''}
+                                        onChange={(e) =>
+                                            setDeliveryCost(
+                                                Number(e.target.value) || 0,
+                                            )
+                                        }
+                                        placeholder="0.00"
+                                        min="0"
+                                        step="0.01"
+                                        className="w-full rounded-lg border border-slate-200 px-3 py-1.5 text-sm text-slate-700 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 dark:border-slate-800 dark:bg-slate-600/10 dark:text-slate-200"
+                                    />
                                 </div>
-                                <p className="mt-4 text-sm font-semibold text-slate-700 dark:text-slate-300">
-                                    Your order is empty
-                                </p>
-                                <p className="mt-1 max-w-48 text-xs leading-5 text-slate-500">
-                                    Choose a product from the catalog to add it
-                                    here.
-                                </p>
-                            </div>
-                        ) : (
-                            <div className="divide-y divide-slate-100 dark:divide-slate-800">
-                                {selectedProducts.map((product) => (
-                                    <SaleLineItem key={product.id}>
-                                        <div className="py-4">
-                                            <div className="flex gap-3">
-                                                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-400 dark:bg-slate-800 dark:text-slate-500">
-                                                    <PackageOpen className="h-5 w-5" />
-                                                </div>
-                                                <div className="min-w-0 flex-1">
-                                                    <div className="flex gap-2">
-                                                        <div className="min-w-0 flex-1">
-                                                            <p className="truncate text-sm font-semibold text-slate-800 dark:text-slate-200">
-                                                                {
-                                                                    product.product_name
-                                                                }
-                                                            </p>
-                                                            <p className="mt-0.5 text-xs text-slate-500">
-                                                                {formatCurrency(
-                                                                    Number(
-                                                                        product.sale_price,
-                                                                    ),
-                                                                )}{' '}
-                                                                each
-                                                            </p>
-                                                        </div>
-                                                        <button
-                                                            type="button"
-                                                            onClick={() =>
-                                                                handleRemoveProduct(
-                                                                    product.id,
-                                                                )
-                                                            }
-                                                            aria-label={`Remove ${product.product_name}`}
-                                                            className="text-slate-400 transition hover:text-red-500"
-                                                        >
-                                                            <X className="h-4 w-4" />
-                                                        </button>
-                                                    </div>
-                                                    <div className="mt-3 flex items-center justify-between gap-2">
-                                                        <div className="inline-flex items-center rounded-lg border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-600/10">
-                                                            <button
-                                                                type="button"
-                                                                onClick={() =>
-                                                                    handleQuantityChange(
-                                                                        product,
-                                                                        getQty(
-                                                                            product.id,
-                                                                        ) - 1,
-                                                                    )
-                                                                }
-                                                                className="p-1.5 text-blue-600 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-500/10"
-                                                                aria-label="Decrease quantity"
-                                                            >
-                                                                <Minus className="h-3.5 w-3.5" />
-                                                            </button>
-                                                            <span className="min-w-8 border-x border-slate-200 px-2 py-1 text-center text-xs font-semibold dark:border-slate-800 dark:text-slate-200">
-                                                                {getQty(
-                                                                    product.id,
-                                                                )}
-                                                            </span>
-                                                            <button
-                                                                type="button"
-                                                                onClick={() =>
-                                                                    handleQuantityChange(
-                                                                        product,
-                                                                        getQty(
-                                                                            product.id,
-                                                                        ) + 1,
-                                                                    )
-                                                                }
-                                                                className="p-1.5 text-blue-600 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-500/10"
-                                                                aria-label="Increase quantity"
-                                                            >
-                                                                <Plus className="h-3.5 w-3.5" />
-                                                            </button>
-                                                        </div>
-                                                        <p className="text-sm font-bold text-slate-900 dark:text-slate-100">
-                                                            {formatCurrency(
-                                                                Number(
-                                                                    product.sale_price,
-                                                                ) *
-                                                                    getQty(
-                                                                        product.id,
-                                                                    ),
-                                                            )}
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </SaleLineItem>
-                                ))}
+                                <div className="mt-3 flex gap-2">
+                                    {[50, 100, 150].map((amount) => (
+                                        <button
+                                            key={amount}
+                                            type="button"
+                                            onClick={() =>
+                                                setDeliveryCost(amount)
+                                            }
+                                            className={`flex-1 rounded-lg border px-2 py-1 text-xs font-medium transition ${deliveryCost === amount ? 'border-blue-500 bg-blue-50 text-blue-700' : 'border-slate-200 text-slate-600 hover:bg-slate-50 dark:border-slate-800 dark:text-slate-400'}`}
+                                        >
+                                            ₱{amount}
+                                        </button>
+                                    ))}
+                                </div>
+                                {deliveryCost > 0 && (
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setDeliveryCost(0);
+                                            setShowDeliveryInput(false);
+                                        }}
+                                        className="mt-2 w-full text-xs text-red-500 hover:text-red-700"
+                                    >
+                                        Remove delivery cost
+                                    </button>
+                                )}
                             </div>
                         )}
                     </div>
+                </div>
 
-                    <div className="border-t border-slate-200 p-5 dark:border-slate-800">
-                        <div className="space-y-2 text-sm">
-                            <div className="flex justify-between text-slate-500 dark:text-slate-400">
-                                <span>Subtotal ({itemCount} items)</span>
-                                <span className="font-medium text-slate-700 dark:text-slate-300">
-                                    {formatCurrency(grandTotal)}
-                                </span>
+                <div className="min-h-0 flex-1 overflow-y-auto px-5 py-3">
+                    {!selectedProducts.length ? (
+                        <div className="flex h-full min-h-56 flex-col items-center justify-center text-center">
+                            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-blue-50 dark:bg-blue-500/10">
+                                <ShoppingBag className="h-6 w-6 text-blue-500" />
                             </div>
-                            <div className="flex items-end justify-between pt-2">
-                                <span className="font-semibold text-slate-900 dark:text-slate-100">
-                                    Total
-                                </span>
-                                <span className="text-2xl font-bold tracking-tight text-slate-950 dark:text-slate-100">
-                                    {formatCurrency(grandTotal)}
-                                </span>
-                            </div>
+                            <p className="mt-4 text-sm font-semibold text-slate-700 dark:text-slate-300">
+                                Your order is empty
+                            </p>
+                            <p className="mt-1 max-w-48 text-xs leading-5 text-slate-500">
+                                Choose a product from the catalog to add it
+                                here.
+                            </p>
                         </div>
-                        <button
-                            type="button"
-                            onClick={openConfirmation}
-                            disabled={!selectedProducts.length}
-                            className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-400"
-                        >
-                            Proceed to Payment{' '}
-                            <ArrowRight className="h-4 w-4" />
-                        </button>
+                    ) : (
+                        <div className="divide-y divide-slate-100 dark:divide-slate-800">
+                            {selectedProducts.map((product) => (
+                                <SaleLineItem key={product.id}>
+                                    <div className="py-4">
+                                        <div className="flex gap-3">
+                                            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-400 dark:bg-slate-800 dark:text-slate-500">
+                                                <PackageOpen className="h-5 w-5" />
+                                            </div>
+                                            <div className="min-w-0 flex-1">
+                                                <div className="flex gap-2">
+                                                    <div className="min-w-0 flex-1">
+                                                        <p className="truncate text-sm font-semibold text-slate-800 dark:text-slate-200">
+                                                            {
+                                                                product.product_name
+                                                            }
+                                                        </p>
+                                                        <p className="mt-0.5 text-xs text-slate-500">
+                                                            {formatCurrency(
+                                                                Number(
+                                                                    product.sale_price,
+                                                                ),
+                                                            )}{' '}
+                                                            each
+                                                        </p>
+                                                    </div>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() =>
+                                                            handleRemoveProduct(
+                                                                product.id,
+                                                            )
+                                                        }
+                                                        className="text-slate-400 transition hover:text-red-500"
+                                                    >
+                                                        <X className="h-4 w-4" />
+                                                    </button>
+                                                </div>
+                                                <div className="mt-3 flex items-center justify-between gap-2">
+                                                    <div className="inline-flex items-center rounded-lg border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-600/10">
+                                                        <button
+                                                            type="button"
+                                                            onClick={() =>
+                                                                handleQuantityChange(
+                                                                    product,
+                                                                    getQty(
+                                                                        product.id,
+                                                                    ) - 1,
+                                                                )
+                                                            }
+                                                            className="p-1.5 text-blue-600 hover:bg-blue-50"
+                                                        >
+                                                            <Minus className="h-3.5 w-3.5" />
+                                                        </button>
+                                                        <span className="min-w-8 border-x border-slate-200 px-2 py-1 text-center text-xs font-semibold">
+                                                            {getQty(product.id)}
+                                                        </span>
+                                                        <button
+                                                            type="button"
+                                                            onClick={() =>
+                                                                handleQuantityChange(
+                                                                    product,
+                                                                    getQty(
+                                                                        product.id,
+                                                                    ) + 1,
+                                                                )
+                                                            }
+                                                            className="p-1.5 text-blue-600 hover:bg-blue-50"
+                                                        >
+                                                            <Plus className="h-3.5 w-3.5" />
+                                                        </button>
+                                                    </div>
+                                                    <p className="text-sm font-bold text-slate-900">
+                                                        {formatCurrency(
+                                                            Number(
+                                                                product.sale_price,
+                                                            ) *
+                                                                getQty(
+                                                                    product.id,
+                                                                ),
+                                                        )}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </SaleLineItem>
+                            ))}
+                        </div>
+                    )}
+                </div>
+
+                <div className="shrink-0 border-t border-slate-200 p-5 dark:border-slate-800">
+                    <div className="space-y-2 text-sm">
+                        <div className="flex justify-between text-slate-500">
+                            <span>Subtotal ({itemCount} items)</span>
+                            <span className="font-medium text-slate-700">
+                                {formatCurrency(grandTotal)}
+                            </span>
+                        </div>
+                        <div className="flex items-end justify-between pt-2">
+                            <span className="font-semibold text-slate-900">
+                                Total
+                            </span>
+                            <span className="text-2xl font-bold tracking-tight text-slate-950">
+                                {formatCurrency(grandTotal)}
+                            </span>
+                        </div>
                     </div>
-                </aside>
-            </div>
+                    <button
+                        type="button"
+                        onClick={openConfirmation}
+                        disabled={!selectedProducts.length}
+                        className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-400"
+                    >
+                        Proceed to Payment <ArrowRight className="h-4 w-4" />
+                    </button>
+                </div>
+            </aside>
 
             <Dialog
                 open={isConfirmationOpen}
@@ -599,21 +581,21 @@ export default function CreateSale({ products }: ProductProps) {
                             Confirm this order?
                         </DialogTitle>
                         <DialogDescription className="mt-1 text-blue-100">
-                            Please review the total before recording this sale.
+                            Please review the total before confirming payment.
                         </DialogDescription>
                     </div>
                     <DialogHeader className="gap-3 px-6 pt-6">
-                        <div className="flex justify-between text-sm text-slate-500 dark:text-slate-400">
+                        <div className="flex justify-between text-sm text-slate-500">
                             <span>
                                 {itemCount} item{itemCount === 1 ? '' : 's'}
                             </span>
                             <span>Payment due</span>
                         </div>
                         <div className="flex items-baseline justify-between">
-                            <span className="font-medium text-slate-700 dark:text-slate-300">
+                            <span className="font-medium text-slate-700">
                                 Order total
                             </span>
-                            <span className="text-2xl font-bold text-slate-950 dark:text-slate-100">
+                            <span className="text-2xl font-bold text-slate-950">
                                 {formatCurrency(grandTotal)}
                             </span>
                         </div>
@@ -623,7 +605,7 @@ export default function CreateSale({ products }: ProductProps) {
                             type="button"
                             onClick={() => setIsConfirmationOpen(false)}
                             disabled={processing}
-                            className="flex-1 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-50 disabled:opacity-60 dark:border-slate-800 dark:text-slate-300 dark:hover:bg-slate-900/40"
+                            className="flex-1 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-50 disabled:opacity-60"
                         >
                             Back to order
                         </button>
