@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\UnitController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -16,7 +17,7 @@ Route::get('/', function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     // Everyone with auth can view
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')
-    ->middleware('permission:view reports');
+        ->middleware('permission:view reports');
 
     // Products
     Route::get('/products', [ProductController::class, 'index'])
@@ -80,7 +81,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Units
     Route::get('/units', [UnitController::class, 'index'])
         ->name('units.index')
-        ->middleware('permission:view unit');    
+        ->middleware('permission:view unit');
 
     Route::get('/units/create', [UnitController::class, 'create'])
         ->name('units.create')
@@ -102,6 +103,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('units.destroy')
         ->middleware('permission:delete unit');
 
+
+    // Users
+    Route::get('/users', [UserController::class, 'index'])->middleware('permission:view users');
+
+    Route::get('/users/create', [UserController::class, 'create'])->middleware('permission:create user');
+
+    Route::post('/users', [UserController::class, 'store'])->middleware('permission:create user');
+
+    Route::get('/users/{user}/edit', [UserController::class, 'edit'])->middleware('permission:edit user');
+
+    Route::put('/users/{user}', [UserController::class, 'update'])->middleware('permission:edit user');
+
+    Route::delete('/users/{user}', [UserController::class, 'destroy'])->middleware('permission:delete user');
 });
 
 require __DIR__ . '/settings.php';

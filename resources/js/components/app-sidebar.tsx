@@ -1,11 +1,11 @@
 import { Link } from '@inertiajs/react';
-import { 
-    LayoutGrid, 
-    PlusCircle, 
+import {
+    LayoutGrid,
+    PlusCircle,
     Clock,
-    Package, 
-    Tag, 
-    Ruler, 
+    Package,
+    Tag,
+    Ruler,
 } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavMain } from '@/components/nav-main';
@@ -27,7 +27,7 @@ const generalNavItems: NavItem[] = [
         title: 'Dashboard',
         href: '/dashboard',
         icon: LayoutGrid,
-    }
+    },
 ];
 
 const salesNavItems: NavItem[] = [
@@ -61,6 +61,13 @@ const inventoryNavItems: NavItem[] = [
     },
 ];
 
+const ManagementNavItems: NavItem[] = [
+    {
+        title: 'Users',
+        href: '/users',
+        icon: Ruler,
+    },
+];
 
 export function AppSidebar() {
     return (
@@ -78,9 +85,10 @@ export function AppSidebar() {
             </SidebarHeader>
 
             <SidebarContent>
-                <NavMain items={generalNavItems}/>
-                <NavMain items={salesNavItems} navLabel='Sales' />
-                <NavMain items={inventoryNavItems} navLabel='Inventory' />
+                <NavMain items={generalNavItems} />
+                <NavMain items={salesNavItems} navLabel="Sales" />
+                <NavMain items={inventoryNavItems} navLabel="Inventory" />
+                <NavMain items={ManagementNavItems} navLabel="Management" />
             </SidebarContent>
 
             <SidebarFooter>
