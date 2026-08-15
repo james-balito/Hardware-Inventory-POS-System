@@ -56,6 +56,17 @@ export interface Sale {
     delivery_cost?: number;
 }
 
+export interface User {
+    id: number;
+    name: string;
+    email: string;
+    avatar?: string;
+    email_verified_at: string | null;
+    two_factor_enabled?: boolean;
+    created_at: string;
+    updated_at: string;
+}
+
 // Column Interface for TableList
 export interface Column {
     label: string;

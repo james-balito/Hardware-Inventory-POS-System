@@ -14,29 +14,47 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create test user
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => Hash::make('password'),
-        ]);
+
+        $this->command->info('');
+        $this->command->info('✅ ==================================');
+        $this->command->info('✅ Seeding database...');
+        $this->command->info('✅ ==================================');
+        $this->command->info('');
+
+
 
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-        
+
         // Truncate tables in reverse order (children first, then parents)
         DB::table('products')->truncate();
         DB::table('categories')->truncate();
         DB::table('units')->truncate();
-        
+
         // Call seeders in correct order (parents first, then children)
         $this->call(CategorySeeder::class);
         $this->call(UnitSeeder::class);
         $this->call(ProductSeeder::class);
         $this->call(RolePermissionSeeder::class);
-        
+
+        $admin = User::factory()->create([
+            'name' => 'Admin User',
+            'email' => 'admin@example.com',
+            'password' => Hash::make('12345678'),
+        ]);
+
+        $admin->assignRole('admin');
+
+        $cashier = User::factory()->create([
+            'name' => 'Cashier 1',
+            'email' => 'cashier@example.com',
+            'password' => Hash::make('cashier123'),
+        ]);
+
+        $cashier->assignRole('cashier');
+
         // Re-enable foreign key checks
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-        
+
         $this->command->info('');
         $this->command->info('✅ ==================================');
         $this->command->info('✅ All seeders completed successfully!');

@@ -15,7 +15,8 @@ Route::get('/', function () {
 // routes/web.php
 Route::middleware(['auth', 'verified'])->group(function () {
     // Everyone with auth can view
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')
+    ->middleware('permission:view reports');
 
     // Products
     Route::get('/products', [ProductController::class, 'index'])
@@ -50,10 +51,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/sales', [SaleController::class, 'store'])
         ->name('sales.store')
         ->middleware('permission:create sale');
-
-    // Reports (admin only)
-    Route::get('/dashboard', [DashboardController::class, 'index'])
-        ->middleware('permission:view reports');
 
     // Categories
     Route::get('/categories', [CategoryController::class, 'index'])
