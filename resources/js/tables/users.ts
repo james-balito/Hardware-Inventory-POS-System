@@ -1,8 +1,11 @@
 export const UserTable = {
     columns: [
-        { key: 'id', label: '#' },
+        { key: 'id', label: 'NO.' },
         { key: 'name', label: 'Name' },
         { key: 'email', label: 'Email' },
-        { key: 'role', label: 'Role' },
+        {
+            key: 'roles',
+            label: 'Position',
+        },
     ],
 };

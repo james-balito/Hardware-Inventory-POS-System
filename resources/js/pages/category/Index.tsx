@@ -1,4 +1,3 @@
-// resources/js/Pages/Categories/Index.tsx
 import { Link, router, Head } from '@inertiajs/react';
 import { useState, useEffect } from 'react';
 import { Plus, Tag } from 'lucide-react';

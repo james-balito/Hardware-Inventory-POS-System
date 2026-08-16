@@ -626,7 +626,7 @@ export default function Index({ products, categories, units }: ProductProps) {
                         </span>
 
                         {activeCategory && (
-                            <span className="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-700">
+                            <span className="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-700 dark:bg-blue-500/10 dark:text-blue-400 border dark:border-blue-400/50">
                                 {
                                     categories.find(
                                         (c) => c.id === activeCategory,
@@ -634,7 +634,7 @@ export default function Index({ products, categories, units }: ProductProps) {
                                 }
                                 <button
                                     onClick={() => setActiveCategory(null)}
-                                    className="ml-0.5 rounded-full p-0.5 hover:bg-blue-200"
+                                    className="ml-0.5 rounded-full p-0.5 hover:bg-blue-200 dark:hover:bg-blue-800"
                                 >
                                     <X className="h-3 w-3" />
                                 </button>

@@ -56,6 +56,7 @@ export interface Sale {
     delivery_cost?: number;
 }
 
+// User Interface
 export interface User {
     id: number;
     name: string;
@@ -63,6 +64,16 @@ export interface User {
     avatar?: string;
     email_verified_at: string | null;
     two_factor_enabled?: boolean;
+    roles?: string[];        // ← Role names like ['admin']
+    role_names?: string;     // ← "admin" or "cashier, manager"
+    created_at: string;
+    updated_at: string;
+}
+
+export interface UserRole {
+    id: number;
+    user_id: number;
+    role_id: number;
     created_at: string;
     updated_at: string;
 }

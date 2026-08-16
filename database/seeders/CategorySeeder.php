@@ -10,31 +10,25 @@ class CategorySeeder extends Seeder
 {
     public function run(): void
     {
-        // Disable foreign key checks
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-        
-        // Clear existing records
         Category::truncate();
-        
-        // Insert categories
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
         $categories = [
-            ['category_name' => 'Electronics', 'description' => 'Electronic devices and gadgets'],
-            ['category_name' => 'Clothing', 'description' => 'Apparel and fashion items'],
-            ['category_name' => 'Books', 'description' => 'Books, magazines, and publications'],
-            ['category_name' => 'Home & Garden', 'description' => 'Home decor, furniture, and garden supplies'],
-            ['category_name' => 'Sports', 'description' => 'Sports equipment and accessories'],
-            ['category_name' => 'Toys', 'description' => 'Toys and games for all ages'],
-            ['category_name' => 'Automotive', 'description' => 'Car parts and accessories'],
-            ['category_name' => 'Health & Beauty', 'description' => 'Health and beauty products'],
+            ['id' => 1, 'category_name' => 'Cement & Aggregates', 'description' => 'Cement, sand, gravel, and concrete products'],
+            ['id' => 2, 'category_name' => 'Roofing & Sheets', 'description' => 'Roofing sheets, gutters, and roofing accessories'],
+            ['id' => 3, 'category_name' => 'Steel & Metal', 'description' => 'Steel bars, pipes, and metal products'],
+            ['id' => 4, 'category_name' => 'Plumbing & Electrical', 'description' => 'Pipes, wires, breakers, and electrical supplies'],
+            ['id' => 5, 'category_name' => 'Paint & Finishing', 'description' => 'Paints, primers, thinners, and finishing materials'],
+            ['id' => 6, 'category_name' => 'Boards & Tiles', 'description' => 'Plywood, cement boards, gypsum boards, and tiles'],
+            ['id' => 7, 'category_name' => 'Hardware & Fasteners', 'description' => 'Nails, screws, bolts, locks, and hardware accessories'],
+            ['id' => 8, 'category_name' => 'Safety & Tools', 'description' => 'Safety equipment, hand tools, and work accessories'],
         ];
 
         foreach ($categories as $category) {
             Category::create($category);
         }
-        
-        // Re-enable foreign key checks
-        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-        
+
         $this->command->info('✓ Categories seeded: ' . Category::count());
     }
 }

@@ -8,19 +8,31 @@ import {
 } from '@/components/ui/sidebar';
 import { useCurrentUrl } from '@/hooks/use-current-url';
 import type { NavItem } from '@/types';
+import { usePermissions } from '@/hooks/use-permission';
 
-
-
-export function NavMain({ items = [], navLabel }: { items: NavItem[], navLabel?: string }) {
+export function NavMain({
+    items = [],
+    navLabel,
+}: {
+    items: NavItem[];
+    navLabel?: string;
+}) {
     const { isCurrentUrl } = useCurrentUrl();
+
+    const { can } = usePermissions();
+
+    const visibleItems = items.filter((item) => {
+        if (!item.permission) return true;
+        return can(item.permission);
+    });
 
     return (
         <SidebarGroup className="px-2 py-0">
-            {navLabel &&
+            {navLabel && visibleItems.length > 0 && (
                 <SidebarGroupLabel>{navLabel}</SidebarGroupLabel>
-            }
+            )}
             <SidebarMenu>
-                {items.map((item) => (
+                {visibleItems.map((item) => (
                     <SidebarMenuItem key={item.title}>
                         <SidebarMenuButton
                             asChild
@@ -37,4 +49,4 @@ export function NavMain({ items = [], navLabel }: { items: NavItem[], navLabel?:
             </SidebarMenu>
         </SidebarGroup>
     );
-}   
+}

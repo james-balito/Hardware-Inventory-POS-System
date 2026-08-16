@@ -14,7 +14,13 @@ class UserController extends Controller
     public function index()
     {
         return Inertia::render('users/Index', [
-            'users' => User::all()
+            'users' => User::with('roles')->get()->map(fn($user) => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'roles' => $user->roles->pluck('name'),
+                'created_at' => $user->created_at,
+            ])
         ]);
     }
 
@@ -23,7 +29,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**

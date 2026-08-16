@@ -16,20 +16,20 @@ class RolePermissionSeeder extends Seeder
         // app()[PermissionRegistrar::class]->registerPermissions();
 
         $permissions = [
-            'view product',
+            'view products',
             'create product',
             'edit product',
             'delete product',
             'view sales',
-            'create sales',
-            'edit sales',
-            'delete sales',
+            'create sale',
+            'edit sale',
+            'delete sale',
             'view reports',
             'view category',
             'edit category',
             'create category',
             'delete category',
-            'view unit',
+            'view units',
             'create unit',
             'edit unit',
             'delete unit',
@@ -49,9 +49,9 @@ class RolePermissionSeeder extends Seeder
         $cashier = Role::create(['name' => 'cashier']);
         $cashier->givePermissionTo([
             'view reports',
-            'view product',
+            'view products',
             'view sales',
-            'create sales',
+            'create sale',
         ]);
     }
 }

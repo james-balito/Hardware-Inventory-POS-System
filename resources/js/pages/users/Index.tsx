@@ -1,34 +1,38 @@
-import type { User } from '@/interfaces/Interfaces';
+import type { UserRole } from '@/interfaces/Interfaces';
 import TableList from '@/components/table-list';
 import { UserTable } from '@/tables/users';
 import { Head } from '@inertiajs/react';
 import PageHeader from '@/components/header';
 import { UsersRound } from 'lucide-react';
 
-interface UserProps {
-    users: User[];
+interface UserRoleProps {
+    users: UserRole[];
 }
 
 Index.layout = {
     breadcrumbs: [
         {
             title: 'Users',
-            href: '/users'
-        }
-    ]
-}
-export default function Index({ users }: UserProps) {
+            href: '/users',
+        },
+    ],
+};
+export default function Index({ users }: UserRoleProps) {
     return (
-        <div className = {`mx-10 my-5`}>
+        <div className={`mx-10 my-5`}>
             <Head title="Users | Macmac Hardware" />
             <PageHeader
-                headerTitle="Inventory"
+                headerTitle="Management"
                 icon={<UsersRound />}
-                title="Products"
+                title="Users"
             />
 
-            <div className = {`mt-4`}>
-                <TableList data={users} columns={UserTable.columns} />
+            <div className={`mt-4`}>
+                <TableList
+                    data={users}
+                    columns={UserTable.columns}
+                    showIndex={false}
+                />
             </div>
         </div>
     );
