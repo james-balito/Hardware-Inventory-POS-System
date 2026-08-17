@@ -60,7 +60,9 @@ export default function Index({ sales }: SaleProps) {
                                 <div className="mt-1 h-7 w-15 animate-pulse rounded bg-slate-200 dark:bg-slate-700" />
                             </div>
                         </div>
-                        <div className="h-10 w-36 animate-pulse rounded-xl bg-slate-200 dark:bg-slate-700" />
+                        {sales.length > 0 && (
+                            <div className="h-10 w-36 animate-pulse rounded-xl bg-slate-200 dark:bg-slate-700" />
+                        )}
                     </div>
 
                     {/* Stats skeleton */}
@@ -127,7 +129,7 @@ export default function Index({ sales }: SaleProps) {
     return (
         <div className="min-h-screen bg-slate-50 dark:bg-slate-900/30">
             <Head title="Sales | Macmac Hardware" />
-            <div className="mx-auto max-w-6xl py-8">
+            <div className="mx-10 py-8">
                 {/* Page Header */}
                 <div className="mb-8 flex items-end justify-between">
                     <PageHeader
@@ -147,7 +149,7 @@ export default function Index({ sales }: SaleProps) {
 
                 {/* Summary Stats */}
                 <div className="mb-6 grid grid-cols-4 gap-4">
-                    <div className="rounded-xl border border-slate-400 bg-white p-4 dark:border-slate-600 dark:bg-slate-600/10">
+                    <div className="rounded-xl border border-slate-400 bg-slate-200/10 p-4 dark:border-slate-600 dark:bg-slate-600/10">
                         <p className="mb-2 text-xs font-semibold tracking-wider text-slate-500 uppercase dark:text-slate-300">
                             Total Revenue
                         </p>
@@ -159,7 +161,7 @@ export default function Index({ sales }: SaleProps) {
                             })}
                         </p>
                     </div>
-                    <div className="rounded-xl border border-green-300 bg-green-600/10 p-4 dark:border-green-600 dark:bg-green-600/10">
+                    <div className="rounded-xl border border-green-300 bg-green-200/10 p-4 dark:border-green-600 dark:bg-green-600/10">
                         <p className="mb-2 text-xs font-semibold tracking-wider text-green-500 uppercase">
                             Total Sales
                         </p>

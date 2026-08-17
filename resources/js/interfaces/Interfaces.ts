@@ -56,6 +56,11 @@ export interface Sale {
     delivery_cost?: number;
 }
 
+export interface RoleWithPermissions {
+    name: string;
+    permissions: string[];
+}
+
 // User Interface
 export interface User {
     id: number;
@@ -64,7 +69,7 @@ export interface User {
     avatar?: string;
     email_verified_at: string | null;
     two_factor_enabled?: boolean;
-    roles?: string[];        // ← Role names like ['admin']
+    roles?: RoleWithPermissions[];        // ← Role names like ['admin']
     role_names?: string;     // ← "admin" or "cashier, manager"
     created_at: string;
     updated_at: string;
@@ -73,7 +78,7 @@ export interface User {
 export interface UserRole {
     id: number;
     user_id: number;
-    role_id: number;
+    role: RoleWithPermissions[];
     created_at: string;
     updated_at: string;
 }

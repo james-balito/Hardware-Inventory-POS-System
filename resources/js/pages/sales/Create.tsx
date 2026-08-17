@@ -596,7 +596,7 @@ export default function CreateSale({ products }: ProductProps) {
                                 Order total
                             </span>
                             <span className="text-2xl font-bold text-slate-950">
-                            {formatCurrency(grandTotal)}
+                                {formatCurrency(grandTotal)}
                             </span>
                         </div>
                     </DialogHeader>

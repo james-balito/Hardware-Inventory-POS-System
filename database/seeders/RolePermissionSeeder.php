@@ -16,23 +16,34 @@ class RolePermissionSeeder extends Seeder
         // app()[PermissionRegistrar::class]->registerPermissions();
 
         $permissions = [
+            // products permission
             'view products',
             'create product',
             'edit product',
             'delete product',
+
+            // sales permission
             'view sales',
             'create sale',
             'edit sale',
             'delete sale',
+
+            // dashboard permission
             'view reports',
+
+            // categories permission
             'view category',
             'edit category',
             'create category',
             'delete category',
+
+            // units permission
             'view units',
             'create unit',
             'edit unit',
             'delete unit',
+            
+            // users permission 
             'view users',
             'create user',
             'edit user',

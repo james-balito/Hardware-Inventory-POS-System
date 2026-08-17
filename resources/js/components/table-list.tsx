@@ -1,5 +1,5 @@
 import gsap from 'gsap';
-import { Eye, Pencil, Trash2, Ellipsis, Plus } from 'lucide-react';
+import { Eye, Pencil, Trash2, Ellipsis, Plus, Divide } from 'lucide-react';
 import { useRef, useLayoutEffect } from 'react';
 import {
     DropdownMenu,
@@ -10,6 +10,7 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import type { TableListProps } from '@/interfaces/Props';
+import { Can } from '@/components/can';
 
 export default function TableList({
     columns = [],
@@ -192,41 +193,67 @@ export default function TableList({
                                                                     View
                                                                 </DropdownMenuItem>
                                                             )}
-                                                        {actions.includes(
-                                                            'edit',
-                                                        ) &&
-                                                            onEdit && (
-                                                                <DropdownMenuItem
-                                                                    onClick={() =>
-                                                                        onEdit(
-                                                                            item,
-                                                                        )
-                                                                    }
-                                                                    className="cursor-pointer text-amber-400 focus:text-amber-500"
-                                                                >
-                                                                    <Pencil className="mr-2 h-4 w-4 text-amber-400 hover:text-amber-600" />{' '}
-                                                                    Edit
-                                                                </DropdownMenuItem>
-                                                            )}
-                                                        {actions.includes(
-                                                            'delete',
-                                                        ) &&
-                                                            onDelete && (
+                                                        <Can
+                                                            permissions={[
+                                                                'edit product',
+                                                                'edit sale',
+                                                                'edit category',
+                                                                'edit user',
+                                                                'edit unit',
+                                                            ]}
+                                                            children={
                                                                 <>
-                                                                    <DropdownMenuSeparator />
-                                                                    <DropdownMenuItem
-                                                                        onClick={() =>
-                                                                            onDelete(
-                                                                                item,
-                                                                            )
-                                                                        }
-                                                                        className="cursor-pointer text-red-600 focus:bg-red-50 focus:text-red-600"
-                                                                    >
-                                                                        <Trash2 className="mr-2 h-4 w-4 text-red-600" />{' '}
-                                                                        Delete
-                                                                    </DropdownMenuItem>
+                                                                    {actions.includes(
+                                                                        'edit',
+                                                                    ) &&
+                                                                        onEdit && (
+                                                                            <DropdownMenuItem
+                                                                                onClick={() =>
+                                                                                    onEdit(
+                                                                                        item,
+                                                                                    )
+                                                                                }
+                                                                                className="cursor-pointer text-amber-400 focus:text-amber-500"
+                                                                            >
+                                                                                <Pencil className="mr-2 h-4 w-4 text-amber-400 hover:text-amber-600" />{' '}
+                                                                                Edit
+                                                                            </DropdownMenuItem>
+                                                                        )}
                                                                 </>
-                                                            )}
+                                                            }
+                                                        />
+                                                        <Can
+                                                            permissions={[
+                                                                'delete product',
+                                                                'delete sale',
+                                                                'delete category',
+                                                                'delete user',
+                                                                'delete unit',
+                                                            ]}
+                                                            children={
+                                                                <>
+                                                                    {actions.includes(
+                                                                        'delete',
+                                                                    ) &&
+                                                                        onDelete && (
+                                                                            <>
+                                                                                <DropdownMenuSeparator />
+                                                                                <DropdownMenuItem
+                                                                                    onClick={() =>
+                                                                                        onDelete(
+                                                                                            item,
+                                                                                        )
+                                                                                    }
+                                                                                    className="cursor-pointer text-red-600 focus:bg-red-50 focus:text-red-600"
+                                                                                >
+                                                                                    <Trash2 className="mr-2 h-4 w-4 text-red-600" />{' '}
+                                                                                    Delete
+                                                                                </DropdownMenuItem>
+                                                                            </>
+                                                                        )}
+                                                                </>
+                                                            }
+                                                        />
                                                     </DropdownMenuGroup>
                                                 </DropdownMenuContent>
                                             </DropdownMenu>

@@ -24,7 +24,7 @@ export default function ProductCard({
     const isLowStock = product.stock_quantity <= 5;
 
     return (
-        <button onClick = {() => onAddOrder?.(product)} title = {isAdded ? 'Added to cart' : 'Add to cart'} className={`group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md dark:border-slate-800 dark:bg-slate-600/10 dark:hover:border-slate-700 cursor-pointer ${view === 'list' ? 'flex items-center gap-4 p-4' : 'flex flex-col p-4'}`}>
+        <div title = {isAdded ? 'Added to cart' : 'Add to cart'} className={`group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md dark:border-slate-800 dark:bg-slate-600/10 dark:hover:border-slate-700 cursor-pointer ${view === 'list' ? 'flex items-center gap-4 p-4' : 'flex flex-col p-4'}`}>
             <div className={`flex shrink-0 items-center justify-center rounded-xl bg-slate-50 text-slate-400 dark:bg-slate-800 dark:text-slate-500 ${view === 'list' ? 'h-16 w-16' : 'h-32 w-full'}`}>
                 <PackageOpen className={view === 'list' ? 'h-7 w-7' : 'h-10 w-10'} />
             </div>
@@ -48,6 +48,6 @@ export default function ProductCard({
                     </button>
                 </div>
             </div>
-        </button>
+        </div>
     );
 }

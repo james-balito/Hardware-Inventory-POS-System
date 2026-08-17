@@ -5,7 +5,11 @@ export const UserTable = {
         { key: 'email', label: 'Email' },
         {
             key: 'roles',
-            label: 'Position',
+            label: 'Position'
+        },
+        {
+            key: 'permissions',
+            label: 'Permissions',
         },
     ],
 };

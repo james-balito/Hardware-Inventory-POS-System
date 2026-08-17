@@ -45,6 +45,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->middleware('permission:delete product');
 
     // Sales
+    Route::get('/sales', [SaleController::class, 'index'])
+        ->name('sales.index')
+        ->middleware('permission:view sales');
+
     Route::get('/sales/create', [SaleController::class, 'create'])
         ->name('sales.create')
         ->middleware('permission:create sale');
@@ -81,7 +85,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Units
     Route::get('/units', [UnitController::class, 'index'])
         ->name('units.index')
-        ->middleware('permission:view unit');
+        ->middleware('permission:view units');
 
     Route::get('/units/create', [UnitController::class, 'create'])
         ->name('units.create')

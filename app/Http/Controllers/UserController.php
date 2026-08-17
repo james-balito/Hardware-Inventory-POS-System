@@ -14,11 +14,14 @@ class UserController extends Controller
     public function index()
     {
         return Inertia::render('users/Index', [
-            'users' => User::with('roles')->get()->map(fn($user) => [
+            'users' => User::with('roles', 'permissions')->get()->map(fn($user) => [
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
-                'roles' => $user->roles->pluck('name'),
+                'roles' => $user->roles->map(fn($role) => [
+                    'name' => $role->name,
+                    'permissions' => $role->permissions->pluck('name'),
+                ]),
                 'created_at' => $user->created_at,
             ])
         ]);
