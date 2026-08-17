@@ -1,12 +1,12 @@
-import type { UserRole } from '@/interfaces/Interfaces';
+import type { User } from '@/interfaces/Interfaces';
 import TableList from '@/components/table-list';
 import { UserTable } from '@/tables/users';
 import { Head } from '@inertiajs/react';
 import PageHeader from '@/components/header';
 import { UsersRound } from 'lucide-react';
 
-interface UserRoleProps {
-    users: UserRole[];
+interface UserProps {
+    users: User[];
 }
 
 Index.layout = {
@@ -17,7 +17,7 @@ Index.layout = {
         },
     ],
 };
-export default function Index({ users }: UserRoleProps) {
+export default function Index({ users }: UserProps) {
     return (
         <div className={`mx-10 my-5`}>
             <Head title="Users | Macmac Hardware" />

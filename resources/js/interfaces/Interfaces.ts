@@ -69,16 +69,8 @@ export interface User {
     avatar?: string;
     email_verified_at: string | null;
     two_factor_enabled?: boolean;
-    roles?: RoleWithPermissions[];        // ← Role names like ['admin']
-    role_names?: string;     // ← "admin" or "cashier, manager"
-    created_at: string;
-    updated_at: string;
-}
-
-export interface UserRole {
-    id: number;
-    user_id: number;
-    role: RoleWithPermissions[];
+    roles?: RoleWithPermissions[];
+    role_names?: string;
     created_at: string;
     updated_at: string;
 }
