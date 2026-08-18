@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -18,7 +19,8 @@ class UserController extends Controller
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
-            'roles' => $user->roles->map(fn($role) => [
+                'roles' => $user->roles->map(fn($role) => [
+                    'id' => $role->id,
                     'name' => $role->name,
                     'permissions' => $role->permissions->pluck('name'),
                 ]),
@@ -30,10 +32,7 @@ class UserController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        
-    }
+    public function create() {}
 
     /**
      * Store a newly created resource in storage.
@@ -56,7 +55,25 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $user = User::with('roles.permissions')->findOrFail($id);
+
+        return Inertia::render('users/Edit', [
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'roles' => $user->roles->map(fn($role) => [
+                    'id' => $role->id,         // ← Add id here
+                    'name' => $role->name,
+                    'permissions' => $role->permissions->pluck('name'),
+                ]),
+            ],
+            'roles' => Role::with('permissions')->get()->map(fn($role) => [
+                'id' => $role->id,
+                'name' => $role->name,
+                'permissions' => $role->permissions->pluck('name'),
+            ]),
+        ]);
     }
 
     /**

@@ -1,7 +1,7 @@
 import type { User } from '@/interfaces/Interfaces';
 import TableList from '@/components/table-list';
 import { UserTable } from '@/tables/users';
-import { Head } from '@inertiajs/react';
+import { Head, router } from '@inertiajs/react';
 import PageHeader from '@/components/header';
 import { UsersRound } from 'lucide-react';
 
@@ -17,6 +17,9 @@ Index.layout = {
         },
     ],
 };
+
+const handleEdit = (user: User) => router.visit(`/users/${user.id}/edit`);
+
 export default function Index({ users }: UserProps) {
     return (
         <div className={`mx-10 my-5`}>
@@ -31,6 +34,10 @@ export default function Index({ users }: UserProps) {
                 <TableList
                     data={users}
                     columns={UserTable.columns}
+                    actions={UserTable.actions}
+                    onView={() => {}}
+                    onEdit={(user) => router.visit(`/users/${user.id}/edit`)}
+                    onDelete={() => {}}
                     showIndex={false}
                 />
             </div>

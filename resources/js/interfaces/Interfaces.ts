@@ -57,6 +57,7 @@ export interface Sale {
 }
 
 export interface RoleWithPermissions {
+    id: number;
     name: string;
     permissions: string[];
 }

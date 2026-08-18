@@ -38,4 +38,5 @@ export const UserTable = {
             ),
         },
     ],
+    actions: ['view', 'edit', 'delete'],
 };
