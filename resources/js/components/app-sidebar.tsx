@@ -6,6 +6,8 @@ import {
     Package,
     Tag,
     Ruler,
+    UsersRound,
+    Shield
 } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavMain } from '@/components/nav-main';
@@ -70,9 +72,15 @@ const ManagementNavItems: NavItem[] = [
     {
         title: 'Users',
         href: '/users',
-        icon: Ruler,
+        icon: UsersRound,
         permission: 'view users',
     },
+    {
+        title: 'Roles',
+        href: '/roles',
+        icon: Shield,
+        permission: 'view roles',
+    }
 ];
 
 export function AppSidebar() {

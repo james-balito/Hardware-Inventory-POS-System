@@ -3,6 +3,7 @@
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserController;
@@ -124,5 +125,4 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Roles and Permissions
     Route::get('/roles', [RoleController::class, 'index'])->middleware('permission:view roles')->name('roles.index');
 });
-
 require __DIR__ . '/settings.php';

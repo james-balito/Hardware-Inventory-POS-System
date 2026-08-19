@@ -12,7 +12,7 @@ export const UserTable = {
             render: (value: RoleWithPermissions[], row: User) => (
                 <div>
                     {value?.map((role) => (
-                        <span key={role.name}>{role.name}</span>
+                        <span key={role.id}>{role.name}</span>
                     )) || <span>No Role</span>}
                 </div>
             ),
@@ -23,7 +23,7 @@ export const UserTable = {
             render: (value: RoleWithPermissions[], row: User) => (
                 <div>
                     {value?.map((role) => (
-                        <span key={role.name} className ={`flex flex-wrap`}>
+                        <span key={role.id} className ={`flex flex-wrap`}>
                             {role.permissions?.map((perm) => (
                                 <span
                                     key={perm}
