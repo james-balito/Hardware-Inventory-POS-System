@@ -109,17 +109,20 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
     // Users
-    Route::get('/users', [UserController::class, 'index'])->middleware('permission:view users');
+    Route::get('/users', [UserController::class, 'index'])->middleware('permission:view users')->name('users.index');
 
-    Route::get('/users/create', [UserController::class, 'create'])->middleware('permission:create user');
+    Route::get('/users/create', [UserController::class, 'create'])->middleware('permission:create user')->name('users.create');
 
-    Route::post('/users', [UserController::class, 'store'])->middleware('permission:create user');
+    Route::post('/users', [UserController::class, 'store'])->middleware('permission:create user')->name('users.store');
 
-    Route::get('/users/{user}/edit', [UserController::class, 'edit'])->middleware('permission:edit user');
+    Route::get('/users/{user}/edit', [UserController::class, 'edit'])->middleware('permission:edit user')->name('users.edit');
 
-    Route::put('/users/{user}', [UserController::class, 'update'])->middleware('permission:edit user');
+    Route::put('/users/{user}', [UserController::class, 'update'])->middleware('permission:edit user')->name('users.update');
 
-    Route::delete('/users/{user}', [UserController::class, 'destroy'])->middleware('permission:delete user');
+    Route::delete('/users/{user}', [UserController::class, 'destroy'])->middleware('permission:delete user')->name('users.destroy');
+
+    // Roles and Permissions
+    Route::get('/roles', [RoleController::class, 'index'])->middleware('permission:view roles')->name('roles.index');
 });
 
 require __DIR__ . '/settings.php';

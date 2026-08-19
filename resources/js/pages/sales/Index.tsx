@@ -148,7 +148,7 @@ export default function Index({ sales }: SaleProps) {
                 </div>
 
                 {/* Summary Stats */}
-                <div className="mb-6 grid grid-cols-4 gap-4">
+                <div className="mb-6 grid grid-cols-2 gap-4 md:grid-cols-2 xl:grid-cols-4 gap-4">
                     <div className="rounded-xl border border-slate-400 bg-slate-200/10 p-4 dark:border-slate-600 dark:bg-slate-600/10">
                         <p className="mb-2 text-xs font-semibold tracking-wider text-slate-500 uppercase dark:text-slate-300">
                             Total Revenue
@@ -165,7 +165,7 @@ export default function Index({ sales }: SaleProps) {
                         <p className="mb-2 text-xs font-semibold tracking-wider text-green-500 uppercase">
                             Total Sales
                         </p>
-                        <p className="font-mono text-2xl font-bold text-green-600">
+                        <p className="font-mono text-base xl:text-2xl font-bold text-green-600">
                             {totalSales}
                         </p>
                     </div>
