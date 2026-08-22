@@ -124,5 +124,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Roles and Permissions
     Route::get('/roles', [RoleController::class, 'index'])->middleware('permission:view roles')->name('roles.index');
+
+    Route::get('/roles/create', [RoleController::class, 'create'])->name('roles.create');
+
+    Route::post('/roles', [RoleController::class, 'store'])->middleware('permission:create role')->name('roles.store');
+
+    Route::get('/roles/{role}/edit', [RoleController::class, 'edit'])->middleware('permission:edit role')->name('roles.edit');
+
+    Route::put('/roles/{role}', [RoleController::class, 'update'])->middleware('permission:edit role')->name('roles.update');
+
+    Route::delete('/roles/{role}', [RoleController::class, 'destroy'])->middleware('permission:delete role')->name('roles.destroy');
 });
 require __DIR__ . '/settings.php';
