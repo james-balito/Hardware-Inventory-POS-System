@@ -51,6 +51,9 @@ class RolePermissionSeeder extends Seeder
 
             // roles permission
             'view roles',
+            'create role',
+            'edit role',
+            'delete role'
         ];
 
         foreach ($permissions as $permission) {

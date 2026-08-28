@@ -34,6 +34,7 @@ import {
     PaginationEllipsis,
 } from '@/components/ui/pagination';
 import { Modal } from '@/components/modal';
+import DeleteConfirmationModal from '@/components/delete-confirmation-modal';
 
 Index.layout = {
     breadcrumbs: [
@@ -72,6 +73,9 @@ export default function Index({ products, categories, units }: ProductProps) {
         null,
     );
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+    const [isItemToDelete, setIsItemToDelete] = useState<string>('');
+    const [processing, setProcessing] = useState(false);
     const [activeCategory, setActiveCategory] = useState<number | null>(null);
     const [stockFilter, setStockFilter] = useState<
         'all' | 'in_stock' | 'low_stock' | 'out_of_stock'
@@ -191,10 +195,17 @@ export default function Index({ products, categories, units }: ProductProps) {
 
     const handleEdit = (id: number) => router.visit(`/products/${id}/edit`);
 
-    const handleDelete = (id: number) => {
-        if (confirm('Are you sure you want to delete this product?')) {
-            router.delete(`/products/${id}`);
-        }
+    const handleDelete = () => {
+        setProcessing(true);
+        router.delete(`/products/${isItemToDelete}`, {
+            onSuccess: () => {
+                setIsDeleteOpen(false);
+                setProcessing(false);
+            },
+            onError: () => {
+                setProcessing(false);
+            },
+        });
     };
 
     // Stock filter handler
@@ -609,7 +620,11 @@ export default function Index({ products, categories, units }: ProductProps) {
                                                 ? '\u00A0\u00A0\u00A0\u00A0'
                                                 : '✓'}
                                         </span>
-                                        <span>{col.label === '#' ? 'ID' : col.label}</span>
+                                        <span>
+                                            {col.label === '#'
+                                                ? 'ID'
+                                                : col.label}
+                                        </span>
                                     </div>
                                 </SelectItem>
                             ))}
@@ -626,7 +641,7 @@ export default function Index({ products, categories, units }: ProductProps) {
                         </span>
 
                         {activeCategory && (
-                            <span className="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-700 dark:bg-blue-500/10 dark:text-blue-400 border dark:border-blue-400/50">
+                            <span className="inline-flex items-center gap-1 rounded-full border bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-700 dark:border-blue-400/50 dark:bg-blue-500/10 dark:text-blue-400">
                                 {
                                     categories.find(
                                         (c) => c.id === activeCategory,
@@ -687,7 +702,10 @@ export default function Index({ products, categories, units }: ProductProps) {
                         data={paginatedProducts}
                         onView={handleShowModal}
                         onEdit={(item) => handleEdit(item.id)}
-                        onDelete={(item) => handleDelete(item.id)}
+                        onDelete={(item) => {
+                            setIsDeleteOpen(true);
+                            setIsItemToDelete(item.product_name);
+                        }}
                         emptyTableMessage={getEmptyMessage()}
                         useDropdown={true}
                     />
@@ -707,7 +725,7 @@ export default function Index({ products, categories, units }: ProductProps) {
                             <PaginationContent>
                                 <PaginationLink
                                     onClick={firstPage}
-                                    className={`-mr-3 ml-3 flex cursor-pointer hover:bg-transparent hover:text-slate-500  dark:hover:text-slate-400 ${currentPage === 1 ? 'pointer-events-none opacity-40' : 'cursor-pointer'}`}
+                                    className={`-mr-3 ml-3 flex cursor-pointer hover:bg-transparent hover:text-slate-500 dark:hover:text-slate-400 ${currentPage === 1 ? 'pointer-events-none opacity-40' : 'cursor-pointer'}`}
                                 >
                                     <ChevronLeftIcon
                                         className={`-mr-5 h-4 w-4`}
@@ -889,6 +907,15 @@ export default function Index({ products, categories, units }: ProductProps) {
                             )}
                         </div>
                     }
+                />
+
+                {/* Delete Product Modal */}
+                <DeleteConfirmationModal
+                    isOpen={isDeleteOpen}
+                    dataName={isItemToDelete}
+                    onClose={() => setIsDeleteOpen(false)}
+                    onConfirm={handleDelete}
+                    isProcessing={processing}
                 />
             </div>
         </div>
